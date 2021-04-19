@@ -25,5 +25,4 @@ Then copy the clone URL to your clipboard.
 5. Go into the bin folder inside mongodb(in my case: C:/mongodb/bin), open command prompt, and run `mongod` to start the mongoDB server.
 
 And you'll be good to go :thumbsup:
-# MPPSC
-# MPPSC
+
