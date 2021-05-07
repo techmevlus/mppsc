@@ -37,6 +37,7 @@ ReactDOM.render(
         <Route exact path="/questionAdded" render={props => 
             <QuestionAdded />
         }/>
+        
   		</div>
   	</Router>
   </Provider>,

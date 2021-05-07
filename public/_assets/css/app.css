@@ -8,34 +8,49 @@
 }
 .question {
 	background-color: #C3FAF4;
-   /* padding: 10px;*/
-    padding: 20px;
+   /* padding: 20px; Original padding*/
+    padding: 10px;
     margin-bottom: 10px;
 	border-left:10px solid rgb(20, 58, 61) ;
 }
 
 .options {
+	/*background-color: #E5F7F5;*/
 	background-color: #E5F7F5;
-    /*padding: 10px;*/
-    padding: 20px;
+    /*padding: 20px; Original padding*/
+    padding: 8px;
     margin-bottom: 10px;
 	border-radius: 10px;
 }
 
+
+
 .options:hover { 
-    background-color: #D0EFF6;
+    /*background-color: #D0EFF6;*/
+	background-color: rgb(56, 204, 230);
+	color: white;
 }
 .pass{
-	height: 100%;
+	/*height: 100%;
     background-color: green;
     position: absolute;
-    display: inline-flex;
+    display: inline-flex;*/
+	background-color: green;
+	color: white;
+	padding: 8px;
+    margin-bottom: 10px;
+	border-radius: 10px;
 }
 .fail{
-	height: 100%;
+	/*height: 100%;
     background-color: red;
     position: absolute;
-    display: inline-flex;
+    display: inline-flex;*/
+	background-color: red;
+	color: white;
+	padding: 8px;
+    margin-bottom: 10px;
+	border-radius: 10px;
 }
 
 .marTop25{
@@ -76,5 +91,12 @@
     color: white;
 }
 .selected{
-	background-color: #ABD9E4;
+	/*background-color: #ABD9E4;*/
+	background-color: blue;
+	color : white;
 }
+
+.answer_light{
+	margin-left:20px;
+}
+

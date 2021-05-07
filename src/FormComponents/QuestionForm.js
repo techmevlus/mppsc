@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as questionActions from '../actions/questionActions';
 class AddQuestion extends React.PureComponent {
+
+    
     constructor(props) {
         super(props);
         this.handleQuestion =   this.handleQuestion.bind(this);

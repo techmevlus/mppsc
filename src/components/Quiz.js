@@ -35,6 +35,14 @@ class Quiz extends React.PureComponent{
 		this.loadQuestionsFromServer();
     }
 
+	resetOptionColor() {
+		document.getElementById("1").className = "strong options";
+		document.getElementById("2").className = "strong options";
+		document.getElementById("3").className = "strong options";
+		document.getElementById("4").className = "strong options";
+	}
+
+	
 	render () { 
 		if(this.state.data==="" || this.state.data===undefined || this.state.data===null){
     		console.log("hello")
@@ -49,9 +57,10 @@ class Quiz extends React.PureComponent{
 					<Options data={(shuffledPosts[0])} />
 			</div>
 			<div className="col-md-10 noPad">
-				<Link to="/"><button className="marTop25 nextBtn btn pull-right">Next Question</button></Link>
+				<Link to="/"><button className="marTop25 nextBtn btn pull-right" onClick={this.resetOptionColor}>Next Question</button></Link>
 				<Link to="/addQuestion"><button className="marTop25 nextBtn btn pull-left">Add Question</button></Link>
 			</div>
+			<Link to="/adminLogin"><button className="marTop25 nextBtn btn pull-left">Admin Page</button></Link>
 		</div>; 
 	}
 }
