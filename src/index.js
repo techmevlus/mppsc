@@ -6,6 +6,8 @@ import {
 import configureStore from './store/configureStore';
 import {Provider} from 'react-redux';
 import Quiz from './components/Quiz';
+import AvailableTest from './components/AvailableTest';
+import AboutUs from './components/AboutUs';
 import QuestionForm from './FormComponents/QuestionForm';
 import QuestionAdded from './components/QuestionAdded';
 
@@ -28,8 +30,14 @@ ReactDOM.render(
   <Provider store={store}>
   	<Router>
   		<div> 
-  			<Route exact path="/" render={props => 
+  			<Route exact path="/index.html" render={props => 
             <Quiz url='http://localhost:3001/api/questions' {...props} />
+        }/>
+        <Route exact path="/portfolio.html" render={props => 
+            <AvailableTest url='http://localhost:3001/api/questions' {...props} />
+        }/>
+         <Route exact path="/about.html" render={props => 
+            <AboutUs url='http://localhost:3001/api/questions' {...props} />
         }/>
         <Route exact path="/addQuestion" render={props => 
             <QuestionForm url='http://localhost:3001/api/questions'/>

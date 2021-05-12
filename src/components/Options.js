@@ -7,6 +7,7 @@ class Options extends React.PureComponent{
 
 	
 	handleClick (valClicked){
+		
 
 		document.getElementById("1").className = "strong options";
 		document.getElementById("2").className = "strong options";
