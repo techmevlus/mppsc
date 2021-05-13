@@ -74,7 +74,7 @@ class Options extends React.PureComponent{
 		var b = iterator.next().value;
 		var c = iterator.next().value;
 		var d = iterator.next().value;
-		
+		 
 		console.log(this.state.questionId)
         return (
             <div>

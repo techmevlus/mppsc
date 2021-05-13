@@ -50,7 +50,7 @@ class Timer extends React.Component {
     if (!startDate) {
       this.setState({ expired: true });
       return;
-    }
+    } 
     const countDownStartDate = new Date(startDate).getTime();
     const distance = countDownStartDate - now;
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));

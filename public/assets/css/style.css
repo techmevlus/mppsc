@@ -2178,7 +2178,7 @@ section {
   display: flex;
   font-size: 20px;
   justify-content: center;
-}
+} 
 .timer > div {
   padding: 10px;
   background: #444;

@@ -9,7 +9,7 @@ class MyResult extends Component {
       questionId: ["a", "b", "c"],
     };
   }
- 
+  
   render() {
     return (
       <div>

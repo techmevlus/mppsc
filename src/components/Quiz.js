@@ -47,7 +47,7 @@ class Quiz extends React.PureComponent{
      			 ele[i].checked = false;
 	}
 
-	 
+	  
 	
 	render () { 
 		if(this.state.data==="" || this.state.data===undefined || this.state.data===null){
