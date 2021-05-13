@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
 import Question from './Question.js';
 import Options from './Options.js';
+import Timer from '../QuizComponents/Timer';
+//import MyResult from '../QuizComponents/MyResult';
 let data = require('../data'); //this imports data from local file, pass it as a prop to Quiz component
 
 const shuffleArray = array => {
@@ -15,6 +17,9 @@ const shuffleArray = array => {
 	}
 	return array;
 }
+
+const startDate = new Date().getTime() + 31536000000;
+
 class Quiz extends React.PureComponent{
 	constructor(props, context) {
 	    super(props, context);
@@ -30,18 +35,19 @@ class Quiz extends React.PureComponent{
 		    	this.setState({ data });
 			})
     }
+	
 
 	componentWillMount() {
 		this.loadQuestionsFromServer();
     }
 
-	resetOptionColor() {
-		document.getElementById("1").className = "strong options";
-		document.getElementById("2").className = "strong options";
-		document.getElementById("3").className = "strong options";
-		document.getElementById("4").className = "strong options";
+	resetOption() {
+		var ele = document.getElementsByName("option");
+   			for(var i=0;i<ele.length;i++)
+     			 ele[i].checked = false;
 	}
 
+	 
 	
 	render () { 
 		if(this.state.data==="" || this.state.data===undefined || this.state.data===null){
@@ -51,16 +57,20 @@ class Quiz extends React.PureComponent{
 		var shuffledPosts = shuffleArray(this.state.data);
 		return <div> 
 			<div className="row posRelative">
+			
+			<Timer startDate={startDate} />
+			
 				<div className="col-md-10">
 					<Question data={shuffledPosts[0].question} />
 				</div>
 					<Options data={(shuffledPosts[0])} />
 			</div>
 			<div className="col-md-10 noPad">
-				<Link to="/"><button className="marTop25 nextBtn btn pull-right" onClick={this.resetOptionColor}>Next Question</button></Link>
+				<Link to="/index.html"><button className="marTop25 nextBtn btn pull-right" onClick={this.resetOption}>Next Question</button></Link>
 				<Link to="/addQuestion"><button className="marTop25 nextBtn btn pull-left">Add Question</button></Link>
 			</div>
 			<Link to="/adminLogin"><button className="marTop25 nextBtn btn pull-left">Admin Page</button></Link>
+			
 		</div>; 
 	}
 }
