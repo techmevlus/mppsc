@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Question from './Question.js';
 import Options from './Options.js';
+import Answer from './Answer.js';
 let data = require('../data'); //this imports data from local file, pass it as a prop to Quiz component
-
+/*
 const shuffleArray = array => {
 	let i = array.length - 1;
 	for (; i > 0; i--) {
@@ -15,25 +16,26 @@ const shuffleArray = array => {
 	}
 	return array;
 }
+*/
 
-class AvailableTest extends React.PureComponent{
+class AvailableTestArea extends React.PureComponent{
 	constructor(props, context) {
 	    super(props, context);
 	    this.state = {
 	    	data:""
 	    }
-		this.loadQuestionsFromServer = this.loadQuestionsFromServer.bind(this);
+		this.loadTestDBFromServer = this.loadTestDBFromServer.bind(this);
 	}
-	loadQuestionsFromServer() {
+	loadTestDBFromServer() {
 		fetch(this.props.url)
 			.then(res => res.json())
-			.then(data=>{
+			.then(data=>{ console.log("TESTING NEW QUERY", data)
 		    	this.setState({ data });
 			})
     }
 
 	componentWillMount() {
-		this.loadQuestionsFromServer();
+		this.loadTestDBFromServer();
     }
 
 	resetOptionColor() {
@@ -171,6 +173,12 @@ class AvailableTest extends React.PureComponent{
             </div>
           </div>
 
+          <Link     to={{
+      pathname: "/availabletest.html",
+      productdetailProps: {
+       productdetail: this.state.data
+      }
+   }}>  
           <div class="col-lg-4 col-md-6 portfolio-item filter-card">
             <div class="portfolio-wrap">
               <img src="assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt=""></img>
@@ -184,7 +192,7 @@ class AvailableTest extends React.PureComponent{
               </div>
             </div>
           </div>
-
+          </Link>
           <div class="col-lg-4 col-md-6 portfolio-item filter-web">
             <div class="portfolio-wrap">
               <img src="assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt=""></img>
@@ -202,6 +210,7 @@ class AvailableTest extends React.PureComponent{
         </div>
 
       </div>
+      <Answer></Answer>
     </section>
                       </main>
 	            </div>; 
@@ -209,11 +218,11 @@ class AvailableTest extends React.PureComponent{
 }
 
 
-AvailableTest.PropTypes = {
+/*AvailableTestArea.PropTypes = {
 	books: PropTypes.bool.isRequired,
- }
+ }*/
  /*Book.PropTypes = {
  	b: PropTypes.string
  }
 */
-export default AvailableTest;
+export default AvailableTestArea;
