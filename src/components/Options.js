@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as answerActions from '../actions/selectedAnswerActions';
 import MyResult from '../QuizComponents/MyResult';
-//import Timer from '../QuizComponents/Timer';
+import Timer from '../QuizComponents/Timer';
 class Options extends React.PureComponent{
 
 	constructor(props) {

@@ -49,7 +49,7 @@ class Quiz extends React.PureComponent{
 
 	  
 	
-	render () { 
+	render () {  console.log("product props is", this.props.location.productdetailProps);
 		if(this.state.data==="" || this.state.data===undefined || this.state.data===null){
     		console.log("hello")
 			return false;
@@ -66,7 +66,7 @@ class Quiz extends React.PureComponent{
 					<Options data={(shuffledPosts[0])} />
 			</div>
 			<div className="col-md-10 noPad">
-				<Link to="/index.html"><button className="marTop25 nextBtn btn pull-right" onClick={this.resetOption}>Next Question</button></Link>
+				<Link to="/quiz.html"><button className="marTop25 nextBtn btn pull-right" onClick={this.resetOption}>Next Question</button></Link>
 				<Link to="/addQuestion"><button className="marTop25 nextBtn btn pull-left">Add Question</button></Link>
 			</div>
 			<Link to="/adminLogin"><button className="marTop25 nextBtn btn pull-left">Admin Page</button></Link>

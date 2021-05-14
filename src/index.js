@@ -6,7 +6,8 @@ import {
 import configureStore from './store/configureStore';
 import {Provider} from 'react-redux';
 import Quiz from './components/Quiz';
-import AvailableTest from './components/AvailableTest';
+import AvailableTestArea from './components/AvailableTestArea';
+import AvailableTestSeries from './components/AvailableTestSeries';
 import AboutUs from './components/AboutUs';
 import QuestionForm from './FormComponents/QuestionForm';
 import QuestionAdded from './components/QuestionAdded';
@@ -38,11 +39,14 @@ ReactDOM.render(
   <Provider store={store}>
   	<Router>
   		<div> 
-  			<Route exact path="/index.html" render={props => 
+  			<Route exact path="/quiz.html" render={props => 
             <Quiz url='http://localhost:3001/api/questions' {...props} />
         }/>
         <Route exact path="/portfolio.html" render={props => 
-            <AvailableTest url='http://localhost:3001/api/questions' {...props} />
+            <AvailableTestArea url='http://localhost:3001/api/questions' {...props} />
+        }/>
+          <Route exact path="/availabletest.html" render={props => 
+            <AvailableTestSeries url='http://localhost:3001/api/questions' {...props} />
         }/>
          <Route exact path="/about.html" render={props => 
             <AboutUs url='http://localhost:3001/api/questions' {...props} />
