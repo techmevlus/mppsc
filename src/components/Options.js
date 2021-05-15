@@ -11,9 +11,15 @@ class Options extends React.PureComponent{
 		super(props);
 	 
 		this.state = {
-		  questionId: []
+		  resultData: [{
+			  questionId: "",
+			  answerKey: "",
+			  optionSelected: ""
+		  }]
 		};
 	  }
+
+
 	  
 	handleClick (valClicked){
 		
@@ -29,15 +35,46 @@ class Options extends React.PureComponent{
 						console.log(elements[i].value);
         			}
     		}*/
+
+			//to clear radio button
 			var ele = document.getElementsByName("option");
    			for(var i=0;i<ele.length;i++)
      			 ele[i].checked = false;
 			
-			if(this.state.questionId.includes(this.props.data._id)){
+			//Match and delete array element. working
+
+			/*if(this.state.resultData.includes(this.props.data._id)){
 				this.setState({
-					questionId: this.state.questionId.filter(element => element !== this.props.data._id)
-					});
-			}
+					resultData: this.state.resultData.filter(element => element !== this.props.data._id)
+				});
+			}*/
+
+			/*this.state.resultData.map((item) =>{
+				if(item.questionId == this.props.data._id){
+					console.log("Clear button is working");
+					console.log(item.questionId);
+					console.log(this.props.data._id);
+				};
+			})*/
+
+			let arr = [...this.state.resultData];
+
+			let a = arr.filter((e)=>{
+				if(e.questionId == this.props.data._id){
+				  return e;
+				}
+			  })
+		  
+			  if(a.length > 0){
+				let a = arr.filter((e) => {
+					if (e.questionId != this.props.data._id) {
+					  return e;
+					}
+				  });
+				  this.setState({
+					resultData:a
+				  })
+			  }
 
 		}else{
 
@@ -55,14 +92,61 @@ class Options extends React.PureComponent{
 			
 			
 			document.getElementById(valClicked).checked = "true";
-			
-			if(!this.state.questionId.includes(this.props.data._id)){
+		
+		    /*this.state.resultData.map((item) =>{
+				if(item.questionId == this.props.data._id){
+					console.log("Radio Button is Working If condition");
+					console.log(item.questionId);
+					console.log(this.props.data._id);
+				}else{
+					console.log("Radio Button is Working else condition");
+					console.log(item.questionId);
+					console.log(this.props.data._id);
+				};
+			})*/
+
+			//Match and add array element. working
+
+			/*if(!this.state.resultData.includes(this.props.data._id)){
 				this.setState({
-					questionId: this.state.questionId.concat(this.props.data._id)
+					resultData : this.state.resultData.concat(this.props.data._id)
 				  });
-			}
+			}*/
+
+			//Update data by matching question id.. working
+
+			/*this.setState(prevState => ({
+					resultData: prevState.resultData.map(
+					obj => (obj.questionId === "questionId1" ? Object.assign(obj, { answerKey: "Updated Key"} ) : obj)
+				  )
+				}));
+				*/
+
+			let arr = [...this.state.resultData];
 			
-			//console.log(this.state.questionId.includes(this.props.data._id));
+			let a = arr.filter((e)=>{
+				if(e.questionId == this.props.data._id){
+				  return e;
+				}
+			  })
+		  
+			  if(a.length > 0){
+					this.setState(prevState => ({
+						resultData: prevState.resultData.map(
+						obj => (obj.questionId === this.props.data._id ? Object.assign(obj, { optionSelected: valClicked }) : obj)
+					  )
+					}));
+			  }else{
+				arr.push({
+					questionId:this.props.data._id,
+					answerKey:this.props.data.key,
+					optionSelected: valClicked
+				  });
+				  this.setState({
+					resultData:arr
+				  })
+			  }
+			
 		}
 	 }
 	
@@ -75,7 +159,8 @@ class Options extends React.PureComponent{
 		var c = iterator.next().value;
 		var d = iterator.next().value;
 		 
-		console.log(this.state.questionId)
+		console.log(this.state.resultData)
+		
         return (
             <div>
 	            <div className="col-md-10">
@@ -111,11 +196,14 @@ class Options extends React.PureComponent{
 						
 	            </div>
 				<div>
-					<ul>
-          				{this.state.questionId.map(item => (
-            			<li key={item}>{item}</li>
+					{/*<ul>
+          				{this.state.resultData.map(item => (
+            			<li>{item.questionId}, {item.answerKey}</li>
           				))}
-        			</ul>
+						  </ul>*/}
+				</div>
+				<div>
+					<h7>Total Attempted Question : {this.state.resultData.length}</h7>
 				</div>
             </div>
         )
