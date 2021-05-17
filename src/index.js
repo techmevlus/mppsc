@@ -10,6 +10,7 @@ import AvailableTestArea from './components/AvailableTestArea';
 import AvailableTestSeries from './components/AvailableTestSeries';
 import AboutUs from './components/AboutUs';
 import QuestionForm from './FormComponents/QuestionForm';
+import Dashboard from './AdminSector/Dashboard';
 import QuestionAdded from './components/QuestionAdded';
 import VideoLecture from './components/VideoLecture';
 import OurTeam from './components/OurTeam';
@@ -69,11 +70,14 @@ ReactDOM.render(
         <Route exact path="/blog.html" render={props => 
             <Blog url='http://localhost:3001/api/questions' {...props} />
         }/>
-        <Route exact path="/index.html" render={props => 
+        <Route exact path="/" render={props => 
             <Home url='http://localhost:3001/api/questions' {...props} />
         }/>
         <Route exact path="/addQuestion" render={props => 
             <QuestionForm url='http://localhost:3001/api/questions'/>
+        }/>
+         <Route exact path="/admin.html" render={props => 
+            <Dashboard url='http://localhost:3001/api/questions'/>
         }/>
         <Route exact path="/questionAdded" render={props => 
             <QuestionAdded />
