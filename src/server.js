@@ -12,8 +12,13 @@ var promise = mongoose.connect('mongodb+srv://techmevlus:0000@cluster0.xt9zo.mon
   useMongoClient: true,
 
 
-  /* other options */
+
+
+  // other options
 });
+
+
+
 console.log("WORKS FINE")
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', ' * ');
@@ -26,6 +31,9 @@ app.use(function(req, res, next) {
 });
 var router = express.Router();
 var Question = require('./../models/schema.js');
+var Cred = require('./../models/adminSchema.js');
+const { collection } = require('./../models/schema.js');
+const dbCollection = require('./../models/schema.js');
 
 router.get('/', function(req, res) {
 	res.json({ message: 'API Initialized!'});
@@ -64,6 +72,55 @@ router.route('/questions')
  	});
 
 
+	 router.route('/questions')
+	 .get(function(req, res) {
+	 //looks at our adminCred Schema
+		 Cred.find(function(err, dataFromDB) {
+			 if (err){
+				 res.send(err);
+			 }
+			 //responds with a json object of our database questions.
+			 res.json(dataFromDB);
+			 console.log(dataFromDB)
+			 console.log("Get Function working alright")
+		 });
+	  })
+	  //post new admin info to the database
+	  .post(function(req, res) {
+		  
+		  var cred 		= new Cred();
+		  cred.username	= "akash";
+		  cred.password = "saste";
+ 
+		 cred.save(function(err) {
+			  if (err)
+				  res.send(err);
+			  res.json({ message:'Admin successfully added!' });
+			  console.log("admin saved here")
+		  });
+	  });
+
+const mongo = require('mongodb').MongoClient;
+mongo.connect('mongodb+srv://techmevlus:0000@cluster0.xt9zo.mongodb.net/mppsc_db?retryWrites=true&w=majority', function(err, client) {
+let allCollections = [];
+//create client by providing database name
+const db = client.db('mppsc_db');
+db.listCollections().toArray(function(err, collections) {
+    if(err) console.log(err);
+    //iterate to each collection detail and push just name in array
+    collections.forEach(eachCollectionDetails => {
+        allCollections.push(eachCollectionDetails.name);
+    });
+
+	console.log(allCollections)
+    //close client
+	client.close();
+ });
+});
+
+
+	
 app.listen(3001, function() {
 	console.log('Api successfully running');
+	
 });
