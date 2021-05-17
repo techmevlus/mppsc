@@ -72,7 +72,7 @@ router.route('/questions')
  	});
 
 
-	 router.route('/questions')
+	 router.route('/abc')
 	 .get(function(req, res) {
 	 //looks at our adminCred Schema
 		 Cred.find(function(err, dataFromDB) {
@@ -82,23 +82,24 @@ router.route('/questions')
 			 //responds with a json object of our database questions.
 			 res.json(dataFromDB);
 			 console.log(dataFromDB)
-			 console.log("Get Function working alright")
 		 });
 	  })
 	  //post new admin info to the database
 	  .post(function(req, res) {
-		  
-		  var cred 		= new Cred();
-		  cred.username	= "akash";
-		  cred.password = "saste";
- 
-		 cred.save(function(err) {
-			  if (err)
-				  res.send(err);
-			  res.json({ message:'Admin successfully added!' });
-			  console.log("admin saved here")
-		  });
-	  });
+		 
+		console.log("post method working...");
+		var cred 		= new Cred();
+		cred.username 	= "hiyu";
+	    cred.password 	= "haya";
+		
+	   	cred.save(function(err) {
+			if (err)
+				res.send(err);
+			//res.json({ message:'Admin successfully added!' });
+			console.log(res);
+		});
+		console.log("ending here")
+	});
 
 const mongo = require('mongodb').MongoClient;
 mongo.connect('mongodb+srv://techmevlus:0000@cluster0.xt9zo.mongodb.net/mppsc_db?retryWrites=true&w=majority', function(err, client) {
