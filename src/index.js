@@ -10,7 +10,6 @@ import AvailableTestArea from './components/AvailableTestArea';
 import AvailableTestSeries from './components/AvailableTestSeries';
 import AboutUs from './components/AboutUs';
 import QuestionForm from './FormComponents/QuestionForm';
-import Dashboard from './AdminSector/Dashboard';
 import QuestionAdded from './components/QuestionAdded';
 import VideoLecture from './components/VideoLecture';
 import OurTeam from './components/OurTeam';
@@ -19,6 +18,12 @@ import ContactUs from './components/ContactUs';
 import Pricing from './components/Pricing';
 import Blog from './components/Blog';
 import BlogSingle from './components/BlogSingle';
+
+//Importing Admin and Public and Private Routes 
+import PrivateRoute from './Utils/PrivateRoute';
+import PublicRoute from './Utils/PublicRoute';
+import Dashboard from './AdminSector/Dashboard';
+import AdminLogin from './AdminSector/AdminLogin';
 
 
 const state={ addQuestion:{
@@ -43,7 +48,7 @@ ReactDOM.render(
   			<Route exact path="/quiz.html" render={props => 
             <Quiz url='http://localhost:3001/api/questions' {...props} />
         }/>
-        <Route exact path="/portfolio.html" render={props => 
+            <Route exact path="/portfolio.html" render={props => 
             <AvailableTestArea url='http://localhost:3001/api/questions' {...props} />
         }/>
           <Route exact path="/availabletest.html" render={props => 
@@ -82,6 +87,9 @@ ReactDOM.render(
         <Route exact path="/questionAdded" render={props => 
             <QuestionAdded />
         }/>
+
+        <PublicRoute path="/login" component={AdminLogin} />
+        <PublicRoute path="/dashboard" component={Dashboard} />
         
   		</div>
   	</Router>

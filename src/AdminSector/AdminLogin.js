@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
  
-function Login(props) {
+function AdminLogin(props) {
   const username = useFormInput('');
   const password = useFormInput('');
   const [error, setError] = useState(null);
