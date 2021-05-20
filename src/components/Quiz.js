@@ -18,7 +18,7 @@ const shuffleArray = array => {
 	return array;
 }
 
-const startDate = new Date().getTime() + 31536000000;
+const startDate = new Date().getTime() + 20000;
 
 class Quiz extends React.PureComponent{
 	constructor(props, context) {
@@ -41,13 +41,6 @@ class Quiz extends React.PureComponent{
 		this.loadQuestionsFromServer();
     }
 
-	resetOption() {
-		var ele = document.getElementsByName("option");
-   			for(var i=0;i<ele.length;i++)
-     			 ele[i].checked = false;
-	}
-
-	  
 	
 	render () {  console.log("product props is", this.props.location.productdetailProps);
 		if(this.state.data==="" || this.state.data===undefined || this.state.data===null){
@@ -57,16 +50,16 @@ class Quiz extends React.PureComponent{
 		var shuffledPosts = shuffleArray(this.state.data);
 		return <div> 
 			<div className="row posRelative">
+			<h1 style={{color: "green"}} id="testCompleteMsg" style={{display:"block"}}>Test Completed :)</h1>
+			<div id="quizTimer" style={{display:"block"}}><Timer startDate={startDate} /></div>
 			
-			<Timer startDate={startDate} />
-			
-				<div className="col-md-10">
+				<div className="col-md-10" id="quizQuestion" style={{display:"block"}}>
 					<Question data={shuffledPosts[0].question} />
 				</div>
 					<Options data={(shuffledPosts[0])} />
 			</div>
 			<div className="col-md-10 noPad">
-				<Link to="/quiz.html"><button className="marTop25 nextBtn btn pull-right" onClick={this.resetOption}>Next Question</button></Link>
+			
 				<Link to="/addQuestion"><button className="marTop25 nextBtn btn pull-left">Add Question</button></Link>
 			</div>
 			<Link to="/adminLogin"><button className="marTop25 nextBtn btn pull-left">Admin Page</button></Link>

@@ -5,17 +5,20 @@ import {bindActionCreators} from 'redux';
 import * as answerActions from '../actions/selectedAnswerActions';
 import MyResult from '../QuizComponents/MyResult';
 import Timer from '../QuizComponents/Timer';
+import { Link } from 'react-router-dom';
+
 class Options extends React.PureComponent{
 
 	constructor(props) {
 		super(props);
 	 
 		this.state = {
-		  resultData: [{
+		  resultData: [/*{
 			  questionId: "",
 			  answerKey: "",
-			  optionSelected: ""
-		  }]
+			  selectedOption: ""
+		  }*/],
+		  correctAnswer: 0
 		};
 	  }
 
@@ -26,36 +29,12 @@ class Options extends React.PureComponent{
 		
 		if("clear" == valClicked){
 			
-			
-			/*var elements = document.getElementsByName("option");
-    		for (var i = 0, l = elements.length; i < l; i++)
-    		{
-       			if (elements[i].checked)
-       				{
-						console.log(elements[i].value);
-        			}
-    		}*/
-
 			//to clear radio button
 			var ele = document.getElementsByName("option");
    			for(var i=0;i<ele.length;i++)
      			 ele[i].checked = false;
 			
-			//Match and delete array element. working
-
-			/*if(this.state.resultData.includes(this.props.data._id)){
-				this.setState({
-					resultData: this.state.resultData.filter(element => element !== this.props.data._id)
-				});
-			}*/
-
-			/*this.state.resultData.map((item) =>{
-				if(item.questionId == this.props.data._id){
-					console.log("Clear button is working");
-					console.log(item.questionId);
-					console.log(this.props.data._id);
-				};
-			})*/
+			//Match and delete array element.
 
 			let arr = [...this.state.resultData];
 
@@ -76,12 +55,15 @@ class Options extends React.PureComponent{
 				  })
 			  }
 
-		}else{
+		}else if("submitQuiz" == valClicked){ // Submit Quiz button
 
-			/*document.getElementById("1").className = "strong options";
-			document.getElementById("2").className = "strong options";
-			document.getElementById("3").className = "strong options";
-			document.getElementById("4").className = "strong options";*/
+			document.getElementById("testCompleted").style.display="block";
+			document.getElementById("testIncomplete").style.display="none";
+			document.getElementById("quizQuestion").style.display="none";
+			document.getElementById("quizTimer").style.display="none";
+    		document.getElementById("testCompleteMsg").style.display="block";
+
+		}else{
 			
 			let isCorrect = (valClicked) == this.props.data.key ? 'pass' : 'fail';
 			//console.log(this.props.data.key);
@@ -92,35 +74,8 @@ class Options extends React.PureComponent{
 			
 			
 			document.getElementById(valClicked).checked = "true";
-		
-		    /*this.state.resultData.map((item) =>{
-				if(item.questionId == this.props.data._id){
-					console.log("Radio Button is Working If condition");
-					console.log(item.questionId);
-					console.log(this.props.data._id);
-				}else{
-					console.log("Radio Button is Working else condition");
-					console.log(item.questionId);
-					console.log(this.props.data._id);
-				};
-			})*/
-
-			//Match and add array element. working
-
-			/*if(!this.state.resultData.includes(this.props.data._id)){
-				this.setState({
-					resultData : this.state.resultData.concat(this.props.data._id)
-				  });
-			}*/
-
-			//Update data by matching question id.. working
-
-			/*this.setState(prevState => ({
-					resultData: prevState.resultData.map(
-					obj => (obj.questionId === "questionId1" ? Object.assign(obj, { answerKey: "Updated Key"} ) : obj)
-				  )
-				}));
-				*/
+			
+			//Match and add array element.
 
 			let arr = [...this.state.resultData];
 			
@@ -131,25 +86,62 @@ class Options extends React.PureComponent{
 			  })
 		  
 			  if(a.length > 0){
+				  // Update Radio button. Selection Changed
 					this.setState(prevState => ({
 						resultData: prevState.resultData.map(
-						obj => (obj.questionId === this.props.data._id ? Object.assign(obj, { optionSelected: valClicked }) : obj)
+						obj => (obj.questionId === this.props.data._id ? Object.assign(obj, { selectedOption: valClicked }) : obj)
 					  )
 					}));
 			  }else{
+				  // Add data into array
 				arr.push({
 					questionId:this.props.data._id,
 					answerKey:this.props.data.key,
-					optionSelected: valClicked
+					selectedOption: valClicked
 				  });
 				  this.setState({
 					resultData:arr
-				  })
+				  });
 			  }
 			
 		}
 	 }
 	
+	 quizResultRadioButton(){
+		 let a = 0;
+		 let count = 0;
+		
+		for(let i = 0;i<this.state.resultData.length;i++){
+			
+			// Counting total number of correct answer
+			
+			if(this.state.resultData[i].answerKey == this.state.resultData[i].selectedOption){
+				a = a + 1 ;
+			}
+			
+			//Check if question already attempted
+			
+			if(this.state.resultData[i].questionId==this.props.data._id){
+				console.log("Question already attempted");
+				var ele = document.getElementById(this.state.resultData[i].selectedOption);
+				ele.checked = true;
+				count = 1;
+			}
+		}	
+
+		this.setState({
+			correctAnswer : a
+		  });
+
+		//clear radio button if Question already not attempted 
+		
+		if(count==0){
+			var ele = document.getElementsByName("option");
+			for(var i=0;i<ele.length;i++)
+				ele[i].checked = false;
+		}
+		
+	}
 
 	render () {
 		let options = this.props.data.options;
@@ -160,10 +152,12 @@ class Options extends React.PureComponent{
 		var d = iterator.next().value;
 		 
 		console.log(this.state.resultData)
-		
+		console.log(this.state.resultData.length)
+		console.log(this.state.correctAnswer)
+		this.quizResultRadioButton();
         return (
             <div>
-	            <div className="col-md-10">
+	            <div className="col-md-10"  id="testIncomplete" style={{displey:"block"}}>
 
 						<div  className="strong options"  id="1" >
 	                    	<h4> 
@@ -193,6 +187,8 @@ class Options extends React.PureComponent{
 							</h4>
 	                    </div>
 						<button onClick={() => this.handleClick("clear")} className="marTop25 nextBtn btn pull-left">Clear</button>
+						<Link to="/quiz.html"><button className="marTop25 nextBtn btn pull-right">Next Question</button></Link>
+						<Link to="/quiz.html"><button className="marTop25 nextBtn btn pull-right" onClick={() => this.handleClick("submitQuiz")}>Submit</button></Link>
 						
 	            </div>
 				<div>
@@ -202,8 +198,9 @@ class Options extends React.PureComponent{
           				))}
 						  </ul>*/}
 				</div>
-				<div>
-					<h7>Total Attempted Question : {this.state.resultData.length}</h7>
+				<div id="testCompleted" style={{display:"none"}}>
+					<h6>Total Attempted Question : {this.state.resultData.length}</h6>
+					<h6>Your Score : {this.state.correctAnswer}</h6>
 				</div>
             </div>
         )

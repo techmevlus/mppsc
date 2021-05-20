@@ -1,24 +1,6 @@
 import React from 'react';
-
-
-/*export default function countdouwnTimer() {
-  const [counter, setCounter] = React.useState(120);
-
-
-  React.useEffect(() => {
-    const timer =
-      counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-    return () => clearInterval(timer);
-  }, [counter]);
-
-  return (
-    <div>
-      <div>Countdown: {counter}</div>
-    </div>
-  );
-}*/
-
-//http://www.4codev.com/react/advanced-timer-countdown-react-component-days-hours-minutes-seconds-idpx1157256550973165770.html
+import Options from '../components/Options';
+import { Link } from 'react-router-dom';
 
 class Timer extends React.Component {
   constructor(props) {
@@ -75,10 +57,21 @@ class Timer extends React.Component {
     this.setState({ days, hours, minutes, seconds, expired: false });
   };
 
+  quizCompleted(){
+    document.getElementById("testCompleted").style.display="block";
+    document.getElementById("testIncomplete").style.display="none";
+    document.getElementById("quizQuestion").style.display="none";
+    document.getElementById("quizTimer").style.display="none";
+    document.getElementById("testCompleteMsg").style.display="block";
+  }
+
+
   render() {
     const { days, hours, minutes, seconds, expired } = this.state;
     if (expired) {
-      return <div className="expired">Expired :(</div>;
+      return <div>
+          {this.quizCompleted()}
+      </div>;
     }
     return (
       <div className="timer">
@@ -104,35 +97,3 @@ class Timer extends React.Component {
 }
 export default Timer;
 
-//CSS Style for Timer. 
-
-/* 
-.timer {
-  display: flex;
-  font-size: 20px;
-  justify-content: center;
-}
-.timer > div {
-  padding: 10px;
-  background: #444;
-  color: #fff;
-  font-size: 30px;
-  margin-right: 2px;
-  width: 100px;
-  display: flex;
-  justify-content: center;
-}
-.timer > div > span {
-  text-transform: uppercase;
-  color: #999;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-}
-.expired {
-  font-size: 20px;
-  color: rgb(126, 49, 49);
-  border: 1px solid rgb(126, 49, 49);
-  padding: 20px;
-}
-*/
