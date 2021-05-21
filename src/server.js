@@ -1,22 +1,21 @@
 require('dotenv').config();
-var express = require('express');
-var app = express();
 
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const utils = require('./utils');
+
+var app = express();
 var bodyParser = require('body-parser'); //BODY Parser - lets us use the req.body
-app.use(bodyParser.urlencoded({ extended: true }));
+// parse application/json
 app.use(bodyParser.json());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
 
 var mongoose = require('mongoose'); //  MongoDB
 //mongodb+srv://cluster0.xt9zo.mongodb.net/myFirstDatabase
 //mongodb://localhost/my_db
-var promise = mongoose.connect('mongodb+srv://techmevlus:0000@cluster0.xt9zo.mongodb.net/mppsc_db?retryWrites=true&w=majority', {
-  useMongoClient: true,
-
-
-
-
-  // other options
-});
+var url = 'mongodb+srv://techmevlus:0000@cluster0.xt9zo.mongodb.net/mppsc_db?retryWrites=true&w=majority';
+var promise = mongoose.connect(url);
 
 
 
@@ -33,8 +32,7 @@ app.use(function(req, res, next) {
 var router = express.Router();
 var Question = require('./../models/schema.js');
 var Cred = require('./../models/adminSchema.js');
-const { collection } = require('./../models/schema.js');
-const dbCollection = require('./../models/schema.js');
+const Exam = require('../models/examCollection');
 
 router.get('/', function(req, res) {
 	res.json({ message: 'API Initialized!'});
@@ -44,6 +42,18 @@ router.get('/', function(req, res) {
 app.use('/api', router);
 //starts the server and listens for requests
 
+
+router.route('/home')
+.get(function(req,res){
+	Exam.find(function(err, dataFromDB) {
+		if (err){
+			res.send(err);
+		}
+		//responds with a json object of our database questions.
+		res.json(dataFromDB);
+		console.log(dataFromDB)
+	});
+});
 
 router.route('/questions')
 	.get(function(req, res) {
@@ -73,72 +83,7 @@ router.route('/questions')
  	});
 
 
-	 router.route('/abc')
-	 .get(function(req, res) {
-	 //looks at our adminCred Schema
-		 Cred.find(function(err, dataFromDB) {
-			 if (err){
-				 res.send(err);
-			 }
-			 //responds with a json object of our database questions.
-			 res.json(dataFromDB);
-			 console.log(dataFromDB)
-		 });
-	  });
-	  //post new admin info to the database
-	 /* .post(function(req, res) {
-		 
-		console.log("post method working...");
-		var cred 		= new Cred();
-		cred.username 	= "hiyu";
-	    cred.password 	= "haya";
-		
-	   	cred.save(function(err) {
-			if (err)
-				res.send(err);
-			//res.json({ message:'Admin successfully added!' });
-			console.log(res);
-		});
-	});*/
-
-const mongo = require('mongodb').MongoClient;
-mongo.connect('mongodb+srv://techmevlus:0000@cluster0.xt9zo.mongodb.net/mppsc_db?retryWrites=true&w=majority', function(err, client) {
-let allCollections = [];
-//create client by providing database name
-const db = client.db('mppsc_db');
-db.listCollections().toArray(function(err, collections) {
-    if(err) console.log(err);
-    //iterate to each collection detail and push just name in array
-    collections.forEach(eachCollectionDetails => {
-        allCollections.push(eachCollectionDetails.name);
-    });
-
-	console.log(allCollections)
-    //close client
-	client.close();
- });
-});
-
-
 //User Authentication Here
-
-//require('dotenv').config();
-
-//const express = require('express');
-const cors = require('cors');
-//const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const utils = require('./utils');
-
-//const app = express();
-//const port = process.env.PORT || 4000;
-
-// enable CORS
-app.use(cors());
-// parse application/json
-//app.use(bodyParser.json());
-// parse application/x-www-form-urlencoded
-//app.use(bodyParser.urlencoded({ extended: true }));
 
 // static user details
 const userData = {
