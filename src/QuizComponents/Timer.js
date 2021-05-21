@@ -65,7 +65,7 @@ class Timer extends React.Component {
     document.getElementById("testCompleteMsg").style.display="block";
   }
 
-
+ 
   render() {
     const { days, hours, minutes, seconds, expired } = this.state;
     if (expired) {

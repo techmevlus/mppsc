@@ -18,7 +18,7 @@ const shuffleArray = array => {
 	return array;
 }
 
-const startDate = new Date().getTime() + 20000;
+const startDate = new Date().getTime() + 55520000;
 
 class Quiz extends React.PureComponent{
 	constructor(props, context) {
@@ -50,7 +50,7 @@ class Quiz extends React.PureComponent{
 		var shuffledPosts = shuffleArray(this.state.data);
 		return <div> 
 			<div className="row posRelative">
-			<h1 style={{color: "green"}} id="testCompleteMsg" style={{display:"block"}}>Test Completed :)</h1>
+			<h1 id="testCompleteMsg" style={{display:"none", color: "green"}}>Test Completed :)</h1>
 			<div id="quizTimer" style={{display:"block"}}><Timer startDate={startDate} /></div>
 			
 				<div className="col-md-10" id="quizQuestion" style={{display:"block"}}>
@@ -76,4 +76,4 @@ class Quiz extends React.PureComponent{
  	b: PropTypes.string
  }
 */
-export default Quiz;
+export default Quiz; 

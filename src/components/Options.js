@@ -218,4 +218,4 @@ function mapDispatchToProps(dispatch){
         actions: bindActionCreators(answerActions , dispatch)
     };
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Options);
+export default connect(mapStateToProps,mapDispatchToProps)(Options); 
