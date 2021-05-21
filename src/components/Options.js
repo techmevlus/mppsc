@@ -154,7 +154,7 @@ class Options extends React.PureComponent{
 		 
 		console.log(this.state.resultData)
 		console.log(this.state.resultData.length)
-		console.log(this.state.correctAnswer) 
+		console.log(this.state.correctAnswer)  
 		this.quizResultRadioButton();
         return (
             <div>
