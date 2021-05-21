@@ -124,6 +124,7 @@ class Options extends React.PureComponent{
 			if(this.state.resultData[i].questionId==this.props.data._id){
 				console.log("Question already attempted");
 				var ele = document.getElementById(this.state.resultData[i].selectedOption);
+				console.log("Option Selected= "+this.state.resultData[i].selectedOption);
 				ele.checked = true;
 				count = 1;
 			}
@@ -159,7 +160,7 @@ class Options extends React.PureComponent{
             <div>
 	            <div className="col-md-10"  id="testIncomplete" style={{displey:"block"}}>
 
-						<div  className="strong options"  id="1" >
+						<div  className="strong options">
 	                    	<h4> 
 								<input type="radio" name="option" id="1" value="1" onClick={() => this.handleClick("1")}/>
 								<label> &nbsp;&nbsp; 1. {a} </label>
