@@ -20,10 +20,18 @@ import Blog from './components/Blog';
 import BlogSingle from './components/BlogSingle';
 
 //Importing Admin and Public and Private Routes 
-import PrivateRoute from './Utils/PrivateRoute';
-import PublicRoute from './Utils/PublicRoute';
+import AdminPrivateRoute from './Utils/AdminPrivateRoute';
+import AdminPublicRoute from './Utils/AdminPublicRoute';
 import Dashboard from './AdminSector/Dashboard';
 import AdminLogin from './AdminSector/AdminLogin';
+
+//Importing Author and Public and Private Routes 
+import AuthorPrivateRoute from './Utils/AuthorPrivateRoute';
+import AuthorPublicRoute from './Utils/AuthorPublicRoute';
+import AuthorDashboard from './AuthorSector/AuthorDashboard';
+import AuthorLogin from './AuthorSector/AuthorLogin';
+
+
 
 
 const state={ addQuestion:{
@@ -81,16 +89,20 @@ ReactDOM.render(
         <Route exact path="/addQuestion" render={props => 
             <QuestionForm url='http://localhost:3001/api/questions'/>
         }/>
-         <Route exact path="/admin.html" render={props => 
-            <Dashboard url='http://localhost:3001/api/questions'/>
-        }/>
         <Route exact path="/questionAdded" render={props => 
             <QuestionAdded />
         }/>
 
-        <PublicRoute path="/login" component={AdminLogin} />
-        <PublicRoute path="/dashboard" component={Dashboard} />
-        
+        <AdminPublicRoute path="/login" component={AdminLogin} />
+        <AdminPrivateRoute path="/dashboard" component={Dashboard} />
+
+
+        <AuthorPublicRoute path="/author-login" component={AuthorLogin} />
+        <AuthorPrivateRoute path="/author-dashboard" component={AuthorDashboard} />
+
+
+
+                
   		</div>
   	</Router>
   </Provider>,

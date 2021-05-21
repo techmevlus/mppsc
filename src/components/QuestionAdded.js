@@ -9,7 +9,7 @@ class QuestionAdded extends React.PureComponent{
 					<img alt="successfully added" src="./../../../_assets/images/tick.png" />
 					<div className="col-md-12 moreOptions">
 						<Link to='/addQuestion' className="col-md-3"> <button className="marTop25 marRight100 btn">Add Another Question</button></Link>
-						<Link to="/" className="col-md-3"> <button className="marTop25 btn">Go back to Quiz</button></Link>
+						<Link to="/quiz.html" className="col-md-3"> <button className="marTop25 btn">Go back to Quiz</button></Link>
 
 					</div>
 				</div>
