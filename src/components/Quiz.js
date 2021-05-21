@@ -18,7 +18,7 @@ const shuffleArray = array => {
 	return array;
 }
 
-const startDate = new Date().getTime() + 55520000;
+const startDate = new Date().getTime() + 55530000;
 
 class Quiz extends React.PureComponent{
 	constructor(props, context) {

@@ -77,7 +77,7 @@ class Options extends React.PureComponent{
 			
 			//Match and add array element.
 
-			let arr = [...this.state.resultData];
+			let arr = [...this.state.resultData]; 
 			
 			let a = arr.filter((e)=>{
 				if(e.questionId == this.props.data._id){
