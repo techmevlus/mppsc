@@ -68,6 +68,22 @@ router.route('/home')
 	});
 });
 
+//Create New Exam
+router.route('/')
+.post(function(req,res){
+	console.log("Exam Creation Running");
+	
+	var exam       = new Exam();
+	exam.exam_name = "VYAPAM";
+
+	exam.save(function(err){
+		if(err){
+			res.send(err);
+		}
+		else console.log("Exam Successfully Created");
+	})
+});
+
 
 //to get questions
 router.route('/questions')
