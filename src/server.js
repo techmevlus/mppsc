@@ -100,15 +100,6 @@ router.route('/questions')
 
 //User Authentication Here
 
-// static user details
-const userData = {
-	//userId: "789789",
-	username: "kuldeep",
-	//name: "Clue Mediator",
-	password: "qaz",
-	//isAdmin: true
-  };
-
 //middleware that checks if JWT token exists and verifies it if it does exist.
 //In all future routes, this helps to know if the request is authenticated or not.
 app.use(function (req, res, next) {
@@ -140,29 +131,38 @@ app.use(function (req, res, next) {
    
   // validate the user credentials
   app.post('/users/signin', function (req, res) {
+
 	const user = req.body.username;
 	const pwd = req.body.password;
-	// return 400 status if username/password is not exist
-	if (!user || !pwd) {
-	  return res.status(400).json({
-		error: true,
-		message: "Username or Password required."
-	  });
-	}
-   
-	// return 401 status if the credential is not match.
-	if (user !== userData.username || pwd !== userData.password) {
-	  return res.status(401).json({
-		error: true,
-		message: "Username or Password is Wrong.",
-	  });
-	}
-	// generate token
-	const token = utils.generateToken(userData);
-	// get basic user details
-	const userObj = utils.getCleanUser(userData);
-	// return the token along with user details
-	return res.json({ user: userObj, token });
+
+	Cred.findOne({'username':user},'username password',function(err,userData){
+		if(err){
+			res.send(err);
+		}
+	
+		// return 400 status if username/password is not exist
+		if (!user || !pwd) {
+			return res.status(400).json({
+			error: true,
+			message: "Username or Password required."
+			});
+		}
+		
+		// return 401 status if the credential is not match.
+		if (user !== userData.username || pwd !== userData.password) {
+			return res.status(401).json({
+			error: true,
+			message: "Username or Password is Wrong.",
+			});
+		}
+		// generate token
+		const token = utils.generateToken(userData);
+		// get basic user details
+		const userObj = utils.getCleanUser(userData);
+		// return the token along with user details
+		return res.json({ user: userObj, token });
+	});
+	
   });
    
    
