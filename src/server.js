@@ -58,7 +58,7 @@ router.route('/abc')
 //to get test detail
 router.route('/home')
 .get(function(req,res){
-	Exam.findOne({'exam_name':'MPPSC'},'test.noq test.negt_mark test.timeof_test test.auth_id test.attempts',function(err, dataFromDB) {
+	Exam.findOne({'_id':'60a787bdd03c9462c79735fe'},'test.noq test.negt_mark test.timeof_test test.auth_id test.attempts',function(err, dataFromDB) {
 		if (err){
 			res.send(err);
 		}
