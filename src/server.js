@@ -42,10 +42,10 @@ router.get('/', function(req, res) {
 app.use('/api', router);
 //starts the server and listens for requests
 
-
-router.route('/home')
+//to get only exam name
+router.route('/abc')
 .get(function(req,res){
-	Exam.find(function(err, dataFromDB) {
+	Exam.findOne({},'exam_name',function(err, dataFromDB) {
 		if (err){
 			res.send(err);
 		}
@@ -55,6 +55,21 @@ router.route('/home')
 	});
 });
 
+//to get test detail
+router.route('/home')
+.get(function(req,res){
+	Exam.findOne({'exam_name':'MPPSC'},'test.noq test.negt_mark test.timeof_test test.auth_id test.attempts',function(err, dataFromDB) {
+		if (err){
+			res.send(err);
+		}
+		//responds with a json object of our database questions.
+		res.json(dataFromDB);
+		console.log(dataFromDB)
+	});
+});
+
+
+//to get questions
 router.route('/questions')
 	.get(function(req, res) {
 	//looks at our Question Schema
