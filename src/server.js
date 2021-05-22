@@ -45,7 +45,7 @@ app.use('/api', router);
 //to get only exam name
 router.route('/abc')
 .get(function(req,res){
-	Exam.findOne({},'exam_name',function(err, dataFromDB) {
+	Exam.findOne({},'exam_name logo',function(err, dataFromDB) {
 		if (err){
 			res.send(err);
 		}
