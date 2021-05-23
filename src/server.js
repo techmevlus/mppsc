@@ -57,8 +57,10 @@ router.route('/exams_name')
 
 //to get test detail
 router.route('/testDetails')
-.get(function(req,res){
-	Exam.findOne({'_id':'60a787bdd03c9462c79735fe'},'test.noq test.negt_mark test.timeof_test test.auth_id test.attempts',function(err, dataFromDB) {
+.post(function(req,res){
+	var examId = req.body.examId;
+	console.log(examId)
+	Exam.findOne({'_id':examId},'test.noq test.negt_mark test.timeof_test test.auth_id test.attempts',function(err, dataFromDB) {
 		if (err){
 			res.send(err);
 		}

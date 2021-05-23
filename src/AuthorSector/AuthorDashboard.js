@@ -100,7 +100,7 @@ render () {
         <section>
             <div onClick={() => this.handleClick("test", this.state.exams[0].id)}><h3   >{(this.state.exams[0]!==undefined)?this.state.exams[0].exam_name :"Exams Comming Soon" }</h3></div>
             <p>{(this.state.exams!==undefined)?
-            this.state.exams.map(item => (<li>{item.exam_name}</li>)) :"Exams Comming Soon" }</p>
+            this.state.exams.map((item, index) => (<li key={index}>{item.exam_name}</li>)) :"Exams Comming Soon" }</p>
 
         </section>
 <div>
@@ -110,7 +110,7 @@ render () {
   <label class="input-group-text" for="inputGroupSelect01">EXAMS</label>
   <select class="form-select" id="inputGroupSelect01" value={this.state.selectedExam} onChange={this.handleChange} >
     <option selected>Choose...</option>
-    {this.state.exams.map(item => (<option value={item._id}>{item.exam_name}</option>))}
+    {this.state.exams.map((item, index) => (<option value={item._id} key={index}>{item.exam_name}</option>))}
 
   </select>
 </div>:<div>NO EXAM</div>
@@ -130,8 +130,8 @@ render () {
 
         <Link     to={{
       pathname: "/author-exam",
-      productdetailProps: {
-       productdetail: this.state.selectedExam
+      selectedExam: {
+       _id: this.state.selectedExam
       }
    }}>  
           <button type="button" class="btn btn-primary">Next</button>
