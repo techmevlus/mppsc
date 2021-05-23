@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
  
 //  <Link to="/addQuestion"><button className="marTop25 nextBtn  btn-primary">Add Question</button></Link>
 // <input value="Logout" type="button"  onClick={() => this.handleLogout("Logout")}  />
-  class AuthorDashboard extends React.PureComponent{
+  class AuthorExam extends React.PureComponent{
 
 
 
@@ -13,13 +13,13 @@ import { Link } from 'react-router-dom'
 		super(props);
     this.state = {
       exams:"",
-      selectedExam :"" 
+      selectedtest :"" 
 
     }
 	 
     this.handleLogout = this.handleLogout.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    console.log("selectedExam", this.state.selectedExam)
+    console.log("selectedtest", this.state.selectedtest)
 
 	  }
 
@@ -45,10 +45,10 @@ import { Link } from 'react-router-dom'
 
       if (valClicked === "Next")
       {
-        console.log("selected Exam", this.state.selectedExam )
+        console.log("selected Exam", this.state.selectedtest )
         this.props.history.push({
           pathname: '/author-exam',
-          selectedExam: { _id: this.state.selectedExam}
+          selectedtest: { _id: this.state.selectedtest}
         })
 
 
@@ -57,7 +57,7 @@ import { Link } from 'react-router-dom'
    
   
    handleChange(event) {
-    this.setState({selectedExam:event.target.value});
+    this.setState({selectedtest:event.target.value});
    
   }
 
@@ -105,7 +105,7 @@ render () {
   (this.state.exams[0]!==undefined)?
   <div class="input-group mb-3">
   <label class="input-group-text" for="inputGroupSelect01">EXAMS</label>
-  <select class="form-select" id="inputGroupSelect01" value={this.state.selectedExam} onChange={this.handleChange} >
+  <select class="form-select" id="inputGroupSelect01" value={this.state.selectedtest} onChange={this.handleChange} >
     <option selected>Choose...</option>
     <option value={this.state.exams[0]._id}>{this.state.exams[0].exam_name}</option>
     <option value={this.state.exams[0]._id}>{this.state.exams[0].exam_name}</option>
@@ -125,7 +125,7 @@ render () {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button  onClick={() => this.handleClick("Next", this.state.selectedExam)}   type="button" class="btn btn-primary">Next</button>
+        <button  onClick={() => this.handleClick("Next", this.state.selectedtest)}   type="button" class="btn btn-primary">Next</button>
       </div>
     </div>
   </div>
@@ -135,4 +135,4 @@ render () {
   );}
 }
  
-export default AuthorDashboard;
+export default AuthorExam;

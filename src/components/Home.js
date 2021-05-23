@@ -56,6 +56,7 @@ class Home extends React.PureComponent{
           <li><a href="/">Home</a></li>
           
         </ol>
+        <Link to="/author-login"><button className="marTop25 nextBtn btn btn-secondary">Author Login</button></Link>
 
       </div>
 

@@ -5,6 +5,11 @@ import {bindActionCreators} from 'redux';
 import * as questionActions from '../actions/questionActions';
 class AddQuestion extends React.PureComponent {
 
+
+
+
+    
+
     
     constructor(props) {
         super(props);
@@ -112,7 +117,14 @@ class AddQuestion extends React.PureComponent {
                                 <div className="col-sm-10">          
                                     <input type="text" className="form-control" placeholder='Correct Answer Number (one of 1,2,3,4 from above)..' name="Key" onChange={this.handleKey} />
                                 </div>
+
+                                
+
+
                             </div>
+
+
+
 
                             <div className="form-group">        
                                 <div className="col-sm-offset-2 col-sm-10">

@@ -60,7 +60,7 @@ class Quiz extends React.PureComponent{
 			</div>
 			<div className="col-md-10 noPad">
 			
-				<Link to="/addQuestion"><button className="marTop25 nextBtn btn pull-left">Add Question</button></Link>
+				<Link to="/addQuestion"><button className="marTop25 nextBtn btn btn-warning ">Add Question</button></Link>
 			</div>
 			<Link to="/adminLogin"><button className="marTop25 nextBtn btn pull-left">Admin Page</button></Link>
 			

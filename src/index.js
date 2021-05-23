@@ -93,12 +93,14 @@ ReactDOM.render(
             <QuestionAdded />
         }/>
 
+
         <AdminPublicRoute path="/login" component={AdminLogin} />
         <AdminPrivateRoute path="/dashboard" component={Dashboard} />
 
 
         <AuthorPublicRoute path="/author-login" component={AuthorLogin} />
-        <AuthorPrivateRoute path="/author-dashboard" component={AuthorDashboard} />
+        <AuthorPrivateRoute path="/author-dashboard" component={AuthorDashboard}       
+        />
 
 
 

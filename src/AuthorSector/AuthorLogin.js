@@ -34,7 +34,8 @@ function AuthorLogin(props) {
         <input type="password" {...password} autoComplete="new-password" />
       </div>
       {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
-      <input type="button" value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} /><br />
+      <button type="submit" class="btn btn-primary"  value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} >Login</button>
+      <input btn btn-primary type="button" value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} /><br />
     </div>
   );
 }
