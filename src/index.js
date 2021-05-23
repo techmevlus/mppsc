@@ -94,7 +94,7 @@ ReactDOM.render(
             <QuestionAdded />
         }/>
         <Route exact path="/author-exam" render={props => 
-            <AuthorExam/>
+            <AuthorExam        {...props}   />
         }/>
 
 

@@ -7,7 +7,7 @@ function PrivateRoute({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}
-      render={(props) => getToken() ? <Component  url='http://localhost:3001/api/exams_name' {...props} /> : <Redirect to={{ pathname: '/author-login', state: { from: props.location } }} />}
+      render={(props) => getToken() ? <Component  url='http://localhost:3001/api/exams_name' {...props} /> : <Redirect to={{ pathname: '/author-login', state: { from: props.location } }} {...props}  />}
     />
   )
 }

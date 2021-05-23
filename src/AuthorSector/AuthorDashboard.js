@@ -51,7 +51,8 @@ import AuthorExam from './AuthorExam.js';
         console.log("selected Exam", this.state.selectedExam )
         this.props.history.push({
           pathname: '/author-exam',
-          selectedExam: { _id: this.state.selectedExam}
+          //selectedExam: { _id: this.state.selectedExam}
+          state: { _id:this.state.selectedExam }
         })
       }
    }
@@ -83,6 +84,7 @@ render () {
 <button type="button" class="btn btn-primary" onClick={() => this.handleClick("exam")} data-toggle="modal" data-target="#exampleModalLong">
   Create Content
 </button>
+
 
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -125,7 +127,17 @@ render () {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button  onClick={() => this.handleClick("Next", this.state.selectedExam)}   type="button" class="btn btn-primary">Next</button>
+
+        <Link     to={{
+      pathname: "/author-exam",
+      productdetailProps: {
+       productdetail: this.state.selectedExam
+      }
+   }}>  
+          <button type="button" class="btn btn-primary">Next</button>
+
+   
+   </Link>
       </div>
     </div>
   </div>
