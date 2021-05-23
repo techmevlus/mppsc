@@ -30,6 +30,7 @@ import AuthorPrivateRoute from './Utils/AuthorPrivateRoute';
 import AuthorPublicRoute from './Utils/AuthorPublicRoute';
 import AuthorDashboard from './AuthorSector/AuthorDashboard';
 import AuthorLogin from './AuthorSector/AuthorLogin';
+import AuthorExam from './AuthorSector/AuthorExam';
 
 
 
@@ -91,6 +92,9 @@ ReactDOM.render(
         }/>
         <Route exact path="/questionAdded" render={props => 
             <QuestionAdded />
+        }/>
+        <Route exact path="/author-exam" render={props => 
+            <AuthorExam/>
         }/>
 
 

@@ -43,9 +43,9 @@ app.use('/api', router);
 //starts the server and listens for requests
 
 //to get only exam name
-router.route('/abc')
+router.route('/exams_name')
 .get(function(req,res){
-	Exam.findOne({},'exam_name logo',function(err, dataFromDB) {
+	Exam.find({},'exam_name',function(err, dataFromDB) {
 		if (err){
 			res.send(err);
 		}
@@ -56,7 +56,7 @@ router.route('/abc')
 });
 
 //to get test detail
-router.route('/home')
+router.route('/testDetails')
 .get(function(req,res){
 	Exam.findOne({'_id':'60a787bdd03c9462c79735fe'},'test.noq test.negt_mark test.timeof_test test.auth_id test.attempts',function(err, dataFromDB) {
 		if (err){

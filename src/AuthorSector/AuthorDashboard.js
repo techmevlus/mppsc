@@ -1,6 +1,7 @@
 import React from 'react';
 import { getUser, removeUserSession } from '../Utils/Common.js';
 import { Link } from 'react-router-dom'
+import AuthorExam from './AuthorExam.js';
  
 //  <Link to="/addQuestion"><button className="marTop25 nextBtn  btn-primary">Add Question</button></Link>
 // <input value="Logout" type="button"  onClick={() => this.handleLogout("Logout")}  />
@@ -12,7 +13,7 @@ import { Link } from 'react-router-dom'
   constructor(props) {
 		super(props);
     this.state = {
-      exams:"",
+      exams:[],
       selectedExam :"" 
 
     }
@@ -27,13 +28,15 @@ import { Link } from 'react-router-dom'
  
    handleClick (valClicked)
    {
-     if (valClicked === "exam")
-     {		fetch(this.props.url)
-			.then(res => res.json())
-			.then(exams=>{
-		    	this.setState({ exams });
-          console.log("EXAMS",this.state.exams[0])
-			})}
+     console.log("valClicked = "+valClicked);
+     if (valClicked === "exam"){
+      fetch(this.props.url)
+        .then(res => res.json())
+        .then(exams=>{
+            this.setState({ exams });
+            console.log("EXAMS",this.state.exams)
+        })
+     }
 
 
       if (valClicked === "test")
@@ -50,8 +53,6 @@ import { Link } from 'react-router-dom'
           pathname: '/author-exam',
           selectedExam: { _id: this.state.selectedExam}
         })
-
-
       }
    }
    
@@ -75,7 +76,6 @@ render () {
  
   return (
     <div style= {{minHeight:"1000px", margin:"5px" }}>
-      
       <button type="button" class="btn btn-danger" onClick={() => this.handleLogout("Logout")}  >Logout</button>
 
 
@@ -97,7 +97,8 @@ render () {
 
         <section>
             <div onClick={() => this.handleClick("test", this.state.exams[0].id)}><h3   >{(this.state.exams[0]!==undefined)?this.state.exams[0].exam_name :"Exams Comming Soon" }</h3></div>
-            <p>{(this.state.exams[0]!==undefined)?this.state.exams[0].test[0].noq :"Exams Comming Soon" }</p>
+            <p>{(this.state.exams!==undefined)?
+            this.state.exams.map(item => (<li>{item.exam_name}</li>)) :"Exams Comming Soon" }</p>
 
         </section>
 <div>
@@ -107,8 +108,7 @@ render () {
   <label class="input-group-text" for="inputGroupSelect01">EXAMS</label>
   <select class="form-select" id="inputGroupSelect01" value={this.state.selectedExam} onChange={this.handleChange} >
     <option selected>Choose...</option>
-    <option value={this.state.exams[0]._id}>{this.state.exams[0].exam_name}</option>
-    <option value={this.state.exams[0]._id}>{this.state.exams[0].exam_name}</option>
+    {this.state.exams.map(item => (<option value={item._id}>{item.exam_name}</option>))}
 
   </select>
 </div>:<div>NO EXAM</div>
