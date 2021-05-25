@@ -4,7 +4,8 @@ class TestName extends React.PureComponent{
 	constructor(props, context) {
 	    super(props, context);
 	    this.state = {
-	    	testData: ""
+	    	testData: "",
+        examId:""
 	    }
       this.loadTestDetailsFromServer = this.loadTestDetailsFromServer.bind(this);
 	}
@@ -12,6 +13,7 @@ class TestName extends React.PureComponent{
   
 
 loadTestDetailsFromServer(){
+  (this.props.location.exam_id.id)?this.setState({examId:this.props.location.exam_id.id }):""
   const formData =  {    examId   : "60a787bdd03c9462c79735fe"  };
    // fetch('http://localhost:3001/api/testDetails')
    fetch('http://localhost:3001/api/testDetails', { 
@@ -31,9 +33,11 @@ loadTestDetailsFromServer(){
 
 componentWillMount(){
   this.loadTestDetailsFromServer();
+ 
+  console.log("EXAM_ID COMMING", this.state.examId)
 }
 	
-	render () {  console.log("DATA IS COMMING", this.props.location.selectedExam)
+	render () {  console.log("DATA IS COMMING", this.props.location.exam_id.id)
             if(this.state.testData==="" || this.state.testData===undefined || this.state.testData===null){
               console.log("Test Data is Empty")
             return false;

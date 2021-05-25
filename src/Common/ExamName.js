@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class ExamName extends React.PureComponent{
 
@@ -8,6 +9,7 @@ class ExamName extends React.PureComponent{
             exams:[]
         }
         this.loadExamNameFromServer = this.loadExamNameFromServer.bind(this);
+
     }
 
     loadExamNameFromServer(){
@@ -21,6 +23,8 @@ class ExamName extends React.PureComponent{
     componentWillMount(){
         this.loadExamNameFromServer();
     }
+
+  
 	
     
 
@@ -33,7 +37,16 @@ class ExamName extends React.PureComponent{
         return 	 <div>
             <ul>
             {this.state.exams.map((item, index) =>(
-                <li key={index}>{item.exam_name}</li>
+                          <Link     to={{
+                            pathname: "/testDetails",
+                            exam_id: {
+                             id: item._id
+                            }
+                         }}> 
+                
+                
+                <li  key={index}>{item.exam_name}</li>
+                </Link>
             ))}
             </ul>
         </div>
