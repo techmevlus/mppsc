@@ -60,7 +60,7 @@ router.route('/testDetails')
 .post(function(req,res){
 	var examId = req.body.examId;
 	console.log(examId)
-	Exam.findOne({'_id':examId},'test.noq test.negt_mark test.timeof_test test.auth_id test.attempts',function(err, dataFromDB) {
+	Exam.findOne({'_id':examId},'test.noq test.negt_mark test.timeof_test test.auth_id test.attempts test.dateof_create',function(err, dataFromDB) {
 		if (err){
 			res.send(err);
 		}

@@ -32,6 +32,7 @@ import AuthorDashboard from './AuthorSector/AuthorDashboard';
 import AuthorLogin from './AuthorSector/AuthorLogin';
 import AuthorExam from './AuthorSector/AuthorExam';
 import ExamName from './Common/ExamName';
+import TestName from './Common/TestName';
 
 
 
@@ -99,6 +100,9 @@ ReactDOM.render(
         }/>
         <Route exact path="/exams_name" render={props => 
             <ExamName url='http://localhost:3001/api/exams_name' {...props} />
+        }/>
+        <Route exact path="/testDetails" render={props => 
+            <TestName url='http://localhost:3001/api/testDetails' {...props} />
         }/>
 
 
