@@ -70,6 +70,24 @@ router.route('/testDetails')
 	});
 });
 
+//to get test data(for quiz)
+router.route('/test')
+.post(function(req,res){
+	var examId = req.body.examId;
+	var testId = req.body.testId;
+	console.log("Exam id ="+examId);
+	console.log("Test id ="+testId);
+	//Exam.findOne({'_id':examId, 'test.auth_id':authorId},'test.test_data',function(err, dataFromDB) {
+	Exam.findOne({'_id':examId, 'test.auth_id':testId},function(err, dataFromDB) {
+		if (err){
+			res.send(err);
+		}
+		//responds with a json object of our database questions.
+		res.json(dataFromDB);
+		console.log(dataFromDB)
+	});
+});
+
 //Create New Exam
 router.route('/')
 .post(function(req,res){
@@ -145,8 +163,8 @@ app.use(function (req, res, next) {
 	if (!req.user) return res.status(401).json({ success: false, message: 'Invalid user to access it.' });
 	res.send('Welcome to the Node.js Tutorial! - ' + req.user.name);
   });
-   
-   
+
+  
   // validate the user credentials
   app.post('/users/signin', function (req, res) {
 

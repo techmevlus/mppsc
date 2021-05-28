@@ -1,6 +1,8 @@
 import React from 'react';
 import Options from '../components/Options';
 import { Link } from 'react-router-dom';
+import Quiz from '../components/Quiz';
+import Test from '../Common/Test';
 
 class Timer extends React.Component {
   constructor(props) {
@@ -57,14 +59,12 @@ class Timer extends React.Component {
     this.setState({ days, hours, minutes, seconds, expired: false });
   };
 
-  quizCompleted(){
-    document.getElementById("testCompleted").style.display="block";
+  quizCompleted = () => {
+    document.getElementById("timer").style.display="none";
+    document.getElementById("question").style.display="none";
     document.getElementById("testIncomplete").style.display="none";
-    document.getElementById("quizQuestion").style.display="none";
-    document.getElementById("quizTimer").style.display="none";
-    document.getElementById("testCompleteMsg").style.display="block";
+    document.getElementById("testCompleted").style.display="block";
   }
-
   
   render() {
     const { days, hours, minutes, seconds, expired } = this.state;
