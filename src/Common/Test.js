@@ -132,6 +132,12 @@ class Test extends React.PureComponent{
                 resultData:arr
             });
         }
+        // Update question panel Color
+        this.setState(prevState => ({
+            questionPanel: prevState.questionPanel.map(
+            obj => (obj.questionNum-1 === this.state.currentQuestion ? Object.assign(obj, { questionColor: "green" }) : obj)
+        )
+        }));
    }
 
    //Clear button function
@@ -162,6 +168,12 @@ class Test extends React.PureComponent{
                  resultData:a
                })
            }
+        // Update question panel Color
+        this.setState(prevState => ({
+            questionPanel: prevState.questionPanel.map(
+            obj => (obj.questionNum-1 === this.state.currentQuestion ? Object.assign(obj, { questionColor: "white" }) : obj)
+        )
+        }));
    }
 
    nextButton(){
@@ -194,9 +206,6 @@ class Test extends React.PureComponent{
                var ele = document.getElementById(this.state.resultData[i].selectedOption);
                ele.checked = true;
                count = 1;
-               //to set color to attempted question on panel
-               //var panel = document.getElementsByName(this.state.resultData[i].selectedOption);
-               //panel.style.backgroundColor = "Green";
            }
        }	
        if(count==0){
@@ -235,7 +244,10 @@ class Test extends React.PureComponent{
         let arr = [...this.state.questionPanel];
         for(let i = 0;i<this.state.testData.length;i++){
             // Add data into array
-            arr.push(i+1);
+            arr.push({
+                questionNum : i + 1,
+                questionColor: "white"
+            });
         }this.setState({
             questionPanel:arr
         });
@@ -290,7 +302,7 @@ class Test extends React.PureComponent{
             <button onClick={() => this.submitButton()}>Submit</button>
             <div>
                 {this.state.questionPanel.map((e, index)=>(
-                    <button key={index} name={e} onClick={()=>this.panelClick(e)} style={{backgroundColor:"White"}}>{e}</button>
+                    <button key={index} onClick={()=>this.panelClick(e.questionNum)} style={{backgroundColor:e.questionColor}}>{e.questionNum}</button>
                 ))}
             </div>
             </div>
