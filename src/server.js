@@ -31,7 +31,8 @@ app.use(function(req, res, next) {
 });
 var router = express.Router();
 var Question = require('./../models/schema.js');
-var Cred = require('./../models/adminSchema.js');
+var AdminCred = require('./../models/adminSchema.js');
+var AuthorCred = require('./../models/authorSchema.js');
 const Exam = require('../models/examCollection');
 
 router.get('/', function(req, res) {
@@ -105,35 +106,6 @@ router.route('/')
 });
 
 
-//to get questions
-router.route('/questions')
-	.get(function(req, res) {
-	//looks at our Question Schema
-		Question.find(function(err, dataFromDB) {
-			if (err){
-				res.send(err);
-			}
-			//responds with a json object of our database questions.
-			res.json(dataFromDB);
-			console.log(dataFromDB)
-		});
- 	})
- 	//post new question to the database
- 	.post(function(req, res) {
-		 
- 		var question 		= new Question();
- 		question.question 	= req.body.question;
-		question.options 	= req.body.options;
-		question.key 		= req.body.key;
-
-		question.save(function(err) {
-	 		if (err)
-	 			res.send(err);
-	 		res.json({ message:'Question successfully added!' });
- 		});
- 	});
-
-
 //User Authentication Here
 
 //middleware that checks if JWT token exists and verifies it if it does exist.
@@ -165,13 +137,49 @@ app.use(function (req, res, next) {
   });
 
   
-  // validate the user credentials
-  app.post('/users/signin', function (req, res) {
+  // validate the admin credentials
+  app.post('/admin/signin', function (req, res) {
 
 	const user = req.body.username;
 	const pwd = req.body.password;
 
-	Cred.findOne({'username':user},'username password',function(err,userData){
+	AdminCred.findOne({'username':user},'username password',function(err,userData){
+		if(err){
+			res.send(err);
+		}
+	
+		// return 400 status if username/password is not exist
+		if (!user || !pwd) {
+			return res.status(400).json({
+			error: true,
+			message: "Username or Password required."
+			});
+		}
+		
+		// return 401 status if the credential is not match.
+		if (user !== userData.username || pwd !== userData.password) {
+			return res.status(401).json({
+			error: true,
+			message: "Username or Password is Wrong.",
+			});
+		}
+		// generate token
+		const token = utils.generateToken(userData);
+		// get basic user details
+		const userObj = utils.getCleanUser(userData);
+		// return the token along with user details
+		return res.json({ user: userObj, token });
+	});
+	
+  });
+
+  // validate the author credentials
+  app.post('/author/signin', function (req, res) {
+
+	const user = req.body.username;
+	const pwd = req.body.password;
+
+	AuthorCred.findOne({'username':user},'username password',function(err,userData){
 		if(err){
 			res.send(err);
 		}

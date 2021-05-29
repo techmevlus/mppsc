@@ -12,7 +12,7 @@ function AuthorLogin(props) {
   const handleLogin = () => {
     setError(null);
     setLoading(true);
-    axios.post('http://localhost:3001/users/signin', { username: username.value, password: password.value }).then(response => {
+    axios.post('http://localhost:3001/author/signin', { username: username.value, password: password.value }).then(response => {
       setLoading(false);
       setUserSession(response.data.token, response.data.user);
       props.history.push('/author-dashboard');

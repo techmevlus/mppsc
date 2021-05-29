@@ -12,7 +12,7 @@ function Login(props) {
   const handleLogin = () => {
     setError(null);
     setLoading(true);
-    axios.post('http://localhost:3001/users/signin', { username: username.value, password: password.value }).then(response => {
+    axios.post('http://localhost:3001/admin/signin', { username: username.value, password: password.value }).then(response => {
       setLoading(false);
       setUserSession(response.data.token, response.data.user);
       props.history.push('/dashboard');
@@ -21,6 +21,25 @@ function Login(props) {
       if (error.response.status === 401) setError(error.response.data.message);
       else setError("Something went wrong. Please try again later.");
     });
+
+   /* const formData =  {     username    : username.value, 
+                            password    : password.value
+                      };
+
+    fetch('http://localhost:3001/api/users/signin', { 
+      method: 'post',
+      headers: {
+          'Accept': 'application/json, text/plain, *,/*', // remove comma after *
+          'Content-Type': 'application/json'
+          
+      },
+      body: JSON.stringify(formData)
+  })
+  .then(response => {
+    setLoading(false);
+    setUserSession(response.data.token, response.data.user);
+    props.history.push('/dashboard');
+  })*/
   }
   return (
     <div>
