@@ -18,6 +18,10 @@ import ContactUs from './components/ContactUs';
 import Pricing from './components/Pricing';
 import Blog from './components/Blog';
 import BlogSingle from './components/BlogSingle';
+import ExamName from './Common/ExamName';
+import TestName from './Common/TestName';
+import Test from './Common/Test';
+import AddNewTest from './FormComponents/AddNewTest';
 
 //Importing Admin and Public and Private Routes 
 import AdminPrivateRoute from './Utils/AdminPrivateRoute';
@@ -31,9 +35,7 @@ import AuthorPublicRoute from './Utils/AuthorPublicRoute';
 import AuthorDashboard from './AuthorSector/AuthorDashboard';
 import AuthorLogin from './AuthorSector/AuthorLogin';
 import AuthorExam from './AuthorSector/AuthorExam';
-import ExamName from './Common/ExamName';
-import TestName from './Common/TestName';
-import Test from './Common/Test';
+
 
 
 
@@ -107,6 +109,10 @@ ReactDOM.render(
         }/>
         <Route exact path="/test" render={props => 
             <Test url='http://localhost:3001/api/test' {...props} />
+        }/>
+
+        <Route exact path="/AddNewTest" render={props => 
+            <AddNewTest url='http://localhost:3001/api/AddNewTest' {...props} />
         }/>
 
 
