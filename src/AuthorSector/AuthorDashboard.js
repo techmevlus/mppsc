@@ -8,9 +8,6 @@ import ExamName from '../Common/ExamName.js'
 // <input value="Logout" type="button"  onClick={() => this.handleLogout("Logout")}  />
   class AuthorDashboard extends React.PureComponent{
 
-
-
-
   constructor(props) {
 		super(props);
     this.state = {
@@ -39,22 +36,12 @@ render () {
   return (
     <div style= {{minHeight:"1000px", margin:"5px" }}>
     
-      <button type="button" class="btn btn-danger" onClick={() => this.handleLogout("Logout")}  >Logout</button>
+      <button type="button" className="btn btn-danger" onClick={() => this.handleLogout("Logout")}  >Logout</button>
 
 
       <hr style={{height:"5px"}}></hr>
       <ExamName url='http://localhost:3001/api/exams_name'></ExamName>
-
-
-
-
-
-
-
-
-
-
-
+      <Link to="/AddNewTest"><button>Add New Test</button></Link>
 
     </div>
   );}

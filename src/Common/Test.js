@@ -8,15 +8,15 @@ class Test extends React.PureComponent{
     constructor(props, context){
         super(props, context);
             this.state = {
-                data : [],
-                examName: "",
-                testData:[{options:[]}],
-                resultData:[],
-                examId: "",
-                testId: "",
-                correctAnswer: 0,
+                data           : [],
+                test_id        : "",
+                testData       : [{options:[]}],
+                resultData     : [],
+                examId         : "",
+                testId         : "",
+                correctAnswer  : 0,
                 currentQuestion: 0,
-                questionPanel:[]
+                questionPanel  : []
             }
         this.loadTestFromServer = this.loadTestFromServer.bind(this);
         this.componentRefresh = this.componentRefresh.bind(this);
@@ -51,7 +51,7 @@ class Test extends React.PureComponent{
             }
             this.setState({
                 testData : this.state.data.test[e].test_data,
-                examName : this.state.data.test[e].auth_id
+                test_id : this.state.data.test[e]._id
             });
     }
 
@@ -276,25 +276,25 @@ class Test extends React.PureComponent{
         console.log(this.state.currentQuestion)
         console.log(this.state.questionPanel)
 		return <div>
-            <h1 id="testHeading">this is Author id = {this.state.examName}</h1>
+            <h1 id="testHeading">this is Test id = {this.state.test_id}</h1>
             <div id="timer" style={{display:"block"}}><Timer startDate={startDate} /></div>
             <div id="question" style={{display:"block"}}>Q.{this.state.currentQuestion+1} {this.state.testData[this.state.currentQuestion].question}</div>
             <div id="testIncomplete" style={{display:"block"}}>
                 <div>
                     <input type="radio" name="option" id="1" value="1" onClick={()=>this.selectRadio("1")}/>
-                    <label> &nbsp;&nbsp; 1. {this.state.testData[this.state.currentQuestion].options[0]} </label>
+                    <label> &nbsp;&nbsp; 1. {this.state.testData[this.state.currentQuestion].options1} </label>
                 </div>
                 <div>
                     <input type="radio" name="option" id="2" value="2" onClick={()=>this.selectRadio("2")}/>
-                    <label> &nbsp;&nbsp; 2. {this.state.testData[this.state.currentQuestion].options[1]} </label>
+                    <label> &nbsp;&nbsp; 2. {this.state.testData[this.state.currentQuestion].options2} </label>
                 </div>
                 <div>
                     <input type="radio" name="option" id="3" value="3" onClick={()=>this.selectRadio("3")}/>
-                    <label> &nbsp;&nbsp; 3. {this.state.testData[this.state.currentQuestion].options[2]} </label>
+                    <label> &nbsp;&nbsp; 3. {this.state.testData[this.state.currentQuestion].options3} </label>
                 </div>
                 <div>
                     <input type="radio" name="option" id="4" value="4" onClick={()=>this.selectRadio("4")}/>
-                    <label> &nbsp;&nbsp; 4. {this.state.testData[this.state.currentQuestion].options[3]} </label>
+                    <label> &nbsp;&nbsp; 4. {this.state.testData[this.state.currentQuestion].options4} </label>
                 </div>
             <button onClick={() => this.clearButton()}>Clear</button>
             <button onClick={() => this.previewsButton()}>Previews Question</button>

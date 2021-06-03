@@ -7,7 +7,7 @@ var examCollectionSchema = mongoose.Schema(
 	    logo     :  	Buffer,
 	    test	 : 	    [{
                             noq          : Number,
-                            negt_mark    : Number,
+                            negt_mark    : String,
                             timeof_test  : Number,
                             dateof_create: Date,
                             auth_id      : String,

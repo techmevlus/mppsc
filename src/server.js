@@ -89,20 +89,29 @@ router.route('/test')
 	});
 });
 
-//Create New Exam
-router.route('/')
+//Add new quiz
+router.route('/createNewTest')
 .post(function(req,res){
-	console.log("Exam Creation Running");
-	
-	var exam       = new Exam();
-	exam.exam_name = "VYAPAM";
+	console.log("Test Creation Running");
 
-	exam.save(function(err){
-		if(err){
-			res.send(err);
+	const newTestData =  {
+		'noq'           : req.body.noq,
+		'negt_mark'     : req.body.negt_mark,
+		'timeof_test'   : req.body.timeof_test,
+		'dateof_create' : req.body.dateof_create,
+		'auth_id'       : req.body.auth_id,
+		'attempts'      : req.body.attempts,
+		'test_data'		: req.body.test_data
+	}
+
+	console.log(req.body.negt_mark)
+	Exam.findOneAndUpdate({'_id':req.body.examId},{$push: {'test': newTestData}}, function(err) {
+		if (err){
+			console.log("Query failed!");
+		}else{
+			console.log("Query passed!");
 		}
-		else console.log("Exam Successfully Created");
-	})
+	});
 });
 
 
@@ -179,7 +188,7 @@ app.use(function (req, res, next) {
 	const user = req.body.username;
 	const pwd = req.body.password;
 
-	AuthorCred.findOne({'username':user},'username password',function(err,userData){
+	AuthorCred.findOne({'username':user},'_id username password',function(err,userData){
 		if(err){
 			res.send(err);
 		}

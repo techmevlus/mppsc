@@ -7,12 +7,12 @@ function generateToken(user) {
   //2. Use the information that are useful in other parts
   if (!user) return null;
   var u = {
-    //userId: user.userId,
+    userId: user._id,
     //name: user.name,
     username: user.username,
     //isAdmin: user.isAdmin
   };
-  
+
   return jwt.sign(u, process.env.JWT_SECRET, {
     expiresIn: 60 * 60 * 24 // expires in 24 hours
   });
@@ -23,7 +23,7 @@ function getCleanUser(user) {
   if (!user) return null;
  
   return {
-    //userId: user.userId,
+    userId: user._id,
     //name: user.name,
     username: user.username,
     //isAdmin: user.isAdmin

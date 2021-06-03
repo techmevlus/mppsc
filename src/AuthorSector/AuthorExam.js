@@ -17,7 +17,8 @@ class AuthorExam extends React.PureComponent{
   
 
 loadTestDetailsFromServer(){
-  const formData =  {    examId    : this.props.location.selectedExam._id };
+  console.log(this.props.location.selectedExam);
+  const formData =  {    examId   : this.props.location.selectedExam  };
    // fetch('http://localhost:3001/api/testDetails')
    fetch('http://localhost:3001/api/testDetails', { 
     method: 'post',
