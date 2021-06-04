@@ -78,7 +78,13 @@ class Pricing extends React.PureComponent{
               <li class="na"><i class="bx bx-x"></i> <span>Pharetra massa massa ultricies</span></li>
               <li class="na"><i class="bx bx-x"></i> <span>Massa ultricies mi quis hendrerit</span></li>
             </ul>
-            <a href="#" class="buy-btn">Buy Now</a>
+            <Link     to={{
+      pathname: "/PayMoney",
+      productdetailProps: {
+       productdetail: this.state.data
+      }
+   }}> 
+            <a href="#" class="buy-btn">Buy Now</a></Link>
           </div>
 
           <div class="col-lg-4 box featured">

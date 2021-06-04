@@ -17,7 +17,8 @@ var mongoose = require('mongoose'); //  MongoDB
 var url = 'mongodb+srv://techmevlus:0000@cluster0.xt9zo.mongodb.net/mppsc_db?retryWrites=true&w=majority';
 var promise = mongoose.connect(url);
 
-
+//Imports related to Payments
+var crypto = require('crypto');
 
 console.log("WORKS FINE")
 app.use(function(req, res, next) {
@@ -42,6 +43,81 @@ router.get('/', function(req, res) {
 //Use our router configuration when we call /api
 app.use('/api', router);
 //starts the server and listens for requests
+
+
+//Imports related to Payments
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/'));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views', __dirname);
+
+
+//PAYMENT API START HERE
+
+
+
+router.route('/PayMoney')
+.post(function(req, res){ console.log("HELLO PAYMENT")
+console.log("req data is coming to the srver", req.body)
+	var strdat = req.body;
+	console.log("payment data is coming to the srver")
+	
+		var ord = JSON.stringify(Math.random()*1000);
+		var i = ord.indexOf('.');
+		ord = 'ORD'+ ord.substr(0,i);
+
+		
+		console.log("payment data is coming to the srver", strdat)
+		var cryp = crypto.createHash('sha512');
+
+		console.log("trnsaction crypcrypcryp", cryp)
+		var text = strdat.key+'|'+ord+'|'+strdat.amount+'|'+strdat.pinfo+'|'+strdat.fname+'|'+strdat.email+'|||||'+strdat.udf5+'||||||'+strdat.salt;
+		console.log("trnsaction text", text);
+		cryp.update(text);
+		console.log("trnsaction cryp", cryp);
+		var hash = cryp.digest('hex');	
+		console.log("PRIVATE CODE",JSON.stringify(hash) )
+		return res.json({ hash, ord });	
+				
+		
+	
+	
+});
+
+router.route('/response.html')
+.post( function(req, res){
+	console.log("INSIDE RESPONSE API")
+	var key = req.body.key;
+	var salt = req.body.salt;
+	var txnid = req.body.txnid;
+	var amount = req.body.amount;
+	var productinfo = req.body.productinfo;
+	var firstname = req.body.firstname;
+	var email = req.body.email;
+	var udf5 = req.body.udf5;
+	var mihpayid = req.body.mihpayid;
+	var status = req.body.status;
+	var resphash = req.body.hash;
+	
+	var keyString 		=  	key+'|'+txnid+'|'+amount+'|'+productinfo+'|'+firstname+'|'+email+'|||||'+udf5+'|||||';
+	var keyArray 		= 	keyString.split('|');
+	var reverseKeyArray	= 	keyArray.reverse();
+	var reverseKeyString=	salt+'|'+status+'|'+reverseKeyArray.join('|');
+	
+	var cryp = crypto.createHash('sha512');	
+	cryp.update(reverseKeyString);
+	var calchash = cryp.digest('hex');
+	
+	var msg = 'Payment failed for Hash not verified...';
+	if(calchash == resphash)
+		msg = 'Transaction Successful and Hash Verified...';
+	
+	res.render(__dirname + '/response.html', {key: key,salt: salt,txnid: txnid,amount: amount, productinfo: productinfo, 
+	firstname: firstname, email: email, mihpayid : mihpayid, status: status,resphash: resphash,msg:msg});
+});
+
+//PAYMENT API ENDS HERE
 
 //to get only exam name
 router.route('/exams_name')
