@@ -11,16 +11,53 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
   <!-- BOLT Production/Live //-->
-<script id="bolt" src="https://checkout-static.citruspay.com/bolt/run/bolt.min.js" bolt-color="e34524" bolt-logo="http://boltiswatching.com/wp-content/uploads/2015/09/Bolt-Logo-e14421724859591.png"></script>
-  
+
+  <!--<script type="application/html" crossorigin="anonymous" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/KChIQO91665523732785.js" onload="onScriptLoad();"> </script> -->
     <!-- Favicons -->
     <link href="assets/img/favicon.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
   
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-  
-   
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+<!-- PAYTM LIBRARY-->
+<script type="application/javascript" crossorigin="anonymous" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/KChIQO91665523732785.js" onload="onScriptLoad();"></script>
+<script>
+    function onScriptLoad(){
+        var config = {
+         "root": "",
+         "flow": "DEFAULT",
+         "data": {
+          "orderId": "" /* update order id */,
+          "token": "" /* update token value */,
+          "tokenType": "TXN_TOKEN",
+          "amount": "" /* update amount */
+         },
+         "handler": {
+            "notifyMerchant": function(eventName,data){
+              console.log("notifyMerchant handler function called");
+              console.log("eventName => ",eventName);
+              console.log("data => ",data);
+            } 
+          }
+        };
+
+        if(window.Paytm && window.Paytm.CheckoutJS){
+            window.Paytm.CheckoutJS.onLoad(function excecuteAfterCompleteLoad() {
+                // initialze configuration using init method 
+                window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
+                   // after successfully update configuration invoke checkoutjs
+                   window.Paytm.CheckoutJS.invoke();
+                }).catch(function onError(error){
+                    console.log("error => ",error);
+                });
+            });
+        } 
+    }
+</script>
+
+    
     <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -63,6 +100,7 @@
 
   </head>
   <body>
+   
 
 
 <!-- ======= Top Bar ======= -->
@@ -252,34 +290,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-<script type="text/javascript">
-  $('#payment_form').bindN('keyup blur', function(){ console.log("AJAX")
-    $.ajax({ 
-            url: 'http://localhost:3000',
-            type: 'post',
-            data: JSON.stringify({ 
-              key: $('#key').val(),
-        salt: $('#salt').val(),
-        txnid: $('#txnid').val(),
-        amount: $('#amount').val(),
-          pinfo: $('#pinfo').val(),
-              fname: $('#fname').val(),
-        email: $('#email').val(),
-        mobile: $('#mobile').val(),
-        udf5: $('#udf5').val()
-            }),
-        contentType: "application/json",
-            dataType: 'json',
-            success: function(json) {            
-        $('#hash').val(json);            
-            }
-          }); 
-  });
-  
-  </script>
 
 
- 
-  
   </body>
 </html>

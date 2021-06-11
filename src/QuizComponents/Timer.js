@@ -3,6 +3,7 @@ import Options from '../components/Options';
 import { Link } from 'react-router-dom';
 import Quiz from '../components/Quiz';
 import Test from '../Common/Test';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 class Timer extends React.Component {
   constructor(props) {
@@ -74,23 +75,24 @@ class Timer extends React.Component {
       </div>;
     }
     return (
-      <div className="timer">
-        <div>
-          {days}
-          <span>d</span>
-        </div>
-        <div>
+      <div style={{fontSize:"25px"}} className="timer">
+
+<AccessTimeIcon ></AccessTimeIcon>
+          {(days!==0)?days:""}
+          <span> :</span>
+        
+        
           {hours}
-          <span>h</span>
-        </div>
-        <div>
+          <span>:</span>
+       
+        
           {minutes}
-          <span>m</span>
-        </div>
-        <div>
+          <span>:</span>
+       
+        
           {seconds}
-          <span>s</span>
-        </div>
+          <span></span>
+       
       </div>
     );
   }

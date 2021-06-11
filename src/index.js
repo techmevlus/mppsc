@@ -23,8 +23,11 @@ import TestName from './Common/TestName';
 import Test from './Common/Test';
 import AddNewTest from './FormComponents/AddNewTest';
 
+
 //Importing Payment Plugin With PayUMoney
 import PayMoney from './PaymentPayUMoney/PayMoney';
+import PaymentResponse from './PaymentPayUMoney/PaymentResponse';
+
 
 //Importing Admin and Public and Private Routes 
 import AdminPrivateRoute from './Utils/AdminPrivateRoute';
@@ -115,6 +118,9 @@ ReactDOM.render(
         }/>
         <Route exact path="/PayMoney" render={props => 
             <PayMoney url='http://localhost:3001/api/PayMoney'  {...props} />
+        }/>
+         <Route exact path="/PaymentResponse" render={props => 
+            <PaymentResponse url='http://localhost:3001/api/PaymentResponse'  {...props} />
         }/>
 
         <Route exact path="/AddNewTest" render={props => 

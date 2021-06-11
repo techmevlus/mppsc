@@ -19,6 +19,7 @@ var promise = mongoose.connect(url);
 
 //Imports related to Payments
 var crypto = require('crypto');
+const https = require('https');
 
 console.log("WORKS FINE")
 app.use(function(req, res, next) {
@@ -45,13 +46,13 @@ app.use('/api', router);
 //starts the server and listens for requests
 
 
-//Imports related to Payments
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/'));
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-app.set('views', __dirname);
 
+
+//Imports related to PAYTM
+const Paytm = require('paytmchecksum');
+var PaytmChecksum = require('./PaytmChecksum');
+const {v4:uuidv4} = require('uuid')
+const formidable=require('formidable')
 
 //PAYMENT API START HERE
 
@@ -59,62 +60,212 @@ app.set('views', __dirname);
 
 router.route('/PayMoney')
 .post(function(req, res){ console.log("HELLO PAYMENT")
-console.log("req data is coming to the srver", req.body)
-	var strdat = req.body;
-	console.log("payment data is coming to the srver")
-	
-		var ord = JSON.stringify(Math.random()*1000);
-		var i = ord.indexOf('.');
-		ord = 'ORD'+ ord.substr(0,i);
+/* import checksum generation utility */
+const{amount,email}=req.body;
+const totalAmount=JSON.stringify(amount);
+console.log('DATA NEW FORMAT', totalAmount, email)
+var params = {};
 
-		
-		console.log("payment data is coming to the srver", strdat)
-		var cryp = crypto.createHash('sha512');
+/* initialize an array */
+params['MID']= 'pzaREG25113202025034'
+params['WEBSITE']= 'DEFAULT'
+params['CHANNEL_ID']= 'WEB'
+params['INDUSTRY_TYPE_id']= 'Retail'
+params['ORDER_ID']= uuidv4()
+params['CUST_ID']= 'abcdefghs12'
+params['TXN_AMOUNT']=   totalAmount
+params['CALLBACK_URL']= 'http://localhost:3001/api/callback'
+params['EMAIL']= email
+params['MOBILE_NO']= '8770639505'
 
-		console.log("trnsaction crypcrypcryp", cryp)
-		var text = strdat.key+'|'+ord+'|'+strdat.amount+'|'+strdat.pinfo+'|'+strdat.fname+'|'+strdat.email+'|||||'+strdat.udf5+'||||||'+strdat.salt;
-		console.log("trnsaction text", text);
-		cryp.update(text);
-		console.log("trnsaction cryp", cryp);
-		var hash = cryp.digest('hex');	
-		console.log("PRIVATE CODE",JSON.stringify(hash) )
-		return res.json({ hash, ord });	
+console.log("params", params)
+
+/**
+* Generate checksum by parameters we have
+* Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
+*/
+var paytmChecksum = PaytmChecksum.generateSignature(params, "jTY7cimGnOK#9pRD");
+paytmChecksum.then(function(checksum){
+	console.log("generateSignature Returns: " + checksum);
+	let paytmParams = {
+		...params, "CHECKSUMHASH":checksum
+	}
+	res.json(paytmParams)
+}).catch(function(error){
+	console.log(error);
+});
 				
 		
 	
 	
 });
 
-router.route('/response.html')
+
+
+
+
+router.route('/PayMoney/Paym/JsCheckout')
+.post(function(req, res){ console.log("HELLO PAYMENT")
+/* import checksum generation utility */
+const{amount,email}=req.body;
+const totalAmount=JSON.stringify(amount);
+console.log('DATA NEW FORMAT', totalAmount, email)
+
+var paytmParams = {};
+var txid = ""
+
+paytmParams.body = {
+    "requestType"   : "Payment",
+    "mid"           : "KChIQO91665523732785",
+    "websiteName"   : "WEBSTAGING",
+    "orderId"       : uuidv4(),
+    "callbackUrl"   : "http://localhost:3001/api/callback",
+    "txnAmount"     : {
+        "value"     : "100.00",
+        "currency"  : "INR",
+    },
+    "userInfo"      : {
+        "custId"    : "CUST_001",
+    },
+};
+/*
+* Generate checksum by parameters we have in body
+* Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
+*/
+PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), "o_iKkHNlRSCGOXpu").then(function(checksum){
+
+	    paytmParams.head = {
+	        "signature"    : checksum
+	    };
+	
+	    var post_data = JSON.stringify(paytmParams);
+
+	
+	    var options = {
+	
+	        /* for Staging */
+	        hostname: 'securegw-stage.paytm.in',
+	
+	        /* for Production */
+	        // hostname: 'securegw.paytm.in',
+	
+	        port: 443,
+	        path: '/theia/api/v1/initiateTransaction?mid=KChIQO91665523732785&orderId='+paytmParams.body.orderId,
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json',
+	            'Content-Length': post_data.length
+	        }
+	    };
+	
+	    var response = "";
+
+	    var post_req = https.request(options, function(post_res) {
+	        post_res.on('data', function (chunk) {
+	            response += chunk;
+	        });
+	
+	        post_res.on('end', function(){
+		txid = response
+	            console.log('Response: ', txid);
+				 res.json({txid, paytmParams});	
+			
+	        });
+	    });
+
+		
+	    post_req.write(post_data);
+	    post_req.end();
+	});
+
+			
+		
+	
+	
+});
+
+router.route('/callback')
 .post( function(req, res){
-	console.log("INSIDE RESPONSE API")
-	var key = req.body.key;
-	var salt = req.body.salt;
-	var txnid = req.body.txnid;
-	var amount = req.body.amount;
-	var productinfo = req.body.productinfo;
-	var firstname = req.body.firstname;
-	var email = req.body.email;
-	var udf5 = req.body.udf5;
-	var mihpayid = req.body.mihpayid;
-	var status = req.body.status;
-	var resphash = req.body.hash;
-	
-	var keyString 		=  	key+'|'+txnid+'|'+amount+'|'+productinfo+'|'+firstname+'|'+email+'|||||'+udf5+'|||||';
-	var keyArray 		= 	keyString.split('|');
-	var reverseKeyArray	= 	keyArray.reverse();
-	var reverseKeyString=	salt+'|'+status+'|'+reverseKeyArray.join('|');
-	
-	var cryp = crypto.createHash('sha512');	
-	cryp.update(reverseKeyString);
-	var calchash = cryp.digest('hex');
-	
-	var msg = 'Payment failed for Hash not verified...';
-	if(calchash == resphash)
-		msg = 'Transaction Successful and Hash Verified...';
-	
-	res.render(__dirname + '/response.html', {key: key,salt: salt,txnid: txnid,amount: amount, productinfo: productinfo, 
-	firstname: firstname, email: email, mihpayid : mihpayid, status: status,resphash: resphash,msg:msg});
+console.log("COMMING TO THIS PAGE")
+const form=new formidable.IncomingForm();
+
+form.parse(req,(err,fields,file)=>
+{
+   
+paytmChecksum = fields.CHECKSUMHASH;
+delete fields.CHECKSUMHASH;
+
+var isVerifySignature = PaytmChecksum.verifySignature(fields, "jTY7cimGnOK#9pRD", paytmChecksum);
+if (isVerifySignature) {
+
+
+    var paytmParams = {};
+    paytmParams["MID"]     = fields.MID;
+    paytmParams["ORDERID"] = fields.ORDERID;
+    
+    /*
+    * Generate checksum by parameters we have
+    * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
+    */
+    PaytmChecksum.generateSignature(paytmParams, "jTY7cimGnOK#9pRD").then(function(checksum){
+    
+        paytmParams["CHECKSUMHASH"] = checksum;
+    
+        var post_data = JSON.stringify(paytmParams);
+    
+        var options = {
+    
+            /* for Staging */
+            //hostname: 'securegw-stage.paytm.in',
+    
+            /* for Production */
+             hostname: 'securegw.paytm.in',
+    
+            port: 443,
+            path: '/order/status',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': post_data.length
+            }
+        };
+    
+        var response = "";
+        var post_req = https.request(options, function(post_res) {
+            post_res.on('data', function (chunk) {
+                response += chunk;
+            });
+    
+            post_res.on('end', function(){
+                         let result=JSON.parse(response)
+                        if(result.STATUS==='TXN_SUCCESS')
+                        {
+							console.log("TXN_SUCCESS")
+                            //store in db
+                            //db.collection('payments').doc('mPDd5z0pNiInbSIIotfj').update({paymentHistory:firebase.firestore.FieldValue.arrayUnion(result)})
+                            //.then(()=>console.log("Update success"))
+                            //.catch(()=>console.log("Unable to update"))
+                        }
+
+                        res.redirect(`http://localhost:3000/status/${result.ORDERID}`)
+
+
+            });
+        });
+		
+        post_req.write(post_data);
+        post_req.end();
+    });        
+ 
+
+} else {
+	console.log("Checksum Mismatched");
+}
+
+
+})
+
+
 });
 
 //PAYMENT API ENDS HERE

@@ -1,5 +1,9 @@
 import React from 'react';
 import Timer from '../QuizComponents/Timer';
+import { Fab } from '@material-ui/core';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+
+//<button key={index} onClick={()=>this.panelClick(e.questionNum)} style={{backgroundColor:e.questionColor}}>{e.questionNum}</button> ON LINE NO. 377
 
 var startDate = new Date().getTime() + 5520000;
 
@@ -171,7 +175,7 @@ class Test extends React.PureComponent{
         // Update question panel Color
         this.setState(prevState => ({
             questionPanel: prevState.questionPanel.map(
-            obj => (obj.questionNum-1 === this.state.currentQuestion ? Object.assign(obj, { questionColor: "white" }) : obj)
+            obj => (obj.questionNum-1 === this.state.currentQuestion ? Object.assign(obj, { questionColor: "red" }) : obj)
         )
         }));
    }
@@ -246,7 +250,7 @@ class Test extends React.PureComponent{
             // Add data into array
             arr.push({
                 questionNum : i + 1,
-                questionColor: "white"
+                questionColor: "red"
             });
         }this.setState({
             questionPanel:arr
@@ -266,7 +270,7 @@ class Test extends React.PureComponent{
         if(this.state.data==="" || this.state.data === undefined || this.state.data === null){
             console.log("test data is empty");
         }else{
-            console.log("tests are recieved");
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.state.data);
         }
         this.fetchRadioButtonHistory();
         this.fetchResult();
@@ -275,39 +279,124 @@ class Test extends React.PureComponent{
         console.log(this.state.resultData)
         console.log(this.state.currentQuestion)
         console.log(this.state.questionPanel)
-		return <div>
-            <h1 id="testHeading">this is Test id = {this.state.test_id}</h1>
-            <div id="timer" style={{display:"block"}}><Timer startDate={startDate} /></div>
-            <div id="question" style={{display:"block"}}>Q.{this.state.currentQuestion+1} {this.state.testData[this.state.currentQuestion].question}</div>
+		return <div style={{padding:"10px", border:"2px", borderColor:"black"}}>
+          
+           {/* <div id="timer" style={{display:"block"}}><Timer startDate={startDate} /></div> */}
+            <div class="container">
+
+<div style={{padding:"20px"}} class="row">
+    <div class="col-2"id="timer" style={{display:"block"}}><Timer startDate={new Date().getTime() + 5520000} /></div>
+    <div class="col-8 d-flex flex-row-reverse">  <h5 id="testHeading">Test ID : {this.state.test_id}</h5></div>
+   
+  </div>
+</div>
+
+
+
+
+           
             <div id="testIncomplete" style={{display:"block"}}>
-                <div>
-                    <input type="radio" name="option" id="1" value="1" onClick={()=>this.selectRadio("1")}/>
-                    <label> &nbsp;&nbsp; 1. {this.state.testData[this.state.currentQuestion].options1} </label>
-                </div>
-                <div>
-                    <input type="radio" name="option" id="2" value="2" onClick={()=>this.selectRadio("2")}/>
+                <div style={{width:"68%", margin:"35px"}}>
+            <div class = "shadow" style={{ backgroundColor:"#F5F5F5", borderRadius:"15px", padding:"35px"}}>
+            <div id="question" style={{display:"block"}}><h3>Q.{this.state.currentQuestion+1} {this.state.testData[this.state.currentQuestion].question}</h3></div>
+            <hr></hr>
+            
+                <div style={{fontSize:"20px"}}>
+                    <input class="form-check-input" type="radio"  name="option" id="1" value="1" onClick={()=>this.selectRadio("1")}/>
+                    <label >   &nbsp;&nbsp; 1. {this.state.testData[this.state.currentQuestion].options1} </label>
+                </div><hr></hr>
+                <div style={{fontSize:"20px"}}>
+                    <input class="form-check-input" type="radio" name="option" id="2" value="2" onClick={()=>this.selectRadio("2")}/>
                     <label> &nbsp;&nbsp; 2. {this.state.testData[this.state.currentQuestion].options2} </label>
-                </div>
-                <div>
-                    <input type="radio" name="option" id="3" value="3" onClick={()=>this.selectRadio("3")}/>
+                </div><hr></hr>
+                <div style={{fontSize:"20px"}}>
+                    <input class="form-check-input" type="radio" name="option" id="3" value="3" onClick={()=>this.selectRadio("3")}/>
                     <label> &nbsp;&nbsp; 3. {this.state.testData[this.state.currentQuestion].options3} </label>
-                </div>
-                <div>
-                    <input type="radio" name="option" id="4" value="4" onClick={()=>this.selectRadio("4")}/>
+                </div><hr></hr>
+                <div style={{fontSize:"20px"}}>
+                    <input class="form-check-input" type="radio" name="option" id="4" value="4" onClick={()=>this.selectRadio("4")}/>
                     <label> &nbsp;&nbsp; 4. {this.state.testData[this.state.currentQuestion].options4} </label>
+
                 </div>
-            <button onClick={() => this.clearButton()}>Clear</button>
-            <button onClick={() => this.previewsButton()}>Previews Question</button>
-            <button onClick={() => this.nextButton()}>Next Question</button>
-            <button onClick={() => this.submitButton()}>Submit</button>
-            <div>
+               
+
+                </div>
+                <div style={{marginTop:"40px", textAlign:"right"}} class="d-grid gap-2  d-md-block ">  
+            
+            <button  style={{marginRight:"5px"}} type="button" class="btn btn-outline-secondary" onClick={() => this.previewsButton()}>Previews Question</button>
+            <button  style={{marginRight:"5px"}} type="button" class="btn btn-outline-primary" onClick={() => this.nextButton()}>Next Question</button>
+            <button style={{marginRight:"5px"}} type="button" class="btn btn-outline-danger" onClick={() => this.clearButton()}>Clear Response</button>
+          { /* <button  style={{marginRight:"5px"}} type="button" class="btn btn-outline-success" onClick={() => this.submitButton()}>Submit Test</button> */}
+
+           
+<button style={{marginRight:"5px"}}  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+  Submit Test
+</button>
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Do you want to end the Test ?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div style={{textAlign:'left'}} class="modal-body">
+        <p>Once you Submit the Test you won't be able to get back</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button  style={{marginRight:"5px"}} type="button" class="btn btn-outline-success" onClick={() => this.submitButton()} data-dismiss="modal">Submit Test</button>
+      </div>
+    </div>
+  </div>
+</div>
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">DASHBOARD</button>
+
+           </div>
+
+
+               </div> 
+
+            
+           
+           </div>
+
+
+<div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">GREEN : Question Attempted <br></br> RED : Unanswered</h5>
+    
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+  <div>
+  <hr></hr>
                 {this.state.questionPanel.map((e, index)=>(
-                    <button key={index} onClick={()=>this.panelClick(e.questionNum)} style={{backgroundColor:e.questionColor}}>{e.questionNum}</button>
+             <span>
+                    <Fab key={index} onClick={()=>this.panelClick(e.questionNum)} style={{backgroundColor:e.questionColor, margin:"5px", color:"white"}}   aria-label={e.questionNum}>{e.questionNum}
+                    
+                    </Fab>
+                    
+                    </span>
                 ))}
             </div>
-            </div>
-            <div id="testCompleted" style={{display:"none"}}>
-                    <h4>Exam Completed</h4>
+
+
+            
+  
+
+  </div>
+</div>
+
+
+           
+            
+            <div class="alert alert-success" role="alert" id="testCompleted" style={{display:"none"}}>
+                    <span><h4 class="alert-heading">Exam Completed <CheckCircleIcon style={{color:"blue",size:"20px"}}> </CheckCircleIcon></h4> </span>
+                    <hr></hr>
 					<h6>Total Attempted Question : {this.state.resultData.length}</h6>
 					<h6>Your Score : {this.state.correctAnswer}</h6>
 			</div>
