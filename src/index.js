@@ -41,6 +41,7 @@ import AuthorPublicRoute from './Utils/AuthorPublicRoute';
 import AuthorDashboard from './AuthorSector/AuthorDashboard';
 import AuthorLogin from './AuthorSector/AuthorLogin';
 import AuthorExam from './AuthorSector/AuthorExam';
+import AvailableTests from './AuthorSector/AvailableTests';
 
 
 
@@ -125,6 +126,10 @@ ReactDOM.render(
 
         <Route exact path="/AddNewTest" render={props => 
             <AddNewTest url='http://localhost:3001/api/AddNewTest' {...props} />
+        }/>
+
+        <Route exact path="/AvailableTests" render={props => 
+            <AvailableTests url='http://localhost:3001/api/AvailableTests' {...props} />
         }/>
 
 

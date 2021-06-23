@@ -37,6 +37,7 @@ var AdminCred = require('./../models/adminSchema.js');
 var AuthorCred = require('./../models/authorSchema.js');
 const Exam = require('../models/examCollection');
 
+
 router.get('/', function(req, res) {
 	res.json({ message: 'API Initialized!'});
 });
@@ -273,7 +274,7 @@ if (isVerifySignature) {
 //to get only exam name
 router.route('/exams_name')
 .get(function(req,res){
-	Exam.find({},'exam_name',function(err, dataFromDB) {
+	Exam.find({},'exam_name logo',function(err, dataFromDB) {
 		if (err){
 			res.send(err);
 		}
@@ -314,6 +315,27 @@ router.route('/test')
 		res.json(dataFromDB);
 		console.log(dataFromDB)
 	});
+});
+
+
+//Create New Exam
+var fs = require('fs');
+router.route('/createNewExam')
+.post(function(req,res){
+	console.log("Exam Creation Running");
+
+	console.log(req.body)
+
+		var exam 	    	  = new Exam();
+ 		exam.exam_name 		  = req.body.examName;
+		exam.logo       = req.body.examLogo;
+
+		exam.save(function(err) {
+	 		if (err)
+	 			res.send(err);
+			console.log("Exam Created Successfully")
+ 		});
+
 });
 
 //Add new quiz

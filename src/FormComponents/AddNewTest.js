@@ -12,7 +12,8 @@ class AddNewTest extends React.PureComponent{
             attempts     : 0,
             test_data    : [],
             exams        : [],
-            examId       : ""
+            examId       : "",
+            examName     : ""
         }
         this.loadExamNameFromServer = this.loadExamNameFromServer.bind(this);
         this.handleNoq = this.handleNoq.bind(this);
@@ -416,28 +417,13 @@ class AddNewTest extends React.PureComponent{
     }
 
     //runs automatically before render function.
-    componentWillMount(){
+    async componentWillMount(){
         this.setAuthorId();
+        await this.settingExamId();
+        await this.settingExamName();
         this.loadExamNameFromServer();
     }
 
-    //Exams dropdown list
-    createExamsDropdown(){
-        let examsName = [];
-        for(let i =0;i<this.state.exams.length;i++){
-            examsName.push(<option value={this.state.exams[i]._id} id={this.state.exams[i].exam_name}>{this.state.exams[i].exam_name}</option>)
-        }
-
-        var a = <label>
-                Exam Name:
-                    <select value={this.state.examId} onChange={this.handleExamSelection}>
-                        <option>Select Exam</option>
-                        {examsName}
-                    </select>
-                </label>
-        
-        return a;
-    }
 
     //update negative marking
     handleExamSelection(e){
@@ -476,13 +462,41 @@ class AddNewTest extends React.PureComponent{
         .then(res=>res.json())
     }
 
+    // to set state = examId from local storage if empty
+  settingExamId() {
+    console.log("settingExamId funtion running");
+    if (this.state.examId === "" || this.state.examId === null || this.state.examId === undefined) {
+      var e = localStorage.getItem('exam_id');
+      this.setState({
+        examId: e
+      })
+    } else {
+      console.log("Exam Id already available")
+    }
+  }
+
+  // to set state = examName from local storage if empty
+  settingExamName() {
+    console.log("settingExamId funtion running");
+    if (this.state.examName === "" || this.state.examName === null || this.state.examName === undefined) {
+      var e = localStorage.getItem('exam_name');
+      this.setState({
+        examName: e
+      })
+    } else {
+      console.log("Exam Name already available")
+    }
+  }
+
     render(){
         console.log(this.state)
         return <div>
             <h1>Add New Test</h1>
             <div id="test" style={{display: "block"}}>
                 <form onSubmit={this.handleSubmit}>
-                {this.createExamsDropdown()}<br/>
+                <label>
+                Exam Name:{this.state.examName}
+                </label><br/>
                 <label>
                 Numbers Of Questions:
                 <input type="number" name="noq" id="noq" placeholder="ex. 25" min="1" max="100" onChange={this.handleNoq}/>

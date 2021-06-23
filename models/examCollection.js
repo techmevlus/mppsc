@@ -6,14 +6,16 @@ var examCollectionSchema = mongoose.Schema(
 	    exam_name:  	String,
 	    logo     :  	Buffer,
 	    test	 : 	    [{
-                            noq          : Number,
-                            negt_mark    : String,
-                            timeof_test  : Number,
-                            dateof_create: Date,
-                            auth_id      : String,
-                            attempts     : Number,
-                            test_data    : Array
-                        }]
+            
+            noq          : Number,
+            negt_mark    : String,
+            timeof_test  : Number,
+            dateof_create: Date,
+            auth_id      : String,
+            attempts     : Number,
+            test_data    : Array
+        
+        }]
 	},
 	{collection : 'exam_collection'});
 
