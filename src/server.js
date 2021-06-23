@@ -57,54 +57,6 @@ const formidable=require('formidable')
 
 //PAYMENT API START HERE
 
-
-
-router.route('/PayMoney')
-.post(function(req, res){ console.log("HELLO PAYMENT")
-/* import checksum generation utility */
-const{amount,email}=req.body;
-const totalAmount=JSON.stringify(amount);
-console.log('DATA NEW FORMAT', totalAmount, email)
-var params = {};
-
-/* initialize an array */
-params['MID']= 'pzaREG25113202025034'
-params['WEBSITE']= 'DEFAULT'
-params['CHANNEL_ID']= 'WEB'
-params['INDUSTRY_TYPE_id']= 'Retail'
-params['ORDER_ID']= uuidv4()
-params['CUST_ID']= 'abcdefghs12'
-params['TXN_AMOUNT']=   totalAmount
-params['CALLBACK_URL']= 'http://localhost:3001/api/callback'
-params['EMAIL']= email
-params['MOBILE_NO']= '8770639505'
-
-console.log("params", params)
-
-/**
-* Generate checksum by parameters we have
-* Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
-*/
-var paytmChecksum = PaytmChecksum.generateSignature(params, "jTY7cimGnOK#9pRD");
-paytmChecksum.then(function(checksum){
-	console.log("generateSignature Returns: " + checksum);
-	let paytmParams = {
-		...params, "CHECKSUMHASH":checksum
-	}
-	res.json(paytmParams)
-}).catch(function(error){
-	console.log(error);
-});
-				
-		
-	
-	
-});
-
-
-
-
-
 router.route('/PayMoney/Paym/JsCheckout')
 .post(function(req, res){ console.log("HELLO PAYMENT")
 /* import checksum generation utility */
@@ -120,9 +72,9 @@ paytmParams.body = {
     "mid"           : "KChIQO91665523732785",
     "websiteName"   : "WEBSTAGING",
     "orderId"       : uuidv4(),
-    "callbackUrl"   : "http://localhost:3001/api/callback",
+    "callbackUrl"   : "http://localhost:3000/api/callback",
     "txnAmount"     : {
-        "value"     : "100.00",
+        "value"     : totalAmount,
         "currency"  : "INR",
     },
     "userInfo"      : {
@@ -168,8 +120,14 @@ PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), "o_iKkHNlRSCGO
 	
 	        post_res.on('end', function(){
 		txid = response
-	            console.log('Response: ', txid);
-				 res.json({txid, paytmParams});	
+           // console.log('Response: ', paytmParams.body.txnAmount.value, paytmParams.body.orderId, JSON.parse(txid).body.txnToken );
+		PayPayload = {
+			amount:paytmParams.body.txnAmount.value,
+			orderId:paytmParams.body.orderId,
+			txnToken:JSON.parse(txid).body.txnToken 
+
+		}
+		 res.json({ PayPayload});
 			
 	        });
 	    });
@@ -189,7 +147,7 @@ router.route('/callback')
 .post( function(req, res){
 console.log("COMMING TO THIS PAGE")
 const form=new formidable.IncomingForm();
-
+res.redirect(`http://localhost:3000/team.html`)
 form.parse(req,(err,fields,file)=>
 {
    
@@ -502,3 +460,10 @@ app.listen(3001, function() {
 	console.log('Api successfully running');
 	
 });
+
+
+
+
+
+
+
