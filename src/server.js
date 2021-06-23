@@ -229,6 +229,25 @@ if (isVerifySignature) {
 
 //PAYMENT API ENDS HERE
 
+//Author Signup
+router.route('/authorSignup')
+.post(function(req,res){
+	console.log("Initiating Author Signup");
+
+	console.log(req.body)
+
+		var author 	    	  = new AuthorCred();
+ 		author.username 	  = req.body.username;
+		author.password       = req.body.password;
+
+		author.save(function(err) {
+	 		if (err)
+	 			res.send(err);
+			res.json({ message:'Author account created successfully!' });
+ 		});
+
+});
+
 //to get only exam name
 router.route('/exams_name')
 .get(function(req,res){
