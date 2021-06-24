@@ -5,12 +5,12 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 //<button key={index} onClick={()=>this.panelClick(e.questionNum)} style={{backgroundColor:e.questionColor}}>{e.questionNum}</button> ON LINE NO. 377
 
-var startDate = new Date().getTime() + 5520000;
 
 class Test extends React.PureComponent {
 
     constructor(props, context) {
         super(props, context);
+        this.testTimerId = null;
         this.state = {
             data: [],
             test_id: "",
@@ -18,6 +18,7 @@ class Test extends React.PureComponent {
             resultData: [],
             examId: "",
             testId: "",
+            timeof_test: "",
             correctAnswer: 0,
             currentQuestion: 0,
 
@@ -56,7 +57,6 @@ class Test extends React.PureComponent {
         for (let i = 0; i < this.state.data.test.length; i++) {
             if (this.state.testId == this.state.data.test[i]._id) {
                 e = i;
-                console.log(this.state.data.test[e].auth_id);
             }
         }
         this.setState({
@@ -66,18 +66,24 @@ class Test extends React.PureComponent {
     }
 
     // to set state = to persist on refresh using local storage
-    settingStates() {
+    async settingStates() {
         console.log("settingExamId funtion running");
         if (this.state.examId === "" || this.state.examId === null || this.state.examId === undefined) {
             var e = localStorage.getItem('_id');
-            this.setState({
+           await this.setState({
                 examId: e
             })
         }
         if (this.state.testId === "" || this.state.testId === null || this.state.testId === undefined) {
             var e = localStorage.getItem('testId');
-            this.setState({
+            await this.setState({
                 testId: e
+            })
+        }
+        if (this.state.timeof_test === "" || this.state.timeof_test === null || this.state.timeof_test === undefined) {
+            var e = localStorage.getItem('timeof_test');
+            await this.setState({
+                timeof_test: e
             })
         }
     }
@@ -93,20 +99,32 @@ class Test extends React.PureComponent {
     // this function automatically gets called when component is destroyed
     componentWillUnmount() {
         console.log("Component is unmounting...")
+        if(this.testTimerId){
+            clearInterval(this.testTimerId);
+        }
     }
 
     //to save state to local storage
     componentRefresh() {
-        console.log("componentRefresh function working")
+        alert("component refresh working")
         localStorage.setItem('_id', this.state.examId);
         localStorage.setItem('testId', this.state.testId);
+        localStorage.setItem('timeof_test', this.state.timeof_test);
     }
 
     // after render this function is called automatically. 
     componentDidMount() {
+        this.testTimerId = setInterval(this.removeTimeTaken, 1000);
         //this will be always ready for page refresh event.
         window.addEventListener('beforeunload', this.componentRefresh);
 
+    }
+
+    //minus seconds taken in test
+    removeTimeTaken = () =>{
+        this.setState({
+            timeof_test: this.state.timeof_test - 1
+        })
     }
 
 
@@ -329,10 +347,9 @@ class Test extends React.PureComponent {
 
     //submit test function on submit button click
     submitButton() {
-        document.getElementById("timer").style.display = "none";
-        document.getElementById("question").style.display = "none";
-        document.getElementById("testIncomplete").style.display = "none";
-        document.getElementById("testCompleted").style.display = "block";
+        this.setState({
+            timeof_test: 0
+        })
     }
 
     //function for question panel
@@ -441,18 +458,15 @@ class Test extends React.PureComponent {
         this.fetchRadioButtonHistory();
         this.fetchResult();
         this.dashboardData();
-        console.log(this.props.url)
-        console.log(this.state.testData)
-        console.log(this.state.resultData)
-        console.log(this.state.currentQuestion)
-        console.log(this.state.questionPanel)
+        
+
         return <div style={{ padding: "10px", border: "2px", borderColor: "black" }}>
 
             {/* <div id="timer" style={{display:"block"}}><Timer startDate={startDate} /></div> */}
             <div class="container">
 
                 <div style={{ padding: "20px" }} class="row">
-                    <div class="col-2" id="timer" style={{ display: "block" }}><Timer startDate={new Date().getTime() + 5520000} /></div>
+                    <div class="col-2" id="timer" style={{ display: "block" }}><Timer startDate={new Date().getTime() + (this.state.timeof_test*1000)} /></div>
                     <div class="col-8 d-flex flex-row-reverse">  <h5 id="testHeading">Test ID : {this.state.test_id}</h5></div>
 
                 </div>
@@ -461,7 +475,7 @@ class Test extends React.PureComponent {
 
 
 
-
+         <div id="test_main">
             <div id="testIncomplete" style={{ display: "block" }}>
                 <div style={{ width: "68%", margin: "35px" }}>
                     <div class="shadow" style={{ backgroundColor: "#F5F5F5", borderRadius: "15px", padding: "35px" }}>
@@ -512,7 +526,28 @@ class Test extends React.PureComponent {
                                         </button>
                                     </div>
                                     <div style={{ textAlign: 'left' }} class="modal-body">
-                                        <p>Once you Submit the Test you won't be able to get back</p>
+                                        <table style={{border: "1px solid black"}}>
+                                            <tr style={{border: "1px solid black"}}>
+                                                <td style={{border: "1px solid black"}}>Not Visited</td>
+                                                <td style={{border: "1px solid black"}}>{this.state.notVisited}</td>
+                                            </tr>
+                                            <tr style={{border: "1px solid black"}}>
+                                                <td style={{border: "1px solid black"}}>Not Attempted</td>
+                                                <td style={{border: "1px solid black"}}>{this.state.notAttempted}</td>
+                                            </tr>
+                                            <tr style={{border: "1px solid black"}}>
+                                                <td style={{border: "1px solid black"}}>Marked Review &amp; Not Attempted</td>
+                                                <td style={{border: "1px solid black"}}>{this.state.markNotAttempted}</td>
+                                            </tr>
+                                            <tr style={{border: "1px solid black"}}>
+                                                <td style={{border: "1px solid black"}}>Marked Review &amp; Attempted</td>
+                                                <td style={{border: "1px solid black"}}>{this.state.markAttempted}</td>
+                                            </tr>
+                                            <tr style={{border: "1px solid black"}}>
+                                                <td style={{border: "1px solid black"}}>Attempted</td>
+                                                <td style={{border: "1px solid black"}}>{this.state.attempted}</td>
+                                            </tr>
+                                        </table>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
@@ -575,6 +610,7 @@ class Test extends React.PureComponent {
                 <h6>Total Attempted Question : {this.state.resultData.length}</h6>
                 <h6>Your Score : {this.state.correctAnswer}</h6>
             </div>
+          </div>
         </div>
     }
 }
