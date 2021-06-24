@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Question from './Question.js';
 import Options from './Options.js';
 let data = require('../data'); //this imports data from local file, pass it as a prop to Quiz component
+import ExamName from '../Common/ExamName'
 
 const shuffleArray = array => {
 	let i = array.length - 1;
@@ -46,71 +47,50 @@ class Home extends React.PureComponent{
              
 					<main id= "main">
             
-          <section id="topbar" class="d-flex align-items-center">
-  <div class="container d-flex justify-content-center justify-content-md-between">
-    <div class="contact-info d-flex align-items-center">
-      <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">suport@mevlus.com</a></i>
-      <i class="bi bi-phone d-flex align-items-center ms-4"><span>+91 9755-088077</span></i>
+
+
+
+
+
+
+
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="2000">
+      <img src="assets/img/banner.jpg"  class="d-block w-100" alt="..."></img>
     </div>
-    <div class="social-links d-none d-md-flex align-items-center">
-      <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-      <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-      <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-      <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+    <div class="carousel-item">
+      <img src="assets/img/banner.jpg"  class="d-block w-100" alt="..."></img>
+    </div>
+    <div class="carousel-item">
+      <img src="assets/img/banner.jpg"  class="d-block w-100" alt="..."></img>
     </div>
   </div>
-</section>
-
- 
-
-					<section id="breadcrumbs" class="breadcrumbs">
-      <div class="container">
-
-        <ol>
-          <li><a href="/">Home</a></li>
-          
-        </ol>
-        <Link to="/author-login"><button className="marTop25 nextBtn btn btn-secondary">Author Login</button></Link>
-
-      </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
 
 
 
 
 
 
+    <section class="shadow" style={{padding:"30px",marginBottom:"50px", marginTop:"50px"}}>
+      <ExamName url='http://localhost:3001/api/exams_name'></ExamName>
 
 
-    </section>
-
-					<section id="featured" class="featured">
-      <div class="container">
-
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="icon-box">
-              <i class="bi bi-card-checklist"></i>
-              <h3><a href="">Lorem Ipsum</a></h3>
-              <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
-            </div>
-          </div>
-          <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="icon-box">
-              <i class="bi bi-bar-chart"></i>
-              <h3><a href="">Dolor Sitema</a></h3>
-              <p>Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
-            </div>
-          </div>
-          <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="icon-box">
-              <i class="bi bi-binoculars"></i>
-              <h3><a href="">Sed ut perspiciatis</a></h3>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
     </section>
 
     <section id="about" class="about">
