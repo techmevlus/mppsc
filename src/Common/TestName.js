@@ -86,7 +86,7 @@ class TestName extends React.PureComponent {
       <main id="main">
         <p>
 
-          {<ul>{this.state.testData.test.map((item, index) => (<Link to="/test" key={index} onClick={() => this.savingToLocalStorage(item.auth_id)}>
+          {<ul>{this.state.testData.test.map((item, index) => (<Link to="/test" key={index} onClick={() => this.savingToLocalStorage(item._id)}>
             <li>
             noq = {item.noq}&nbsp;&nbsp;
             negt_mark = {item.negt_mark}&nbsp;&nbsp;

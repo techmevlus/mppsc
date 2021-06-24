@@ -266,7 +266,7 @@ router.route('/testDetails')
 .post(function(req,res){
 	var examId = req.body.examId;
 	console.log(examId)
-	Exam.findOne({'_id':examId},'test.noq test.negt_mark test.timeof_test test.auth_id test.attempts test.dateof_create',function(err, dataFromDB) {
+	Exam.findOne({'_id':examId},'test._id test.noq test.negt_mark test.timeof_test test.auth_id test.attempts test.dateof_create',function(err, dataFromDB) {
 		if (err){
 			res.send(err);
 		}
@@ -284,7 +284,7 @@ router.route('/test')
 	console.log("Exam id ="+examId);
 	console.log("Test id ="+testId);
 	//Exam.findOne({'_id':examId, 'test.auth_id':authorId},'test.test_data',function(err, dataFromDB) {
-	Exam.findOne({'_id':examId, 'test.auth_id':testId},function(err, dataFromDB) {
+	Exam.findOne({'_id':examId, 'test._id':testId},function(err, dataFromDB) {
 		if (err){
 			res.send(err);
 		}
