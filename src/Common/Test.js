@@ -13,14 +13,18 @@ class Test extends React.PureComponent {
         this.testTimerId = null;
         this.state = {
             data: [],
+
+            examId: "",
             test_id: "",
             testData: [{ options: [] }],
             resultData: [],
-            examId: "",
-            testId: "",
+            
             timeof_test: "",
-            correctAnswer: 0,
             currentQuestion: 0,
+
+            rightAnswer: 0,
+            wrongAnswer: 0,
+            testResult: 0,
 
             questionPanel: [],
             notVisited   : "",
@@ -37,7 +41,7 @@ class Test extends React.PureComponent {
 
         const formData = {
             examId: this.state.examId,
-            testId: this.state.testId
+            testId: this.state.test_id  
         };
 
         await fetch('http://localhost:3001/api/test', {
@@ -55,13 +59,15 @@ class Test extends React.PureComponent {
             });
         var e;
         for (let i = 0; i < this.state.data.test.length; i++) {
-            if (this.state.testId == this.state.data.test[i]._id) {
+            if (this.state.test_id == this.state.data.test[i]._id) {
                 e = i;
             }
         }
-        this.setState({
-            testData: this.state.data.test[e].test_data,
-            test_id: this.state.data.test[e]._id
+        await this.setState({
+            data: this.state.data.test[e]
+        })
+        await this.setState({
+            testData: this.state.data.test_data
         });
     }
 
@@ -74,10 +80,10 @@ class Test extends React.PureComponent {
                 examId: e
             })
         }
-        if (this.state.testId === "" || this.state.testId === null || this.state.testId === undefined) {
-            var e = localStorage.getItem('testId');
+        if (this.state.test_id === "" || this.state.test_id === null || this.state.test_id === undefined) {
+            var e = localStorage.getItem('test_id');
             await this.setState({
-                testId: e
+                test_id: e
             })
         }
         if (this.state.timeof_test === "" || this.state.timeof_test === null || this.state.timeof_test === undefined) {
@@ -108,7 +114,7 @@ class Test extends React.PureComponent {
     componentRefresh() {
         alert("component refresh working")
         localStorage.setItem('_id', this.state.examId);
-        localStorage.setItem('testId', this.state.testId);
+        localStorage.setItem('test_id', this.state.test_id);
         localStorage.setItem('timeof_test', this.state.timeof_test);
     }
 
@@ -331,18 +337,28 @@ class Test extends React.PureComponent {
 
     //this function will calculate result
     fetchResult() {
-        var a = 0;
+        var rightAnswer = 0;
+        var wrongAnswer = 0;
         for (let i = 0; i < this.state.resultData.length; i++) {
 
             // Counting total number of correct answer
 
             if (this.state.resultData[i].answerKey == this.state.resultData[i].selectedOption) {
-                a = a + 1;
+                rightAnswer = rightAnswer + 1;
+            }else{
+                wrongAnswer = wrongAnswer + 1;
             }
         }
         this.setState({
-            correctAnswer: a
+            rightAnswer: rightAnswer
         });
+        this.setState({
+            wrongAnswer: wrongAnswer
+        })
+        var result = rightAnswer - (wrongAnswer*this.state.data.negt_mark);
+        this.setState({
+            testResult: result
+        })
     }
 
     //submit test function on submit button click
@@ -447,6 +463,37 @@ class Test extends React.PureComponent {
             }
         }
         return false;
+    }
+
+    //display test analysis and explaination after test completion
+    resultExplaination(){
+        let arr = [];
+        for(let i=0;i<this.state.testData.length;i++){
+            arr.push(
+                <div>
+                    <h5>Q.{i+1} {this.state.testData[i].question}</h5>
+                    <h6>1. {this.state.testData[i].options1}</h6>
+                    <h6>2. {this.state.testData[i].options2}</h6>
+                    <h6>3. {this.state.testData[i].options3}</h6>
+                    <h6>4. {this.state.testData[i].options4}</h6>
+                    {this.selectedAndCorrect(i)}<br/>
+                </div>
+            );
+        }
+        return arr;
+    }
+    
+    //check and return result data to analysis function
+    selectedAndCorrect(e){
+        for(let i=0;i<this.state.resultData.length;i++){
+            if(this.state.resultData[i].questionId==e){
+                return <div>
+                    <span style={{color: (this.state.resultData[i].selectedOption==this.state.resultData[i].answerKey) ? "green" : "red"}}>Selected Answer : {this.state.resultData[i].selectedOption}</span><br/>
+                    <span style={{color:"green"}}>Correct Answer : {this.state.resultData[i].answerKey}</span><br/>
+                    <span style={{fontWeight:"bold"}}>Explaination : {this.state.testData[e].explain}</span>
+                </div>
+            }
+        }
     }
 
     render() {
@@ -606,9 +653,27 @@ class Test extends React.PureComponent {
 
             <div class="alert alert-success" role="alert" id="testCompleted" style={{ display: "none" }}>
                 <span><h4 class="alert-heading">Exam Completed <CheckCircleIcon style={{ color: "blue", size: "20px" }}> </CheckCircleIcon></h4> </span>
-                <hr></hr>
-                <h6>Total Attempted Question : {this.state.resultData.length}</h6>
-                <h6>Your Score : {this.state.correctAnswer}</h6>
+                <hr/>
+                <table style={{border: "1px solid black"}}>
+                    <tr style={{border: "1px solid black"}}>
+                        <td style={{border: "1px solid black"}}>Total Attempted Question</td>
+                        <td style={{border: "1px solid black"}}>{this.state.resultData.length}</td>
+                    </tr>
+                    <tr style={{border: "1px solid black"}}>
+                        <td style={{border: "1px solid black"}}>Right Answer</td>
+                        <td style={{border: "1px solid black"}}>{this.state.rightAnswer}</td>
+                    </tr>
+                    <tr style={{border: "1px solid black"}}>
+                        <td style={{border: "1px solid black"}}>Wrong Answer</td>
+                        <td style={{border: "1px solid black"}}>{this.state.wrongAnswer}</td>
+                    </tr>
+                    <tr style={{border: "1px solid black"}}>
+                        <td style={{border: "1px solid black"}}>Test Marks</td>
+                        <td style={{border: "1px solid black"}}>{this.state.testResult}</td>
+                    </tr>
+                </table>
+                <hr/>
+                {this.resultExplaination()}
             </div>
           </div>
         </div>

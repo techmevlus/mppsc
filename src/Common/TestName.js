@@ -74,7 +74,7 @@ class TestName extends React.PureComponent {
 
   // save exam id to local storage
   savingToLocalStorage(value) {
-    localStorage.setItem('testId', value);
+    localStorage.setItem('test_id', value);
     var e = this.state.timeof_test*60;
     localStorage.setItem('timeof_test', e); 
     modal('toggle')
