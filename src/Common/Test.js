@@ -11,7 +11,7 @@ class Test extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
         this.testTimerId = null;
-        this.state = {
+        this.state = { 
             data: [],
 
             examId: "",
@@ -94,6 +94,7 @@ class Test extends React.PureComponent {
         }
         if (this.state.resultData === []|| this.state.resultData === null || this.state.resultData === undefined) {
             var e = localStorage.getItem('resultData');
+            console.log("getting resultdata")
             console.log(e)
             await this.setState({
                 resultData: e
@@ -101,6 +102,7 @@ class Test extends React.PureComponent {
         }
         if (this.state.questionPanel === [] || this.state.questionPanel === null || this.state.questionPanel === undefined) {
             var e = localStorage.getItem('questionPanel');
+            console.log("getting questionPanel")
             console.log(e)
             await this.setState({
                 questionPanel: e
