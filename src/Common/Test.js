@@ -1,6 +1,6 @@
 import React from 'react';
 import Timer from '../QuizComponents/Timer';
-import { Fab } from '@material-ui/core';
+import { Fab, Modal } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 //<button key={index} onClick={()=>this.panelClick(e.questionNum)} style={{backgroundColor:e.questionColor}}>{e.questionNum}</button> ON LINE NO. 377
@@ -92,6 +92,20 @@ class Test extends React.PureComponent {
                 timeof_test: e
             })
         }
+        if (this.state.resultData === []|| this.state.resultData === null || this.state.resultData === undefined) {
+            var e = localStorage.getItem('resultData');
+            console.log(e)
+            await this.setState({
+                resultData: e
+            })
+        }
+        if (this.state.questionPanel === [] || this.state.questionPanel === null || this.state.questionPanel === undefined) {
+            var e = localStorage.getItem('questionPanel');
+            console.log(e)
+            await this.setState({
+                questionPanel: e
+            })
+        }
     }
 
     // this function is called automatically before render
@@ -116,10 +130,13 @@ class Test extends React.PureComponent {
         localStorage.setItem('_id', this.state.examId);
         localStorage.setItem('test_id', this.state.test_id);
         localStorage.setItem('timeof_test', this.state.timeof_test);
+        localStorage.setItem('resultData', this.state.resultData);
+        localStorage.setItem('questionPanel', this.state.questionPanel);
     }
 
     // after render this function is called automatically. 
-    componentDidMount() {
+    async componentDidMount() {
+        await this.checkTestInitiation();
         this.testTimerId = setInterval(this.removeTimeTaken, 1000);
         //this will be always ready for page refresh event.
         window.addEventListener('beforeunload', this.componentRefresh);
@@ -496,7 +513,53 @@ class Test extends React.PureComponent {
         }
     }
 
-    render() {
+    //starting fullScreen
+    async onFullScreen(){
+        localStorage.setItem('isTestInitiated', "1");
+        var a = document.getElementById("test_main");
+        a.requestFullscreen();
+        document.getElementById("startTestModal").style.display="none";
+        document.getElementById("test_main").style.display="block";
+    }
+    //closing fullscreen
+    offFullScreen(){
+        localStorage.setItem('isTestExited', "1");
+        document.exitFullscreen();
+        document.getElementById("startTestModal").style.display = "none";
+        document.getElementById("test_main").style.display = "none";
+        document.getElementById("thankYou").style.display = "block";
+    }
+
+    //check if test is already initiated
+    checkTestInitiation(){
+        var ea = localStorage.getItem('isTestInitiated');
+        if(ea == "0" ){
+            //show modal
+            document.getElementById("startTestModal").style.display = "block";
+            document.getElementById("test_main").style.display = "none";
+            document.getElementById("thankYou").style.display = "none";
+        }else{
+            //don't show modal
+            var eb = localStorage.getItem('isTestExited');
+            if(eb == "0"){
+                document.getElementById("startTestModal").style.display="none";
+                document.getElementById("test_main").style.display="block";
+                document.getElementById("thankYou").style.display="none";
+            }else{
+                document.getElementById("startTestModal").style.display="none";
+                document.getElementById("test_main").style.display="none";
+                document.getElementById("thankYou").style.display="block";
+            }
+        }
+    }
+
+    //show analysis
+    showAnalysis(){
+        document.getElementById("showAnalysis").style.display = "block";
+        document.getElementById("showAnalysisButton").style.display = "none";
+    }
+
+    render() {console.log(this.state.currentQuestion)
         if (this.state.data === "" || this.state.data === undefined || this.state.data === null) {
             console.log("test data is empty");
         } else {
@@ -510,6 +573,38 @@ class Test extends React.PureComponent {
         return <div style={{ padding: "10px", border: "2px", borderColor: "black" }}>
 
             {/* <div id="timer" style={{display:"block"}}><Timer startDate={startDate} /></div> */}
+
+            <div id="startTestModal" style={{ display: "block" }}>
+                {/*Button trigger modal*/}
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Start Test
+                </button>
+
+                {/*Modal*/}
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Start Test Confirmation!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        <span>Are You Ready?</span>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO, I am not ready</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick={this.onFullScreen}>YES, I am ready</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+         <div id="test_main" style={{display:"none",backgroundColor:"white"}}>
+
             <div class="container">
 
                 <div style={{ padding: "20px" }} class="row">
@@ -519,10 +614,6 @@ class Test extends React.PureComponent {
                 </div>
             </div>
 
-
-
-
-         <div id="test_main">
             <div id="testIncomplete" style={{ display: "block" }}>
                 <div style={{ width: "68%", margin: "35px" }}>
                     <div class="shadow" style={{ backgroundColor: "#F5F5F5", borderRadius: "15px", padding: "35px" }}>
@@ -605,6 +696,8 @@ class Test extends React.PureComponent {
                         </div>
                         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">DASHBOARD</button>
 
+                        
+
                     </div>
 
 
@@ -673,9 +766,12 @@ class Test extends React.PureComponent {
                     </tr>
                 </table>
                 <hr/>
-                {this.resultExplaination()}
+                <div id="showAnalysis" style={{display:"none"}}>{this.resultExplaination()}</div>
+                <button type="button" class="btn btn-success" id="showAnalysisButton" onClick={this.showAnalysis}>Show Analysis</button>&nbsp;
+                <button type="button" class="btn btn-success" onClick={this.offFullScreen}>Exit Test</button>
             </div>
-          </div>
+        </div>
+        <div id="thankYou" style={{display: "none"}}><h1>Thank You ...</h1></div>
         </div>
     }
 }

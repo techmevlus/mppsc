@@ -77,6 +77,8 @@ class TestName extends React.PureComponent {
     localStorage.setItem('test_id', value);
     var e = this.state.timeof_test*60;
     localStorage.setItem('timeof_test', e); 
+    localStorage.setItem('isTestInitiated', "0"); 
+    localStorage.setItem('isTestExited', "0");  
     modal('toggle')
   }
   SetTestId(value) {
