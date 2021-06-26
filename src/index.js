@@ -88,7 +88,7 @@ ReactDOM.render(
             <Pricing url='http://localhost:3001/api/questions' {...props} />
         }/>
         <Route exact path="/contact.html" render={props => 
-            <ContactUs url='http://localhost:3001/api/questions' {...props} />
+            <ContactUs  {...props} />
         }/>
          <Route exact path="/blog-single.html" render={props => 
             <BlogSingle url='http://localhost:3001/api/questions' {...props} />
