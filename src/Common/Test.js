@@ -518,15 +518,27 @@ class Test extends React.PureComponent {
     //starting fullScreen
     async onFullScreen(){
         localStorage.setItem('isTestInitiated', "1");
-        var a = document.getElementById("test_main");
-        a.requestFullscreen();
+        var elem = document.getElementById("test_main");
+        if (elem.requestFullscreen) { 
+            elem.requestFullscreen();
+        }else if(elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        }else if(elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        } 
         document.getElementById("startTestModal").style.display="none";
         document.getElementById("test_main").style.display="block";
     }
     //closing fullscreen
     offFullScreen(){
         localStorage.setItem('isTestExited', "1");
-        document.exitFullscreen();
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }else if(document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        }else if(document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
         document.getElementById("startTestModal").style.display = "none";
         document.getElementById("test_main").style.display = "none";
         document.getElementById("thankYou").style.display = "block";
