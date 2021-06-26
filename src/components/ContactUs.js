@@ -3,47 +3,68 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Question from './Question.js';
 import Options from './Options.js';
+import emailjs from 'emailjs-com';
 let data = require('../data'); //this imports data from local file, pass it as a prop to Quiz component
-
-const shuffleArray = array => {
-	let i = array.length - 1;
-	for (; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		const temp = array[i];
-		array[i] = array[j];
-		array[j] = temp;
-	}
-	return array;
-}
 
 class ContactUs extends React.PureComponent{
 	constructor(props, context) {
 	    super(props, context);
-	    this.state = {
-	    	data:""
-	    }
-		this.loadQuestionsFromServer = this.loadQuestionsFromServer.bind(this);
+      this.state = { feedback: '',
+      name: '',
+      email: '' 
+     };
+
 	}
-	loadQuestionsFromServer() {
-		fetch(this.props.url)
-			.then(res => res.json())
-			.then(data=>{
-		    	this.setState({ data });
-			})
+     // saves the user's name entered to state
+     nameChange = (event) => {
+      this.setState({name: event.target.value})
+    }
+    
+    // saves the user's email entered to state
+    emailChange = (event) => {
+      this.setState({email: event.target.value})
     }
 
-	componentWillMount() {
-		this.loadQuestionsFromServer();
+    // saves the user's message entered to state
+    messageChange = (event) => {
+      this.setState({feedback: event.target.value})
     }
 
-	resetOptionColor() {
-		document.getElementById("1").className = "strong options";
-		document.getElementById("2").className = "strong options";
-		document.getElementById("3").className = "strong options";
-		document.getElementById("4").className = "strong options";
-	}
+    //onSubmit of email form
+    handleSubmit = (event) => {
+      event.preventDefault();
 
-	
+      //This templateId is created in EmailJS.com
+      const templateId = 'template_vh9pdez';
+  
+      //This is a custom method from EmailJS that takes the information 
+      //from the form and sends the email with the information gathered 
+      //and formats the email based on the templateID provided.
+      this.sendFeedback(templateId, {
+                                      message: this.state.feedback, 
+                                      user_name: this.state.name, 
+                                      user_email: this.state.email
+                                     }
+                       )
+
+    }
+  
+    //Custom EmailJS method
+    sendFeedback = (templateId, variables) => {
+      window.emailjs.send(
+        'service_ax3aape', templateId,
+        variables
+        ).then(res => {
+          // Email successfully sent alert
+         console.log("EMAILS RES",res)
+        })
+        // Email Failed to send Error alert
+        .catch(err => {
+       
+          console.error('Email Error:', err)
+        })
+    }
+ 
 	render () { 
         return 	 <div> 
               <main id="main">
@@ -105,7 +126,7 @@ class ContactUs extends React.PureComponent{
 
 
           <div class="col-lg-6">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            <form  method="post" role="form" class="php-email-form" >
               <div class="row">
                 <div class="col-md-6 form-group">
                   <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required></input>
@@ -125,13 +146,55 @@ class ContactUs extends React.PureComponent{
                 <div class="error-message"></div>
                 <div class="sent-message">Your message has been sent. Thank you!</div>
               </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
+              <div class="text-center"><button type="submit" >Send Message</button></div>
             </form>
           </div>
 
+    
         </div>
 
       </div>
+
+
+
+          <form className="test-mailing" onSubmit={this.handleSubmit}>
+
+            <br/>
+            <div style={{fontSize: "1.2rem"}}>
+
+              <h6>You can also send me an email directly from here</h6>
+              <div>
+                  <label htmlFor="name">Name</label>
+                  <input className="form-control email-inputs" name="user_name" type="text" 
+                    id="name" onChange={this.nameChange} required/>
+              </div>
+
+              <div>
+                  <label htmlFor="email">Email</label>
+                  <input className="form-control email-inputs" name="user_email" type="text"
+                    id="email" onChange={this.emailChange} required/>
+              </div>
+
+              <label htmlFor="message">
+                  Message
+              </label>
+              <div>
+                <textarea
+                  id="message"
+                  name="message"
+                  onChange={this.messageChange}
+                  placeholder="Put your message here"
+                  required
+                  className="email-text-area form-control"
+                  rows="15"
+                  cols="20"
+                />
+              </div>
+
+            </div>
+
+            <input type="submit" value="Submit" className="btn btn-outline-primary" />
+          </form>
     </section>
 
 
@@ -146,7 +209,7 @@ class ContactUs extends React.PureComponent{
               
    
 
-	            </div>; 
+	            </div>
 	}
 }
 
