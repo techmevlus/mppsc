@@ -22,7 +22,7 @@ import ExamName from './Common/ExamName';
 import TestName from './Common/TestName';
 import Test from './Common/Test';
 import AddNewTest from './FormComponents/AddNewTest';
-
+import { SnackbarProvider } from 'notistack';
 
 //Importing Payment Plugin With PayUMoney
 import PayMoney from './PaymentPayUMoney/PayMoney';
@@ -66,6 +66,7 @@ ReactDOM.render(
   <Provider store={store}>
   	<Router>
   		<div> 
+          <SnackbarProvider maxSnack={3}>
   			<Route exact path="/quiz.html" render={props => 
             <Quiz url='http://localhost:3001/api/questions' {...props} />
         }/>
@@ -142,7 +143,7 @@ ReactDOM.render(
         />
 
 
-
+        </SnackbarProvider>
                 
   		</div>
   	</Router>

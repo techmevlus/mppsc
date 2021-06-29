@@ -46,9 +46,7 @@ class ExamName extends React.PureComponent {
         }
         return <div>
             
-  <div class="d-flex justify-content-end">
-  <Link to="/author-login"><button className="marTop25 nextBtn btn btn-secondary">Author Login</button></Link>
-      </div>           
+           
 <div class="d-flex justify-content-center" >
     <h3 style={{marginBottom:"40px"}}>Available Examinations</h3>
 </div>
