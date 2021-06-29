@@ -2,6 +2,8 @@ import React from 'react';
 import Timer from '../QuizComponents/Timer';
 import { Fab, Modal } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { ToggleOff } from '@material-ui/icons';
+import { Redirect } from 'react-router-dom';
 
 //<button key={index} onClick={()=>this.panelClick(e.questionNum)} style={{backgroundColor:e.questionColor}}>{e.questionNum}</button> ON LINE NO. 377
 
@@ -11,14 +13,14 @@ class Test extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
         this.testTimerId = null;
-        this.state = { 
+        this.state = {
             data: [],
 
             examId: "",
             test_id: "",
             testData: [{ options: [] }],
-            resultData: [],
-            
+            resultData: "",
+
             timeof_test: "",
             currentQuestion: 0,
 
@@ -27,11 +29,13 @@ class Test extends React.PureComponent {
             testResult: 0,
 
             questionPanel: [],
-            notVisited   : "",
-            notAttempted : 1,
+            notVisited: "",
+            notAttempted: 1,
             markNotAttempted: 0,
             markAttempted: 0,
-            attempted : 0
+            attempted: 0,
+
+            redirect : null
         }
         this.loadTestFromServer = this.loadTestFromServer.bind(this);
         this.componentRefresh = this.componentRefresh.bind(this);
@@ -41,7 +45,7 @@ class Test extends React.PureComponent {
 
         const formData = {
             examId: this.state.examId,
-            testId: this.state.test_id  
+            testId: this.state.test_id
         };
 
         await fetch('http://localhost:3001/api/test', {
@@ -76,7 +80,7 @@ class Test extends React.PureComponent {
         console.log("settingExamId funtion running");
         if (this.state.examId === "" || this.state.examId === null || this.state.examId === undefined) {
             var e = localStorage.getItem('_id');
-           await this.setState({
+            await this.setState({
                 examId: e
             })
         }
@@ -92,22 +96,6 @@ class Test extends React.PureComponent {
                 timeof_test: e
             })
         }
-        if (this.state.resultData === []|| this.state.resultData === null || this.state.resultData === undefined) {
-            var e = localStorage.getItem('resultData');
-            console.log("getting resultdata")
-            console.log(e)
-            await this.setState({
-                resultData: e
-            })
-        }
-        if (this.state.questionPanel === [] || this.state.questionPanel === null || this.state.questionPanel === undefined) {
-            var e = localStorage.getItem('questionPanel');
-            console.log("getting questionPanel")
-            console.log(e)
-            await this.setState({
-                questionPanel: e
-            })
-        }
     }
 
     // this function is called automatically before render
@@ -121,7 +109,7 @@ class Test extends React.PureComponent {
     // this function automatically gets called when component is destroyed
     componentWillUnmount() {
         console.log("Component is unmounting...")
-        if(this.testTimerId){
+        if (this.testTimerId) {
             clearInterval(this.testTimerId);
         }
     }
@@ -132,8 +120,7 @@ class Test extends React.PureComponent {
         localStorage.setItem('_id', this.state.examId);
         localStorage.setItem('test_id', this.state.test_id);
         localStorage.setItem('timeof_test', this.state.timeof_test);
-        localStorage.setItem('resultData', this.state.resultData);
-        localStorage.setItem('questionPanel', this.state.questionPanel);
+        localStorage.setItem('currentQuestion', this.state.currentQuestion);
     }
 
     // after render this function is called automatically. 
@@ -146,7 +133,7 @@ class Test extends React.PureComponent {
     }
 
     //minus seconds taken in test
-    removeTimeTaken = () =>{
+    removeTimeTaken = () => {
         this.setState({
             timeof_test: this.state.timeof_test - 1
         })
@@ -235,20 +222,20 @@ class Test extends React.PureComponent {
         await this.setState({
             currentQuestion: a
         })
-        
+
         //check if marked question
         var colorCheck = false;
         var colorValue = "";
-        for(let i = 0; i<this.state.questionPanel.length; i++){
-            if(this.state.questionPanel[i].questionColor == "blue" && this.state.questionPanel[i].questionNum-1 == this.state.currentQuestion){
-                colorCheck = 1 ;
+        for (let i = 0; i < this.state.questionPanel.length; i++) {
+            if (this.state.questionPanel[i].questionColor == "blue" && this.state.questionPanel[i].questionNum - 1 == this.state.currentQuestion) {
+                colorCheck = 1;
                 colorValue = "red";
-            }else if(this.state.questionPanel[i].questionColor == "orange" && this.state.questionPanel[i].questionNum-1 == this.state.currentQuestion){
-                colorCheck = 1 ;
+            } else if (this.state.questionPanel[i].questionColor == "orange" && this.state.questionPanel[i].questionNum - 1 == this.state.currentQuestion) {
+                colorCheck = 1;
                 colorValue = "green";
             }
         }
-        if(colorCheck == 1){
+        if (colorCheck == 1) {
             // Update question panel Color
             this.setState(prevState => ({
                 questionPanel: prevState.questionPanel.map(
@@ -268,16 +255,16 @@ class Test extends React.PureComponent {
         //check if marked question
         var colorCheck = false;
         var colorValue = "";
-        for(let i = 0; i<this.state.questionPanel.length; i++){
-            if(this.state.questionPanel[i].questionColor == "blue" && this.state.questionPanel[i].questionNum-1 == this.state.currentQuestion){
-                colorCheck = 1 ;
+        for (let i = 0; i < this.state.questionPanel.length; i++) {
+            if (this.state.questionPanel[i].questionColor == "blue" && this.state.questionPanel[i].questionNum - 1 == this.state.currentQuestion) {
+                colorCheck = 1;
                 colorValue = "red";
-            }else if(this.state.questionPanel[i].questionColor == "orange" && this.state.questionPanel[i].questionNum-1 == this.state.currentQuestion){
-                colorCheck = 1 ;
+            } else if (this.state.questionPanel[i].questionColor == "orange" && this.state.questionPanel[i].questionNum - 1 == this.state.currentQuestion) {
+                colorCheck = 1;
                 colorValue = "green";
             }
         }
-        if(colorCheck == 1){
+        if (colorCheck == 1) {
             // Update question panel Color
             this.setState(prevState => ({
                 questionPanel: prevState.questionPanel.map(
@@ -288,7 +275,7 @@ class Test extends React.PureComponent {
     }
 
     //mark for review button
-    reviewButton = () =>{
+    reviewButton = () => {
         var count = 0;
         for (let i = 0; i < this.state.resultData.length; i++) {
             //Check if question already attempted			
@@ -297,14 +284,14 @@ class Test extends React.PureComponent {
             }
         }
 
-        if(count){
+        if (count) {
             // question marked for review and eligible for evaluation
             this.setState(prevState => ({
                 questionPanel: prevState.questionPanel.map(
                     obj => (obj.questionNum - 1 === this.state.currentQuestion ? Object.assign(obj, { questionColor: "orange" }) : obj)
                 )
             }));
-        }else{
+        } else {
             // question marked for review and not eligible for evaluation
             this.setState(prevState => ({
                 questionPanel: prevState.questionPanel.map(
@@ -320,13 +307,13 @@ class Test extends React.PureComponent {
         //if question is visited first time
         var colorCheck = false;
         var colorValue = "";
-        for(let i = 0; i<this.state.questionPanel.length; i++){
-            if(this.state.questionPanel[i].questionColor == "silver" && this.state.questionPanel[i].questionNum-1 == this.state.currentQuestion){
-                colorCheck = 1 ;
+        for (let i = 0; i < this.state.questionPanel.length; i++) {
+            if (this.state.questionPanel[i].questionColor == "silver" && this.state.questionPanel[i].questionNum - 1 == this.state.currentQuestion) {
+                colorCheck = 1;
                 colorValue = "red";
             }
         }
-        if(colorCheck == 1){
+        if (colorCheck == 1) {
             // Update question panel Color
             this.setState(prevState => ({
                 questionPanel: prevState.questionPanel.map(
@@ -364,7 +351,7 @@ class Test extends React.PureComponent {
 
             if (this.state.resultData[i].answerKey == this.state.resultData[i].selectedOption) {
                 rightAnswer = rightAnswer + 1;
-            }else{
+            } else {
                 wrongAnswer = wrongAnswer + 1;
             }
         }
@@ -374,14 +361,14 @@ class Test extends React.PureComponent {
         this.setState({
             wrongAnswer: wrongAnswer
         })
-        var result = rightAnswer - (wrongAnswer*this.state.data.negt_mark);
+        var result = rightAnswer - (wrongAnswer * this.state.data.negt_mark);
         this.setState({
             testResult: result
         })
     }
 
     //submit test function on submit button click
-    submitButton() {
+    submitButton = () => {
         this.setState({
             timeof_test: 0
         })
@@ -411,16 +398,16 @@ class Test extends React.PureComponent {
         //check if marked question
         var colorCheck = false;
         var colorValue = "";
-        for(let i = 0; i<this.state.questionPanel.length; i++){
-            if(this.state.questionPanel[i].questionColor == "blue" && this.state.questionPanel[i].questionNum-1 == this.state.currentQuestion){
-                colorCheck = 1 ;
+        for (let i = 0; i < this.state.questionPanel.length; i++) {
+            if (this.state.questionPanel[i].questionColor == "blue" && this.state.questionPanel[i].questionNum - 1 == this.state.currentQuestion) {
+                colorCheck = 1;
                 colorValue = "red";
-            }else if(this.state.questionPanel[i].questionColor == "orange" && this.state.questionPanel[i].questionNum-1 == this.state.currentQuestion){
-                colorCheck = 1 ;
+            } else if (this.state.questionPanel[i].questionColor == "orange" && this.state.questionPanel[i].questionNum - 1 == this.state.currentQuestion) {
+                colorCheck = 1;
                 colorValue = "green";
             }
         }
-        if(colorCheck == 1){
+        if (colorCheck == 1) {
             // Update question panel Color
             this.setState(prevState => ({
                 questionPanel: prevState.questionPanel.map(
@@ -431,53 +418,53 @@ class Test extends React.PureComponent {
     }
 
     //updating dashboard number data
-    dashboardData(){
+    dashboardData() {
         var colorSilver = 0;
         var colorRed = 0;
         var colorBlue = 0;
         var colorOrange = 0;
         var colorGreen = 0;
 
-        for(let i = 0; i<this.state.questionPanel.length; i++){
-            if(this.state.questionPanel[i].questionColor == "silver"){
-                colorSilver = colorSilver + 1 ;
-            }else if(this.state.questionPanel[i].questionColor == "red"){
-                colorRed = colorRed + 1 ;
-            }else if(this.state.questionPanel[i].questionColor == "blue"){
-                colorBlue = colorBlue + 1 ;
-            }else if(this.state.questionPanel[i].questionColor == "orange"){
-                colorOrange = colorOrange + 1 ;
-            }else{
-                colorGreen = colorGreen + 1 ;
+        for (let i = 0; i < this.state.questionPanel.length; i++) {
+            if (this.state.questionPanel[i].questionColor == "silver") {
+                colorSilver = colorSilver + 1;
+            } else if (this.state.questionPanel[i].questionColor == "red") {
+                colorRed = colorRed + 1;
+            } else if (this.state.questionPanel[i].questionColor == "blue") {
+                colorBlue = colorBlue + 1;
+            } else if (this.state.questionPanel[i].questionColor == "orange") {
+                colorOrange = colorOrange + 1;
+            } else {
+                colorGreen = colorGreen + 1;
             }
         }
 
         this.setState({
-            notVisited : colorSilver
+            notVisited: colorSilver
         })
 
         this.setState({
-            notAttempted : colorRed
+            notAttempted: colorRed
         })
 
         this.setState({
-            markNotAttempted : colorBlue
+            markNotAttempted: colorBlue
         })
 
         this.setState({
-            markAttempted : colorOrange
+            markAttempted: colorOrange
         })
 
         this.setState({
-            attempted : colorGreen
+            attempted: colorGreen
         })
     }
 
     //check if question attempted or not to change color of mark review button
-    checkMarkButtonColor(){
+    checkMarkButtonColor() {
         var count = 0;
-        for(let i=0; i<this.state.resultData.length;i++){
-            if(this.state.resultData[i].questionId == this.state.currentQuestion){
+        for (let i = 0; i < this.state.resultData.length; i++) {
+            if (this.state.resultData[i].questionId == this.state.currentQuestion) {
                 return true;
             }
         }
@@ -485,95 +472,111 @@ class Test extends React.PureComponent {
     }
 
     //display test analysis and explaination after test completion
-    resultExplaination(){
+    resultExplaination() {
         let arr = [];
-        for(let i=0;i<this.state.testData.length;i++){
+        for (let i = 0; i < this.state.testData.length; i++) {
             arr.push(
-                <div>
-                    <h5>Q.{i+1} {this.state.testData[i].question}</h5>
+                <div id={"explain"+i}>
+                    <h5>Q.{i + 1} {this.state.testData[i].question}</h5>
                     <h6>1. {this.state.testData[i].options1}</h6>
                     <h6>2. {this.state.testData[i].options2}</h6>
                     <h6>3. {this.state.testData[i].options3}</h6>
                     <h6>4. {this.state.testData[i].options4}</h6>
-                    {this.selectedAndCorrect(i)}<br/>
+                    {this.selectedAndCorrect(i)}<br />
                 </div>
-            );
+            ); 
         }
-        return arr;
+        return arr; 
     }
-    
+
     //check and return result data to analysis function
-    selectedAndCorrect(e){
-        for(let i=0;i<this.state.resultData.length;i++){
-            if(this.state.resultData[i].questionId==e){
+    selectedAndCorrect(e) {
+        for (let i = 0; i < this.state.resultData.length; i++) {
+            if (this.state.resultData[i].questionId == e) {
                 return <div>
-                    <span style={{color: (this.state.resultData[i].selectedOption==this.state.resultData[i].answerKey) ? "green" : "red"}}>Selected Answer : {this.state.resultData[i].selectedOption}</span><br/>
-                    <span style={{color:"green"}}>Correct Answer : {this.state.resultData[i].answerKey}</span><br/>
-                    <span style={{fontWeight:"bold"}}>Explaination : {this.state.testData[e].explain}</span>
+                    <span style={{ color: (this.state.resultData[i].selectedOption == this.state.resultData[i].answerKey) ? "green" : "red" }}>Selected Answer : {this.state.resultData[i].selectedOption}</span><br />
+                    <span style={{ color: "green" }}>Correct Answer : {this.state.resultData[i].answerKey}</span><br />
+                    <span style={{ fontWeight: "bold" }}>Explaination : {this.state.testData[e].explain}</span>
                 </div>
             }
         }
+        return <div>
+            <span style={{ color: "red" }}>Selected Answer : Not Attempted</span><br />
+            <span style={{ color: "green" }}>Correct Answer : {this.state.testData[e].key} </span><br />
+            <span style={{ fontWeight: "bold" }}>Explaination : {this.state.testData[e].explain}</span>
+        </div>
     }
-
+ 
     //starting fullScreen
-    async onFullScreen(){
+    async onFullScreen() {
         localStorage.setItem('isTestInitiated', "1");
         var elem = document.getElementById("test_main");
-        if (elem.requestFullscreen) { 
+        if (elem.requestFullscreen) {
             elem.requestFullscreen();
-        }else if(elem.webkitRequestFullscreen) { /* Safari */
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
             elem.webkitRequestFullscreen();
-        }else if(elem.msRequestFullscreen) { /* IE11 */
+        } else if (elem.msRequestFullscreen) { /* IE11 */
             elem.msRequestFullscreen();
-        } 
-        document.getElementById("startTestModal").style.display="none";
-        document.getElementById("test_main").style.display="block";
+        }
+        $('#staticBackdrop').modal('hide');
+        document.getElementById("test_main").style.display = "block";
     }
     //closing fullscreen
-    offFullScreen(){
+    offFullScreen() {
         localStorage.setItem('isTestExited', "1");
         if (document.exitFullscreen) {
             document.exitFullscreen();
-        }else if(document.webkitExitFullscreen) { /* Safari */
+        } else if (document.webkitExitFullscreen) { /* Safari */
             document.webkitExitFullscreen();
-        }else if(document.msExitFullscreen) { /* IE11 */
+        } else if (document.msExitFullscreen) { /* IE11 */
             document.msExitFullscreen();
         }
-        document.getElementById("startTestModal").style.display = "none";
+        $('#staticBackdrop').modal('hide');
         document.getElementById("test_main").style.display = "none";
         document.getElementById("thankYou").style.display = "block";
+        window.location.reload(false); 
     }
 
     //check if test is already initiated
-    checkTestInitiation(){
+    checkTestInitiation() {
         var ea = localStorage.getItem('isTestInitiated');
-        if(ea == "0" ){
+        if (ea == "0") {
             //show modal
-            document.getElementById("startTestModal").style.display = "block";
+            $('#staticBackdrop').modal('show');
             document.getElementById("test_main").style.display = "none";
             document.getElementById("thankYou").style.display = "none";
-        }else{
+        } else {
             //don't show modal
             var eb = localStorage.getItem('isTestExited');
-            if(eb == "0"){
-                document.getElementById("startTestModal").style.display="none";
-                document.getElementById("test_main").style.display="block";
-                document.getElementById("thankYou").style.display="none";
-            }else{
-                document.getElementById("startTestModal").style.display="none";
-                document.getElementById("test_main").style.display="none";
-                document.getElementById("thankYou").style.display="block";
+            if (eb == "0") {
+                $('#staticBackdrop').modal('hide');
+                document.getElementById("test_main").style.display = "block";
+                document.getElementById("thankYou").style.display = "none";
+            } else {
+                $('#staticBackdrop').modal('hide');
+                document.getElementById("test_main").style.display = "none";
+                document.getElementById("thankYou").style.display = "block";
             }
         }
     }
 
     //show analysis
-    showAnalysis(){
+    showAnalysis() {
         document.getElementById("showAnalysis").style.display = "block";
         document.getElementById("showAnalysisButton").style.display = "none";
     }
 
-    render() {console.log(this.state.currentQuestion)
+    //send back to test names page
+    backTestName = () =>{
+        this.setState({
+            redirect: "/testDetails"
+        })
+    }
+
+    render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+          }
         if (this.state.data === "" || this.state.data === undefined || this.state.data === null) {
             console.log("test data is empty");
         } else {
@@ -582,34 +585,60 @@ class Test extends React.PureComponent {
         this.fetchRadioButtonHistory();
         this.fetchResult();
         this.dashboardData();
-        
+
 
         return <div style={{ padding: "10px", border: "2px", borderColor: "black" }}>
 
             {/* <div id="timer" style={{display:"block"}}><Timer startDate={startDate} /></div> */}
 
-            <div id="startTestModal" style={{ display: "block" }}>
-                {/*Button trigger modal*/}
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Start Test
-                </button>
-
-                {/*Modal*/}
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-fullscreen">
                     <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Start Test Confirmation!</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div style={{ backgroundColor: "green", color: 'white' }} class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Exam Instructions</h5>
+                            <p>Kuldeep</p>
                         </div>
                         <div class="modal-body">
-                        <span>Are You Ready?</span>
+                            <span>
+                                SUBJECT NAME and SUBJECT NUMBER <br></br>
+
+                                Assessment Task X – Take Home Examination <br></br>
+
+                                Insert Session and year e.g. Autumn 2020 <br></br>
+
+                                Instructions <br></br>
+
+                                This examination is made available online at TIME on DATE.  <br></br>
+
+                                Your completed answer file is due at TIME on DATE and must be submitted online via the xx link Assignments folder on Blackboard/Canvas.  <br></br>
+
+                                There are X questions. Your answer to each question attempted should commence on a new page and be appropriately numbered.  <br></br>
+
+                                The examination is worth X% of the marks available in this subject. The contribution each question makes to the total examination mark is indicated in marks or as a percentage.  <br></br>
+
+                                This examination is an open book examination. <br></br>
+
+                                This examination is expected to take approximately 2 hours [3 if an exception] of working time. You are advised to allocate your time accordingly. Your answer file may be submitted at any time before the due time. Please allow time to complete the submission process. <br></br>
+
+                                Please submit your file in PDF/Word etc format unless directed otherwise. Please name your file as follows:  <br></br>
+
+                                EXAM_subject number_student number   e.g. EXAM_54000_12345678 <br></br>
+
+                                Word Limit <br></br>
+
+                                There is a word limit for each question. Footnotes/references are not included in the word count. The most important thing is to answer the question in a succinct manner. This means that your answer can consist of a word count less than the imposed word limit. A ten percent (10%) leeway on word counts is permitted. <br></br>
+
+                                Footnotes/references must be used for citation purposes only and not for the development of your arguments. A bibliography is not required for this assessment task.  <br></br>
+
+                                Important Notice – Exam Conditions and Academic Integrity <br></br>
+
+                                In attempting this examination and submitting an answer file, candidates are undertaking that the work they submit is a result of their own unaided efforts and that they have not discussed the questions or possible answers with other persons during the examination period. Candidates who are found to have participated in any form of cooperation or collusion or any activity which could amount to academic misconduct in the answering of this examination will have their marks withdrawn and disciplinary action will be initiated on a complaint from the Examiner.  <br></br>
+                            </span>
                         </div>
                         <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO, I am not ready</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick={this.onFullScreen}>YES, I am ready</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onClick={this.backTestName}>   Cancel   </button>
+                            <button type="button" class="btn btn-success" onClick={this.onFullScreen}>   I am Ready   </button>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -617,177 +646,183 @@ class Test extends React.PureComponent {
 
 
 
-         <div id="test_main" style={{display:"none",backgroundColor:"white"}}>
+            <div id="test_main" style={{ display: "none", backgroundColor: "white" }}>
 
-            <div class="container">
+                <div class="container">
 
-                <div style={{ padding: "20px" }} class="row">
-                    <div class="col-2" id="timer" style={{ display: "block" }}><Timer startDate={new Date().getTime() + (this.state.timeof_test*1000)} /></div>
-                    <div class="col-8 d-flex flex-row-reverse">  <h5 id="testHeading">Test ID : {this.state.test_id}</h5></div>
-
-                </div>
-            </div>
-
-            <div id="testIncomplete" style={{ display: "block" }}>
-                <div style={{ width: "68%", margin: "35px" }}>
-                    <div class="shadow" style={{ backgroundColor: "#F5F5F5", borderRadius: "15px", padding: "35px" }}>
-                        <div id="question" style={{ display: "block" }}><h3>Q.{this.state.currentQuestion + 1} {this.state.testData[this.state.currentQuestion].question}</h3></div>
-                        <hr></hr>
-
-                        <div style={{ fontSize: "20px" }}>
-                            <input class="form-check-input" type="radio" name="option" id="1" value="1" onClick={() => this.selectRadio("1")} />
-                            <label >   &nbsp;&nbsp; 1. {this.state.testData[this.state.currentQuestion].options1} </label>
-                        </div><hr></hr>
-                        <div style={{ fontSize: "20px" }}>
-                            <input class="form-check-input" type="radio" name="option" id="2" value="2" onClick={() => this.selectRadio("2")} />
-                            <label> &nbsp;&nbsp; 2. {this.state.testData[this.state.currentQuestion].options2} </label>
-                        </div><hr></hr>
-                        <div style={{ fontSize: "20px" }}>
-                            <input class="form-check-input" type="radio" name="option" id="3" value="3" onClick={() => this.selectRadio("3")} />
-                            <label> &nbsp;&nbsp; 3. {this.state.testData[this.state.currentQuestion].options3} </label>
-                        </div><hr></hr>
-                        <div style={{ fontSize: "20px" }}>
-                            <input class="form-check-input" type="radio" name="option" id="4" value="4" onClick={() => this.selectRadio("4")} />
-                            <label> &nbsp;&nbsp; 4. {this.state.testData[this.state.currentQuestion].options4} </label>
-
-                        </div>
-
+                    <div style={{ padding: "20px" }} class="row">
+                        <div class="col-2" id="timer" style={{ display: "block" }}><Timer startDate={new Date().getTime() + (this.state.timeof_test * 1000)} /></div>
+                        <div class="col-8 d-flex flex-row-reverse">  <h5 id="testHeading">Test ID : {this.state.test_id}</h5></div>
 
                     </div>
-                    <div style={{ marginTop: "40px", textAlign: "right" }} class="d-grid gap-2  d-md-block ">
+                </div>
 
-                        <button style={(this.state.currentQuestion == 0) ? { marginRight: "5px" ,display :"none"} : {marginRight: "5px" ,display :"block"}} type="button" class="btn btn-outline-dark" onClick={() => this.previewsButton()}>Previews Question</button>
-                        <button style={(this.state.currentQuestion+1 == this.state.testData.length) ? { marginRight: "5px" ,display :"none"} : {marginRight: "5px" ,display :"block"}} type="button" class="btn btn-outline-dark" onClick={() => this.nextButton()}>Next Question</button>
-                        <button style={{ marginRight: "5px" }} type="button" class="btn btn-outline-danger" onClick={() => this.clearButton()}>Clear Response</button>
-                        <button style={{ marginRight: "5px" }} type="button" className={this.checkMarkButtonColor()? "btn btn-outline-warning" : "btn btn-outline-primary"} onClick={() => this.reviewButton()}>Mark Review</button>
-                        { /* <button  style={{marginRight:"5px"}} type="button" class="btn btn-outline-success" onClick={() => this.submitButton()}>Submit Test</button> */}
+                <div id="testIncomplete" style={{ display: "block" }}>
+                    <div style={{ width: "68%", margin: "35px" }}>
+                        <div class="shadow" style={{ backgroundColor: "#F5F5F5", borderRadius: "15px", padding: "35px" }}>
+                            <div id="question" style={{ display: "block" }}><h3>Q.{this.state.currentQuestion + 1} {this.state.testData[this.state.currentQuestion].question}</h3></div>
+                            <hr></hr>
+
+                            <div style={{ fontSize: "20px" }}>
+                                <input class="form-check-input" type="radio" name="option" id="1" value="1" onClick={() => this.selectRadio("1")} />
+                                <label >   &nbsp;&nbsp; 1. {this.state.testData[this.state.currentQuestion].options1} </label>
+                            </div><hr></hr>
+                            <div style={{ fontSize: "20px" }}>
+                                <input class="form-check-input" type="radio" name="option" id="2" value="2" onClick={() => this.selectRadio("2")} />
+                                <label> &nbsp;&nbsp; 2. {this.state.testData[this.state.currentQuestion].options2} </label>
+                            </div><hr></hr>
+                            <div style={{ fontSize: "20px" }}>
+                                <input class="form-check-input" type="radio" name="option" id="3" value="3" onClick={() => this.selectRadio("3")} />
+                                <label> &nbsp;&nbsp; 3. {this.state.testData[this.state.currentQuestion].options3} </label>
+                            </div><hr></hr>
+                            <div style={{ fontSize: "20px" }}>
+                                <input class="form-check-input" type="radio" name="option" id="4" value="4" onClick={() => this.selectRadio("4")} />
+                                <label> &nbsp;&nbsp; 4. {this.state.testData[this.state.currentQuestion].options4} </label>
+
+                            </div>
 
 
-                        <button style={{ marginRight: "5px" }} type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                        </div>
+                        <div style={{ marginTop: "40px", textAlign: "right" }} class="d-grid gap-2  d-md-block ">
+
+                            <button style={(this.state.currentQuestion == 0) ? { marginRight: "5px", display: "none" } : { marginRight: "5px", display: "block" }} type="button" class="btn btn-outline-dark" onClick={() => this.previewsButton()}>Previews Question</button>
+                            <button style={(this.state.currentQuestion + 1 == this.state.testData.length) ? { marginRight: "5px", display: "none" } : { marginRight: "5px", display: "block" }} type="button" class="btn btn-outline-dark" onClick={() => this.nextButton()}>Next Question</button>
+                            <button style={{ marginRight: "5px" }} type="button" class="btn btn-outline-danger" onClick={() => this.clearButton()}>Clear Response</button>
+                            <button style={{ marginRight: "5px" }} type="button" className={this.checkMarkButtonColor() ? "btn btn-outline-warning" : "btn btn-outline-primary"} onClick={() => this.reviewButton()}>Mark Review</button>
+                            { /* <button  style={{marginRight:"5px"}} type="button" class="btn btn-outline-success" onClick={() => this.submitButton()}>Submit Test</button> */}
+
+                            {/* Button trigger modal */}
+                            <button style={{ marginRight: "5px" }} onClick={this.submitButton} type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitButtonModal">
                             Submit Test
-                        </button>
+                            </button>
 
-
-                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            {/* Modal */}
+                            <div class="modal fade" id="submitButtonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Do you want to end the Test ?</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div style={{ textAlign: 'left' }} class="modal-body">
-                                        <table style={{border: "1px solid black"}}>
-                                            <tr style={{border: "1px solid black"}}>
-                                                <td style={{border: "1px solid black"}}>Not Visited</td>
-                                                <td style={{border: "1px solid black"}}>{this.state.notVisited}</td>
-                                            </tr>
-                                            <tr style={{border: "1px solid black"}}>
-                                                <td style={{border: "1px solid black"}}>Not Attempted</td>
-                                                <td style={{border: "1px solid black"}}>{this.state.notAttempted}</td>
-                                            </tr>
-                                            <tr style={{border: "1px solid black"}}>
-                                                <td style={{border: "1px solid black"}}>Marked Review &amp; Not Attempted</td>
-                                                <td style={{border: "1px solid black"}}>{this.state.markNotAttempted}</td>
-                                            </tr>
-                                            <tr style={{border: "1px solid black"}}>
-                                                <td style={{border: "1px solid black"}}>Marked Review &amp; Attempted</td>
-                                                <td style={{border: "1px solid black"}}>{this.state.markAttempted}</td>
-                                            </tr>
-                                            <tr style={{border: "1px solid black"}}>
-                                                <td style={{border: "1px solid black"}}>Attempted</td>
-                                                <td style={{border: "1px solid black"}}>{this.state.attempted}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                                        <button style={{ marginRight: "5px" }} type="button" class="btn btn-outline-success" onClick={() => this.submitButton()} data-dismiss="modal">Submit Test</button>
-                                    </div>
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Do you want end this test?</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                <table style={{ border: "1px solid black" }}>
+                                                <tr style={{ border: "1px solid black" }}>
+                                                    <td style={{ border: "1px solid black" }}>Not Visited</td>
+                                                    <td style={{ border: "1px solid black" }}>{this.state.notVisited}</td>
+                                                </tr>
+                                                <tr style={{ border: "1px solid black" }}>
+                                                    <td style={{ border: "1px solid black" }}>Not Attempted</td>
+                                                    <td style={{ border: "1px solid black" }}>{this.state.notAttempted}</td>
+                                                </tr>
+                                                <tr style={{ border: "1px solid black" }}>
+                                                    <td style={{ border: "1px solid black" }}>Marked Review &amp; Not Attempted</td>
+                                                    <td style={{ border: "1px solid black" }}>{this.state.markNotAttempted}</td>
+                                                </tr>
+                                                <tr style={{ border: "1px solid black" }}>
+                                                    <td style={{ border: "1px solid black" }}>Marked Review &amp; Attempted</td>
+                                                    <td style={{ border: "1px solid black" }}>{this.state.markAttempted}</td>
+                                                </tr>
+                                                <tr style={{ border: "1px solid black" }}>
+                                                    <td style={{ border: "1px solid black" }}>Attempted</td>
+                                                    <td style={{ border: "1px solid black" }}>{this.state.attempted}</td>
+                                                </tr>
+                                            </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" onClick={this.submitButton} data-dismis="modal">Submit</button>
+                                </div>
                                 </div>
                             </div>
+                            </div>
+
+
+                            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">DASHBOARD</button>
+
+
+
                         </div>
-                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">DASHBOARD</button>
 
-                        
 
                     </div>
 
 
+
                 </div>
 
 
+                <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+                    <div class="offcanvas-header">
 
-            </div>
 
-
-            <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-                <div class="offcanvas-header">
-                    
-
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div>
-                        
-                        {this.state.questionPanel.map((e, index) => (
-                            <span>
-                                <Fab key={index} onClick={() => this.panelClick(e.questionNum)} style={{ backgroundColor: e.questionColor, margin: "5px", color: "white" }} aria-label={e.questionNum}>{e.questionNum}
-
-                                </Fab>
-
-                            </span>
-                        ))}
-                        
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    <hr></hr>
+                    <div class="offcanvas-body">
+                        <div>
 
-                    <h6 class="offcanvas-title" id="offcanvasScrollingLabel">
-                            <span className="badge rounded-pill bg-secondary">{this.state.notVisited}</span>&nbsp;<span style={{color:"silver"}}>Not Visited : Silver</span><br/>
-                            <span className="badge rounded-pill bg-danger">{this.state.notAttempted}</span>&nbsp;<span style={{color:"red"}}>Not Attempted : Red</span><br/>
-                            <span className="badge rounded-pill bg-primary">{this.state.markNotAttempted}</span>&nbsp;<span style={{color:"blue"}}>Marked Review &amp; Not Attempted : Blue</span><br/>
-                            <span className="badge rounded-pill bg-warning">{this.state.markAttempted}</span>&nbsp;<span style={{color:"orange"}}>Marked Review &amp; Attempted : Orange</span><br/>
-                            <span className="badge rounded-pill bg-success">{this.state.attempted}</span>&nbsp;<span style={{color:"green"}}>Attempted : Green</span>
-                    </h6>
+                            {this.state.questionPanel.map((e, index) => (
+                                <span>
+                                    <Fab key={index} onClick={() => this.panelClick(e.questionNum)} style={{ backgroundColor: e.questionColor, margin: "5px", color: "white" }} aria-label={e.questionNum}>{e.questionNum}
+
+                                    </Fab>
+
+                                </span>
+                            ))}
+
+                        </div>
+                        <hr></hr>
+
+                        <h6 class="offcanvas-title" id="offcanvasScrollingLabel">
+                            <span className="badge rounded-pill bg-secondary">{this.state.notVisited}</span>&nbsp;<span style={{ color: "silver" }}>Not Visited : Silver</span><br />
+                            <span className="badge rounded-pill bg-danger">{this.state.notAttempted}</span>&nbsp;<span style={{ color: "red" }}>Not Attempted : Red</span><br />
+                            <span className="badge rounded-pill bg-primary">{this.state.markNotAttempted}</span>&nbsp;<span style={{ color: "blue" }}>Marked Review &amp; Not Attempted : Blue</span><br />
+                            <span className="badge rounded-pill bg-warning">{this.state.markAttempted}</span>&nbsp;<span style={{ color: "orange" }}>Marked Review &amp; Attempted : Orange</span><br />
+                            <span className="badge rounded-pill bg-success">{this.state.attempted}</span>&nbsp;<span style={{ color: "green" }}>Attempted : Green</span>
+                        </h6>
 
 
+                    </div>
+                </div>
+
+
+
+
+                <div class="alert alert-success" role="alert" id="testCompleted" style={{ display: "none" }}>
+                    <span><h4 class="alert-heading">Exam Completed <CheckCircleIcon style={{ color: "blue", size: "20px" }}> </CheckCircleIcon></h4> </span>
+                    <hr />
+                    <table style={{ border: "1px solid black" }}>
+                        <tr style={{ border: "1px solid black" }}>
+                            <td style={{ border: "1px solid black" }}>Total Question</td>
+                            <td style={{ border: "1px solid black" }}>{this.state.testData.length}</td>
+                        </tr>
+                        <tr style={{ border: "1px solid black" }}>
+                            <td style={{ border: "1px solid black" }}>Attempted Question</td>
+                            <td style={{ border: "1px solid black" }}>{this.state.resultData.length}</td>
+                        </tr>
+                        <tr style={{ border: "1px solid black" }}>
+                            <td style={{ border: "1px solid black" }}>Right Answer</td>
+                            <td style={{ border: "1px solid black" }}>{this.state.rightAnswer}</td>
+                        </tr>
+                        <tr style={{ border: "1px solid black" }}>
+                            <td style={{ border: "1px solid black" }}>Wrong Answer</td>
+                            <td style={{ border: "1px solid black" }}>{this.state.wrongAnswer}</td>
+                        </tr>
+                        <tr style={{ border: "1px solid black" }}>
+                            <td style={{ border: "1px solid black" }}>Test Marks</td>
+                            <td style={{ border: "1px solid black" }}>{this.state.testResult}</td>
+                        </tr>
+                    </table>
+                    <hr />
+                    <button type="button" class="btn btn-success" id="showAnalysisButton" onClick={this.showAnalysis}>Show Analysis</button>&nbsp;
+                    <button type="button" class="btn btn-success" onClick={this.offFullScreen}>Exit Test</button>
+                    <div id="showAnalysis" style={{ display: "none" }}>{this.resultExplaination()}</div>
                 </div>
             </div>
-
-
-
-
-            <div class="alert alert-success" role="alert" id="testCompleted" style={{ display: "none" }}>
-                <span><h4 class="alert-heading">Exam Completed <CheckCircleIcon style={{ color: "blue", size: "20px" }}> </CheckCircleIcon></h4> </span>
-                <hr/>
-                <table style={{border: "1px solid black"}}>
-                    <tr style={{border: "1px solid black"}}>
-                        <td style={{border: "1px solid black"}}>Total Attempted Question</td>
-                        <td style={{border: "1px solid black"}}>{this.state.resultData.length}</td>
-                    </tr>
-                    <tr style={{border: "1px solid black"}}>
-                        <td style={{border: "1px solid black"}}>Right Answer</td>
-                        <td style={{border: "1px solid black"}}>{this.state.rightAnswer}</td>
-                    </tr>
-                    <tr style={{border: "1px solid black"}}>
-                        <td style={{border: "1px solid black"}}>Wrong Answer</td>
-                        <td style={{border: "1px solid black"}}>{this.state.wrongAnswer}</td>
-                    </tr>
-                    <tr style={{border: "1px solid black"}}>
-                        <td style={{border: "1px solid black"}}>Test Marks</td>
-                        <td style={{border: "1px solid black"}}>{this.state.testResult}</td>
-                    </tr>
-                </table>
-                <hr/>
-                <div id="showAnalysis" style={{display:"none"}}>{this.resultExplaination()}</div>
-                <button type="button" class="btn btn-success" id="showAnalysisButton" onClick={this.showAnalysis}>Show Analysis</button>&nbsp;
-                <button type="button" class="btn btn-success" onClick={this.offFullScreen}>Exit Test</button>
-            </div>
+            <div id="thankYou" style={{ display: "none" }}><h1>Thank You ...</h1></div>
         </div>
-        <div id="thankYou" style={{display: "none"}}><h1>Thank You ...</h1></div>
-        </div>
-    }
+    } 
 }
 
 export default Test;
