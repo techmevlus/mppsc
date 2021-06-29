@@ -5,6 +5,7 @@ import Question from './Question.js';
 import Options from './Options.js';
 let data = require('../data'); //this imports data from local file, pass it as a prop to Quiz component
 import ExamName from '../Common/ExamName'
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const shuffleArray = array => {
 	let i = array.length - 1;
@@ -86,9 +87,12 @@ class Home extends React.PureComponent{
 
 
 
-
+<div class="d-flex justify-content-end">
+  <Link to="/author-login"><button className="marTop25 nextBtn btn btn-secondary">Author Login</button></Link>
+      </div>  
     <section class=" container-md shadow" style={{padding:"30px",marginBottom:"50px", marginTop:"50px"}}>
       <ExamName url='http://localhost:3001/api/exams_name'></ExamName>
+     
 
 
     </section>
@@ -233,17 +237,17 @@ class Home extends React.PureComponent{
       <div class="col-lg-3 col-md-6 footer-contact">
         <h4>Contact Us</h4>
         <p>
-          A108 Adam Street <br></br>
-          New York, NY 535022<br></br>
-          United States <br></br>
-          <strong>Phone:</strong> +1 5589 55488 55<br></br>
-          <strong>Email:</strong> info@example.com<br></br>
+          54 Vijay Nagar <br></br>
+          Indore, 452010<br></br>
+          India <br></br>
+          <strong>Phone:</strong> +91 9755 088077<br></br>
+          <strong>Email:</strong> techmevlus@gmail.com<br></br>
         </p>
 
       </div>
 
       <div class="col-lg-3 col-md-6 footer-info">
-        <h3>About Eterna</h3>
+        <h3>About Mevlus</h3>
         <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
         <div class="social-links mt-3">
           <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
@@ -260,7 +264,7 @@ class Home extends React.PureComponent{
 
 <div class="container">
   <div class="copyright">
-    &copy; Copyright <strong><span>Eterna</span></strong>. All Rights Reserved
+    &copy; Copyright <strong><span>Mevlus</span></strong>. All Rights Reserved
   </div>
 
 </div>
@@ -274,7 +278,7 @@ class Home extends React.PureComponent{
  
    
 
-	            </div>; 
+	            </div>
 	}
 }
 

@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Question from './Question.js';
-import Options from './Options.js';
 import emailjs from 'emailjs-com';
+import { Fab } from '@material-ui/core';
+import CheckIcon from '@material-ui/icons/Check';
+import SaveIcon from '@material-ui/icons/Save';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import SendIcon from '@material-ui/icons/Send';
+import { withSnackbar } from 'notistack';
+import Button from '@material-ui/core/Button';
+
+
+
 let data = require('../data'); //this imports data from local file, pass it as a prop to Quiz component
 
 class ContactUs extends React.PureComponent{
@@ -11,10 +19,30 @@ class ContactUs extends React.PureComponent{
 	    super(props, context);
       this.state = { feedback: '',
       name: '',
-      email: '' 
+      email: '' ,
+      subject:'',
+      success:false,
+      loading:false,
+      timePassed:false
+
+
      };
 
 	}
+
+
+   handleButtonClick = () => {
+    if (!this.state.loading) {
+     
+      this.setState({success: false, loading:true})
+      setTimeout(() => { this.setState({timePassed: true, success: true, loading:false }) }, 1700);
+      if (!this.state.timePassed){
+        console.log("timeout")
+      }
+    
+    }
+  };
+
      // saves the user's name entered to state
      nameChange = (event) => {
       this.setState({name: event.target.value})
@@ -30,8 +58,13 @@ class ContactUs extends React.PureComponent{
       this.setState({feedback: event.target.value})
     }
 
+    subjectChange = (event) => {
+      this.setState({subject: event.target.value})
+    }
     //onSubmit of email form
     handleSubmit = (event) => {
+      this.setState({ loading:true }) 
+
       event.preventDefault();
 
       //This templateId is created in EmailJS.com
@@ -55,8 +88,11 @@ class ContactUs extends React.PureComponent{
         'service_ax3aape', templateId,
         variables
         ).then(res => {
+          this.setState({timePassed: true, success: true, loading:false }) 
+          setTimeout(() => { this.setState({timePassed: false, success: false, loading:false, feedback:"", name:"", email:"" , message:"", subject:"" }) }, 1700);
           // Email successfully sent alert
-         console.log("EMAILS RES",res)
+          console.log('Email sent:', res)
+          this.props.enqueueSnackbar('  Message sent Successfully. ', {   variant: 'success'  })
         })
         // Email Failed to send Error alert
         .catch(err => {
@@ -126,28 +162,46 @@ class ContactUs extends React.PureComponent{
 
 
           <div class="col-lg-6">
-            <form  method="post" role="form" class="php-email-form" >
+            <form  method="post" role="form" class="php-email-form"  onSubmit={this.handleSubmit}>
               <div class="row">
                 <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required></input>
+                  <input type="text" name="user_name" class="form-control" id="name" placeholder="Your Name" onChange={this.nameChange} value = {this.state.name} required></input>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required></input>
+                  <input type="email" class="form-control" name="user_email" id="email" placeholder="Your Email" onChange={this.emailChange} value = {this.state.email} required></input>
                 </div>
               </div>
               <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required></input>
+                <input type="text" class="form-control" name="subject" id="subject" onChange={this.subjectChange} placeholder="Subject" value={this.state.subject} required></input>
               </div>
               <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+                <textarea id="message"    onChange={this.messageChange} class="form-control" name="message" rows="5" placeholder="Message" value = {this.state.feedback} required></textarea>
               </div>
               <div class="my-3">
                 <div class="loading">Loading</div>
                 <div class="error-message"></div>
                 <div class="sent-message">Your message has been sent. Thank you!</div>
               </div>
-              <div class="text-center"><button type="submit" >Send Message</button></div>
+              <br></br>
+              <div  class="text-center">
+                {
+                  this.state.loading?<CircularProgress size={60}  /> :
+    <Fab
+    aria-label="save"
+    color="primary"
+    type="submit" 
+    
+  >
+    {this.state.success ? <CheckIcon /> : <SendIcon />}
+  </Fab>
+                }
+          
+        
+    </div>
             </form>
+
+
+    
           </div>
 
     
@@ -157,52 +211,8 @@ class ContactUs extends React.PureComponent{
 
 
 
-          <form className="test-mailing" onSubmit={this.handleSubmit}>
-
-            <br/>
-            <div style={{fontSize: "1.2rem"}}>
-
-              <h6>You can also send me an email directly from here</h6>
-              <div>
-                  <label htmlFor="name">Name</label>
-                  <input className="form-control email-inputs" name="user_name" type="text" 
-                    id="name" onChange={this.nameChange} required/>
-              </div>
-
-              <div>
-                  <label htmlFor="email">Email</label>
-                  <input className="form-control email-inputs" name="user_email" type="text"
-                    id="email" onChange={this.emailChange} required/>
-              </div>
-
-              <label htmlFor="message">
-                  Message
-              </label>
-              <div>
-                <textarea
-                  id="message"
-                  name="message"
-                  onChange={this.messageChange}
-                  placeholder="Put your message here"
-                  required
-                  className="email-text-area form-control"
-                  rows="15"
-                  cols="20"
-                />
-              </div>
-
-            </div>
-
-            <input type="submit" value="Submit" className="btn btn-outline-primary" />
-          </form>
     </section>
 
-
-
-
-		
-
-			
 
 
               </main>
@@ -221,4 +231,4 @@ ContactUs.PropTypes = {
  	b: PropTypes.string
  }
 */
-export default ContactUs;
+export default withSnackbar(ContactUs);
