@@ -318,10 +318,12 @@ router.route('/createNewExam')
 
 });
 
+
 //Add new quiz
 router.route('/createNewTest')
 .post(function(req,res){
 	console.log("Test Creation Running");
+	console.log(req.body);
 
 	const newTestData =  {
 		'noq'           : req.body.noq,
@@ -333,10 +335,10 @@ router.route('/createNewTest')
 		'test_data'		: req.body.test_data
 	}
 
-	console.log(req.body.negt_mark)
+	console.log(newTestData)
 	Exam.findOneAndUpdate({'_id':req.body.examId},{$push: {'test': newTestData}}, function(err) {
 		if (err){
-			console.log("Query failed!");
+			console.log("Quesry failed!");
 		}else{
 			console.log("Query passed!");
 		}

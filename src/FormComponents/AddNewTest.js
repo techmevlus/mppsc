@@ -438,7 +438,7 @@ class AddNewTest extends React.PureComponent{
             return;
         }
         var today = new Date();
-        var date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();        
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();        
         const formData =  {
             examId        : this.state.examId,
             noq           : this.state.noq,
@@ -509,10 +509,10 @@ class AddNewTest extends React.PureComponent{
                 <label>
                 Negative Marking:
                     <select value={this.state.value} onChange={this.handleNegt_mark}>
-                        <option value="none">none</option>
-                        <option value="1/4">1/4</option>
-                        <option value="1/2">1/2</option>
-                        <option value="3/4">3/4</option>
+                        <option value="0">none</option>
+                        <option value="0.25">1/4</option>
+                        <option value="0.50">1/2</option>
+                        <option value="0.75">3/4</option>
                         <option value="1">1</option>
                     </select>
                 </label><br/>
