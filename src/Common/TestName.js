@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment'
 
 class TestName extends React.PureComponent {
   constructor(props, context) {
@@ -90,25 +91,37 @@ class TestName extends React.PureComponent {
     if (this.state.testData === "" || this.state.testData === undefined || this.state.testData === null) {
       console.log("Test Data is Empty")
       return false;
-    } console.log("Test Data Recieved")
+    } console.log("Test Data Recieved", this.state.testData)
     console.log(this.state.testData.test);
     return <div>
       <main id="main">
-        <p>
+      <div style={{padding:"40px"}}  class="d-flex justify-content-center" >
+          <h3 >Available Mock Tests</h3>
+       </div>
 
-          {<ul>{this.state.testData.test.map((item, index) => (
-           <Link to="/test"> <li onClick={() => this.savingToLocalStorage(item._id)} type="button">
-              noq = {item.noq}&nbsp;&nbsp;
-              negt_mark = {item.negt_mark}&nbsp;&nbsp;
-              timeof_test = {item.timeof_test}&nbsp;&nbsp;
-              auth_id = {item.auth_id}&nbsp;&nbsp;
-              attempts = {item.attempts}&nbsp;&nbsp;
-              <span style={{ fontSize: "20px" }} class="badge rounded-pill bg-warning text-dark">Take Test</span>
-            </li></Link>
-          ))}</ul>}
-        </p>
+        <div  class=" d-flex justify-content-center   container-sm   list-group">
+
+       
+          {this.state.testData.test.map((item, index) => (
+            <a  onClick={() => this.savingToLocalStorage(item._id)} class="list-group-item list-group-item-action" style={{marginBottom:"10px"}}>
+           <Link style ={{color:"black"}}  to="/test" >  
+           
+            <div class="d-flex w-100 justify-content-between"  type="button">
+              <h5 class="mb-1">{item.auth_id}&nbsp;&nbsp;</h5>
+              <small class="text-muted">{  moment.utc(item.dateof_create).local().startOf('seconds').fromNow()   }  </small>
+            
+            </div>
+
+            <p class="mb-1"> Questions : {item.noq}&nbsp;&nbsp; |  Negative Marking : {item.negt_mark}&nbsp;&nbsp; |  Duration : {item.timeof_test}&nbsp;&nbsp;  </p>
+           <small class="text-muted">Total Visits {item.attempts}&nbsp;&nbsp;</small>
+            </Link>
+            </a>
+          ))}
+          
 
 
+
+</div>
 
       </main>
 

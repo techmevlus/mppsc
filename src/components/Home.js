@@ -90,7 +90,7 @@ class Home extends React.PureComponent{
 <div class="d-flex justify-content-end">
   <Link to="/author-login"><button className="marTop25 nextBtn btn btn-secondary">Author Login</button></Link>
       </div>  
-    <section class=" container-md shadow" style={{padding:"30px",marginBottom:"50px", marginTop:"50px"}}>
+    <section class=" container-md shadow" style={{padding:"30px",marginBottom:"50px", marginTop:"50px", maxWidth:"1200px"}}>
       <ExamName url='http://localhost:3001/api/exams_name'></ExamName>
      
 

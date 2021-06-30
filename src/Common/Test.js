@@ -596,15 +596,40 @@ class Test extends React.PureComponent {
                     <div class="modal-content">
                         <div style={{ backgroundColor: "green", color: 'white' }} class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Exam Instructions</h5>
-                            <p>Kuldeep</p>
+                            <p>Guest</p>
                         </div>
                         <div class="modal-body">
                             <span>
-                                SUBJECT NAME and SUBJECT NUMBER <br></br>
 
-                                Assessment Task X – Take Home Examination <br></br>
 
-                                Insert Session and year e.g. Autumn 2020 <br></br>
+                          
+<table class="table ">
+  <thead>
+  <tr>
+      <th scope="col">Sl. No.</th>
+      <th scope="col">Name </th>
+      <th scope="col">Question</th>
+      <th scope="col">Duration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>{this.state.test_id}</td>
+    </tr>
+   
+  
+  </tbody>
+</table>
+    
+
+                                1. SUBJECT NAME and SUBJECT NUMBER <br></br>
+
+                                2. Assessment Task X – Take Home Examination <br></br>
+
+                                3. Insert Session and year e.g. Autumn 2020 <br></br>
 
                                 Instructions <br></br>
 
@@ -636,6 +661,7 @@ class Test extends React.PureComponent {
                             </span>
                         </div>
                         <div class="modal-footer">
+
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onClick={this.backTestName}>   Cancel   </button>
                             <button type="button" class="btn btn-success" onClick={this.onFullScreen}>   I am Ready   </button>
                         </div>
@@ -659,22 +685,22 @@ class Test extends React.PureComponent {
 
                 <div id="testIncomplete" style={{ display: "block" }}>
                     <div style={{ width: "68%", margin: "35px" }}>
-                        <div class="shadow" style={{ backgroundColor: "#F5F5F5", borderRadius: "15px", padding: "35px" }}>
+                        <div  style={{borderRadius: "15px", padding: "35px" }}>
                             <div id="question" style={{ display: "block" }}><h3>Q.{this.state.currentQuestion + 1} {this.state.testData[this.state.currentQuestion].question}</h3></div>
-                            <hr></hr>
+                            
 
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="1" value="1" onClick={() => this.selectRadio("1")} />
                                 <label >   &nbsp;&nbsp; 1. {this.state.testData[this.state.currentQuestion].options1} </label>
-                            </div><hr></hr>
+                            </div>
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="2" value="2" onClick={() => this.selectRadio("2")} />
                                 <label> &nbsp;&nbsp; 2. {this.state.testData[this.state.currentQuestion].options2} </label>
-                            </div><hr></hr>
+                            </div>
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="3" value="3" onClick={() => this.selectRadio("3")} />
                                 <label> &nbsp;&nbsp; 3. {this.state.testData[this.state.currentQuestion].options3} </label>
-                            </div><hr></hr>
+                            </div>
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="4" value="4" onClick={() => this.selectRadio("4")} />
                                 <label> &nbsp;&nbsp; 4. {this.state.testData[this.state.currentQuestion].options4} </label>
