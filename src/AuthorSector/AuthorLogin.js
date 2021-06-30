@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { setUserSession } from '../Utils/Common';
+import { set } from 'mongoose';
 
  
 function AuthorLogin(props) {
@@ -12,6 +13,7 @@ function AuthorLogin(props) {
   const [error, setError] = useState(null);
 
   const [signupStatus,setSignupStatus] = useState('');
+  const [authorUsername,setAuthorUsername] = useState('');
   const [authorName,setAuthorName] = useState('');
   const [authorPassword,setAuthorPasswrod] =  useState('');
   const [authorPasswordConfirm,setAuthorPasswrodConfirm] =  useState('');
@@ -21,6 +23,10 @@ function AuthorLogin(props) {
 
 
   //handle Author name  
+  const handleAuthorUsername = (e) =>{
+    setAuthorUsername(e.target.value);
+  }
+  
   const handleAuthorName = (e) =>{
     setAuthorName(e.target.value);
   }
@@ -45,30 +51,67 @@ function AuthorLogin(props) {
 
   const handleValidation = () =>{
 
-    //author name validation
-    if(authorName == ""){
-      setSignupStatus("Name can't be empty");
+    var validator = require('validator');
+
+    //author username validation
+    if(authorUsername == ""){
+      setSignupStatus("enter your username");
+      return false;
+    }else if(authorUsername.indexOf(' ')>=0){
+      setSignupStatus("space character not allowed in username");
       return false;
     }
 
-    //author password validation
+    //author name validation
     else{
-      console.log(authorPassword.indexOf(' ')>=0)
-      if(authorPassword == ""){
-        setSignupStatus("Password is required");
-        return false;
-      }else if(authorPassword.indexOf(' ')>=0){
-        setSignupStatus("No white spaces allowed in password");
-        return false;
-      }else if(authorPassword.length < 8 || authorPassword.length > 16){
-        setSignupStatus("Password length should be 8 to 16 character");
-        return false;
-      }else if(authorPassword !== authorPasswordConfirm ){
-        setSignupStatus("Password did not match");
+      if(authorName == ""){
+        setSignupStatus("enter your name");
         return false;
       }
+      
+
+      //email validation
       else{
-        return true;
+        if (authorEmail == "") {
+          setSignupStatus("enter your email address");
+          return false;
+        }else if(!validator.isEmail(authorEmail)){
+          setSignupStatus("invalid email");
+          return false;
+        }
+        
+        //author mobile validation
+        else{
+          if(authorMobile == ""){
+            setSignupStatus("enter mobile number")
+            return false;
+          }else if(!validator.isMobilePhone(authorMobile) || authorMobile.length !== 10){
+            setSignupStatus("invalid mobile number");
+            return false;
+          }
+
+          //password validation
+          else{
+            if(authorPassword == ""){
+              setSignupStatus("Password is required");
+              return false;
+            }else if(authorPassword.indexOf(' ')>=0){
+              setSignupStatus("No white spaces allowed in password");
+              return false;
+            }else if(authorPassword.length < 8 || authorPassword.length > 16){
+              setSignupStatus("Password length should be 8 to 16 character");
+              return false;
+            }else if(authorPassword !== authorPasswordConfirm ){
+              setSignupStatus("Password did not match");
+              return false;
+            }
+    
+            //everything is alright 
+            else{
+              return true;
+            }
+        }
+        }
       }
     }
   }
@@ -79,14 +122,13 @@ function AuthorLogin(props) {
     console.log(authorPassword);
     if(handleValidation()){
       const formData = {
-        username : authorName,
-        password : authorPassword
+        authorUsername : authorUsername,
+        authorPassword : authorPassword,
+        authorName: authorName,
+        authorEmail: authorEmail,
+        authorMobile: authorMobile,
       }
       console.log(formData)
-      if(authorName == null || authorName == "" || authorName == undefined)
-        return;
-      if(authorPassword == null || authorPassword == "" || authorPassword == undefined)
-        return;
       fetch('http://localhost:3001/api/authorSignup', { 
               method: 'post',
               headers: {
@@ -101,6 +143,7 @@ function AuthorLogin(props) {
             if(res.ok==true){
               setSignupStatus("Signup Successful!");
               setSignup(!signup);
+              alert("Signup Successfull!")
             }else{
               setSignupStatus('Signup Failed!');
             }
@@ -145,27 +188,32 @@ function AuthorLogin(props) {
           
 
             <div class="form-floating mb-3">
-               <input type="text" name="authorName" placeholder="Enter Username" onChange={handleAuthorName} class="form-control" id="floatingusername"/>
+               <input type="text" name="authorUsername" placeholder="Enter Username" onChange={handleAuthorUsername} class="form-control" id="floatingAthorUsername"/>
+               <label for="floatingInput">Username</label>
+             </div>
+            
+            <div class="form-floating mb-3">
+               <input type="text" name="authorName" placeholder="Enter Name" onChange={handleAuthorName} class="form-control" id="floatingAuthorName"/>
                <label for="floatingInput">Name</label>
              </div>
 
            <div class="form-floating mb-3">
-               <input type="text" name="authorEmail" placeholder="Enter Email" onChange={handleAuthorEmail} class="form-control" id="floatingEmail"/>
+               <input type="text" name="authorEmail" placeholder="Enter Email" onChange={handleAuthorEmail} class="form-control" id="floatingAuthorEmail"/>
                <label for="floatingInput">Email </label>
              </div>
 
              <div class="form-floating mb-3">
-               <input type="text" name="authorMobile" placeholder="Enter Mobile No." onChange={handleAuthorMobile} class="form-control" id="floatingMobile"/>
+               <input type="text" name="authorMobile"  placeholder="Enter Mobile No." onChange={handleAuthorMobile} class="form-control" id="floatingAuthorMobile"/>
                <label for="floatingInput">Mobile </label>
              </div>
 
              <div class="form-floating mb-3">
-               <input type="password" name="authorPassword" placeholder="Enter password" onChange={handleAuthorPassword} class="form-control" id="floatingPassword" />
+               <input type="password" name="authorPassword" placeholder="Enter password" onChange={handleAuthorPassword} class="form-control" id="floatingAuthorPassword" />
                <label for="floatingPassword">Password</label>
            </div>
 
            <div class="form-floating">
-               <input type="password" name="authorPasswordConfirm" placeholder="Confirm password" onChange={handleAuthorPasswordConfirm} class="form-control" id="floatingPasswordConfirm" />
+               <input type="password" name="authorPasswordConfirm" placeholder="Confirm password" onChange={handleAuthorPasswordConfirm} class="form-control" id="floatingAuthorPasswordConfirm" />
                <label for="floatingPasswordConfirm"> Confirm Password</label>
            </div>
 
