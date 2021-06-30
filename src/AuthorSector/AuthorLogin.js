@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { setUserSession } from '../Utils/Common';
+
  
 function AuthorLogin(props) {
 
   const [loading, setLoading] = useState(false);
+  const [signup, setSignup] = useState(false);
   const username = useFormInput('');
   const password = useFormInput('');
   const [error, setError] = useState(null);
@@ -12,10 +14,23 @@ function AuthorLogin(props) {
   const [signupStatus,setSignupStatus] = useState('');
   const [authorName,setAuthorName] = useState('');
   const [authorPassword,setAuthorPasswrod] =  useState('');
+  const [authorPasswordConfirm,setAuthorPasswrodConfirm] =  useState('');
+  const [authorEmail,setAuthorEmail] = useState('');
+  const [authorMobile,setAuthorMobile] = useState('');
+
+
 
   //handle Author name  
   const handleAuthorName = (e) =>{
     setAuthorName(e.target.value);
+  }
+
+  const handleAuthorEmail = (e) =>{
+    setAuthorEmail(e.target.value);
+  }
+
+  const handleAuthorMobile = (e) =>{
+    setAuthorMobile(e.target.value);
   }
 
   //handle Author password
@@ -23,11 +38,16 @@ function AuthorLogin(props) {
     setAuthorPasswrod(e.target.value);
   }
 
+  const handleAuthorPasswordConfirm = (e) => {
+    setAuthorPasswrodConfirm(e.target.value);
+  }
+
+
   const handleValidation = () =>{
 
     //author name validation
     if(authorName == ""){
-      setSignupStatus("author name can't be empty");
+      setSignupStatus("Name can't be empty");
       return false;
     }
 
@@ -35,15 +55,19 @@ function AuthorLogin(props) {
     else{
       console.log(authorPassword.indexOf(' ')>=0)
       if(authorPassword == ""){
-        setSignupStatus("password is required");
+        setSignupStatus("Password is required");
         return false;
       }else if(authorPassword.indexOf(' ')>=0){
-        setSignupStatus("no white space allowed in password");
+        setSignupStatus("No white spaces allowed in password");
         return false;
       }else if(authorPassword.length < 8 || authorPassword.length > 16){
-        setSignupStatus("password length should be 8 to 16 character");
+        setSignupStatus("Password length should be 8 to 16 character");
         return false;
-      }else{
+      }else if(authorPassword !== authorPasswordConfirm ){
+        setSignupStatus("Password did not match");
+        return false;
+      }
+      else{
         return true;
       }
     }
@@ -75,9 +99,10 @@ function AuthorLogin(props) {
           .then(res=>{
             console.log(res)
             if(res.ok==true){
-              setSignupStatus("Author Signup Successful!");
+              setSignupStatus("Signup Successful!");
+              setSignup(!signup);
             }else{
-              setSignupStatus('Author Signup Failed!');
+              setSignupStatus('Signup Failed!');
             }
           })
     }
@@ -99,47 +124,104 @@ function AuthorLogin(props) {
   }
 
 
+  const showSignup = () => {
+   
+    setSignup(!signup);
+   
+  }
+
+  
+ 
+
+
   return (
     <div>
-      Login<br /><br />
-      <div>
-        Username<br />
-        <input type="text" {...username} autoComplete="new-password" />
-      </div>
-      <div style={{ marginTop: 10 }}>
-        Password<br />
-        <input type="password" {...password} autoComplete="new-password" />
-      </div>
-      {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
-      <button type="submit" class="btn btn-primary"  value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} >Login</button>&nbsp;
+<section class="container container-sm shadow" style={{ borderRadius:"5px", marginTop:"45px", padding:"50px", paddingTop:"50px", maxWidth:"600px", paddingBottom:"50px", marginBottom:"80px"}}> 
+<div class=" d-flex justify-content-center" style={{paddingBottom:"50px"}} >
+<img  class ="logo_animation" src="assets/img/M_logo.jpeg" style={{  borderRadius:"50%"}}  alt="..."></img>
+
+</div>
+{signup ? (<div >
+          
+
+            <div class="form-floating mb-3">
+               <input type="text" name="authorName" placeholder="Enter Username" onChange={handleAuthorName} class="form-control" id="floatingusername"/>
+               <label for="floatingInput">Name</label>
+             </div>
+
+           <div class="form-floating mb-3">
+               <input type="text" name="authorEmail" placeholder="Enter Email" onChange={handleAuthorEmail} class="form-control" id="floatingEmail"/>
+               <label for="floatingInput">Email </label>
+             </div>
+
+             <div class="form-floating mb-3">
+               <input type="text" name="authorMobile" placeholder="Enter Mobile No." onChange={handleAuthorMobile} class="form-control" id="floatingMobile"/>
+               <label for="floatingInput">Mobile </label>
+             </div>
+
+             <div class="form-floating mb-3">
+               <input type="password" name="authorPassword" placeholder="Enter password" onChange={handleAuthorPassword} class="form-control" id="floatingPassword" />
+               <label for="floatingPassword">Password</label>
+           </div>
+
+           <div class="form-floating">
+               <input type="password" name="authorPasswordConfirm" placeholder="Confirm password" onChange={handleAuthorPasswordConfirm} class="form-control" id="floatingPasswordConfirm" />
+               <label for="floatingPasswordConfirm"> Confirm Password</label>
+           </div>
+
+           {signupStatus && <><small style={{ color: 'red' }}>{signupStatus}</small><br /></>}<br />
+           <br/>
+           <button type="submit" class="btn btn-primary"  value={loading ? 'Loading...' : 'Sign Up'} onClick={handleAuthorSignup} disabled={loading} >   Sign Up</button>&nbsp;
+           <span style={{color:'blue'}}  onClick={showSignup} ><a> Already have an account ? Click here </a> </span><br />
+       
+           
+         </div>
+
+        ) :  
+        <section>
+
+
+        <div class="form-floating mb-3">
+    <input type="text" {...username} class="form-control" id="floatingInput" placeholder="name@example.com"/>
+    <label for="floatingInput">Username</label>
+  </div>
+  <div class="form-floating">
+    <input type="password" {...password} class="form-control" id="floatingPassword" placeholder="Password"/>
+    <label for="floatingPassword">Password</label>
+  </div> 
+  <br/>
+  {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
+  {/*<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>*/}
+  <button type="submit" class="btn btn-primary"  value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} >   Login</button>&nbsp;
+  <span style={{color:'blue'}}  onClick={showSignup} ><a> Don't  have an account ? Create here </a> </span><br />
+       
+    
+
+  
+  
+        </section>
+        }
+ </section>
+
+    
+     
+      
+      
+   
+ 
+    
       
       {/* Author Signup */}
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Signup</button><br />
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">New Author Signup</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <label>
-                Author Name : <input type="text" name="authorName" placeholder="Enter Username" onChange={handleAuthorName} required/>
-              </label><br/>
-              <label>
-                Author Password : <input type="password" name="authorPassword" placeholder="Enter password" onChange={handleAuthorPassword} required/>
-              </label>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-primary" onClick={handleAuthorSignup}>Signup</button><br/>
-              {signupStatus}
-            </div>
-          </div>
-        </div>
-      </div>
+   
+   
+      
+       
+<br></br>
+
+
+
     </div>
-  );
+  )
 }
  
 const useFormInput = initialValue => {
@@ -154,4 +236,4 @@ const useFormInput = initialValue => {
   }
 }
  
-export default AuthorLogin;
+export default (AuthorLogin);
