@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 class AddNewTest extends React.PureComponent{
 
@@ -438,7 +439,8 @@ class AddNewTest extends React.PureComponent{
             return;
         }
         var today = new Date();
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();        
+        //var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();  
+        var date = today.getTime();      
         const formData =  {
             examId        : this.state.examId,
             noq           : this.state.noq,
@@ -489,7 +491,6 @@ class AddNewTest extends React.PureComponent{
   }
 
     render(){
-        console.log(this.state)
         return <div>
             <h1>Add New Test</h1>
             <div id="test" style={{display: "block"}}>
