@@ -236,9 +236,12 @@ router.route('/authorSignup')
 
 	console.log(req.body)
 
-		var author 	    	  = new AuthorCred();
- 		author.username 	  = req.body.username;
-		author.password       = req.body.password;
+		var author 	    	= new AuthorCred();
+ 		author.username 	= req.body.authorUsername;
+ 		author.name 		= req.body.authorName;
+		author.password 	= req.body.authorPassword;
+		author.email 		= req.body.authorEmail;
+		author.mobile 		= req.body.authorMobile;
 
 		author.save(function(err) {
 	 		if (err)
