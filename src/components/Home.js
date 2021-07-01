@@ -5,7 +5,6 @@ import Question from './Question.js';
 import Options from './Options.js';
 let data = require('../data'); //this imports data from local file, pass it as a prop to Quiz component
 import ExamName from '../Common/ExamName'
-import Skeleton from '@material-ui/lab/Skeleton';
 
 const shuffleArray = array => {
 	let i = array.length - 1;

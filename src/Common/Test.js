@@ -674,53 +674,57 @@ class Test extends React.PureComponent {
 
             <div id="test_main" style={{ display: "none", backgroundColor: "white" }}>
 
-                <div class="container">
-
-                    <div style={{ padding: "20px" }} class="row">
-                        <div class="col-2" id="timer" style={{ display: "block" }}><Timer startDate={new Date().getTime() + (this.state.timeof_test * 1000)} /></div>
-                        <div class="col-8 d-flex flex-row-reverse">  <h5 id="testHeading">Test ID : {this.state.test_id}</h5></div>
-
-                    </div>
-                </div>
+             
 
                 <div id="testIncomplete" style={{ display: "block" }}>
                     <div style={{ width: "68%", margin: "35px" }}>
                         <div  style={{borderRadius: "15px", padding: "35px" }}>
+                            <h3> { this.state.currentQuestion +1} / {this.state.testData.length}</h3>
+                            <br></br>
                             <div id="question" style={{ display: "block" }}><h3>Q.{this.state.currentQuestion + 1} {this.state.testData[this.state.currentQuestion].question}</h3></div>
                             
 
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="1" value="1" onClick={() => this.selectRadio("1")} />
-                                <label >   &nbsp;&nbsp; 1. {this.state.testData[this.state.currentQuestion].options1} </label>
+                                <label >   &nbsp;&nbsp; (A)  { this.state.testData[this.state.currentQuestion].options1} </label>
                             </div>
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="2" value="2" onClick={() => this.selectRadio("2")} />
-                                <label> &nbsp;&nbsp; 2. {this.state.testData[this.state.currentQuestion].options2} </label>
+                                <label> &nbsp;&nbsp; (B)  {this.state.testData[this.state.currentQuestion].options2} </label>
                             </div>
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="3" value="3" onClick={() => this.selectRadio("3")} />
-                                <label> &nbsp;&nbsp; 3. {this.state.testData[this.state.currentQuestion].options3} </label>
+                                <label> &nbsp;&nbsp; (C)  {this.state.testData[this.state.currentQuestion].options3} </label>
                             </div>
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="4" value="4" onClick={() => this.selectRadio("4")} />
-                                <label> &nbsp;&nbsp; 4. {this.state.testData[this.state.currentQuestion].options4} </label>
+                                <label> &nbsp;&nbsp; (E)  {this.state.testData[this.state.currentQuestion].options4} </label>
 
                             </div>
 
 
                         </div>
-                        <div style={{ marginTop: "40px", textAlign: "right" }} class="d-grid gap-2  d-md-block ">
+                        <div style={{ marginTop: "150px", textAlign: "left" }} class="d-grid gap-2  d-md-block  ">
+                            
+                            {
+                                (this.state.currentQuestion !== 0)?  <button  style={{ marginRight: "10px" }} type="button" class="btn btn-outline-dark" onClick={() => this.previewsButton()}> Previews Question</button>:""
 
-                            <button style={(this.state.currentQuestion == 0) ? { marginRight: "5px", display: "none" } : { marginRight: "5px", display: "block" }} type="button" class="btn btn-outline-dark" onClick={() => this.previewsButton()}>Previews Question</button>
-                            <button style={(this.state.currentQuestion + 1 == this.state.testData.length) ? { marginRight: "5px", display: "none" } : { marginRight: "5px", display: "block" }} type="button" class="btn btn-outline-dark" onClick={() => this.nextButton()}>Next Question</button>
-                            <button style={{ marginRight: "5px" }} type="button" class="btn btn-outline-danger" onClick={() => this.clearButton()}>Clear Response</button>
-                            <button style={{ marginRight: "5px" }} type="button" className={this.checkMarkButtonColor() ? "btn btn-outline-warning" : "btn btn-outline-primary"} onClick={() => this.reviewButton()}>Mark Review</button>
+                            }
+                            {
+                                (this.state.currentQuestion + 1 !== this.state.testData.length)?  <button  style={{ marginRight: "10px" }}  type="button" class="btn btn-outline-dark" onClick={() => this.nextButton()}>Next Question</button>:""
+
+                            }
+                            <button style={{ marginRight: "10px" }} type="button" class="btn btn-outline-danger" onClick={() => this.clearButton()}>Clear Response</button>
+                            <button style={{ marginRight: "10px" }} type="button" className={this.checkMarkButtonColor() ? "btn btn-outline-warning" : "btn btn-outline-primary"} onClick={() => this.reviewButton()}>Mark Review</button>
                             { /* <button  style={{marginRight:"5px"}} type="button" class="btn btn-outline-success" onClick={() => this.submitButton()}>Submit Test</button> */}
 
                             {/* Button trigger modal */}
-                            <button style={{ marginRight: "5px" }} onClick={this.submitButton} type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitButtonModal">
+                            <button style={{ marginRight: "10px" }} onClick={this.submitButton} type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitButtonModal">
                             Submit Test
                             </button>
+
+                            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">DASHBOARD</button>
+
 
                             {/* Modal */}
                             <div class="modal fade" id="submitButtonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -765,7 +769,6 @@ class Test extends React.PureComponent {
                             </div>
 
 
-                            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">DASHBOARD</button>
 
 
 
@@ -781,12 +784,32 @@ class Test extends React.PureComponent {
 
                 <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
                     <div class="offcanvas-header">
+                    <div style={{ padding: "20px" }} class="row">
+    <div class="col-4" id="timer" style={{ display: "block" }}><Timer startDate={new Date().getTime() + (this.state.timeof_test * 1000)} /></div>
+    <div class="col-8 d-flex flex-row-reverse">  <span id="testHeading">Test ID <br></br>{this.state.test_id}</span></div>
+    <hr></hr>
 
+</div>
 
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
+
+
+                    <h6 style={{}} class="offcanvas-footer" id="offcanvasScrollingLabel">
+                            <span className="badge rounded-pill bg-secondary">{this.state.notVisited}</span>&nbsp;<span style={{ color: "silver" }}>Not Visited : Silver</span><br />
+                            <span className="badge rounded-pill bg-danger">{this.state.notAttempted}</span>&nbsp;<span style={{ color: "red" }}>Not Attempted : Red</span><br />
+                            <span className="badge rounded-pill bg-primary">{this.state.markNotAttempted}</span>&nbsp;<span style={{ color: "blue" }}>Marked Review &amp; Not Attempted : Blue</span><br />
+                            <span className="badge rounded-pill bg-warning">{this.state.markAttempted}</span>&nbsp;<span style={{ color: "orange" }}>Marked Review &amp; Attempted : Orange</span><br />
+                            <span className="badge rounded-pill bg-success">{this.state.attempted}</span>&nbsp;<span style={{ color: "green" }}>Attempted : Green</span>
+                        </h6>
+                        <hr></hr>
+                        <br></br>
                         <div>
+                        
+
+
+
 
                             {this.state.questionPanel.map((e, index) => (
                                 <span>
@@ -800,13 +823,6 @@ class Test extends React.PureComponent {
                         </div>
                         <hr></hr>
 
-                        <h6 class="offcanvas-title" id="offcanvasScrollingLabel">
-                            <span className="badge rounded-pill bg-secondary">{this.state.notVisited}</span>&nbsp;<span style={{ color: "silver" }}>Not Visited : Silver</span><br />
-                            <span className="badge rounded-pill bg-danger">{this.state.notAttempted}</span>&nbsp;<span style={{ color: "red" }}>Not Attempted : Red</span><br />
-                            <span className="badge rounded-pill bg-primary">{this.state.markNotAttempted}</span>&nbsp;<span style={{ color: "blue" }}>Marked Review &amp; Not Attempted : Blue</span><br />
-                            <span className="badge rounded-pill bg-warning">{this.state.markAttempted}</span>&nbsp;<span style={{ color: "orange" }}>Marked Review &amp; Attempted : Orange</span><br />
-                            <span className="badge rounded-pill bg-success">{this.state.attempted}</span>&nbsp;<span style={{ color: "green" }}>Attempted : Green</span>
-                        </h6>
 
 
                     </div>

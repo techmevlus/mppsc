@@ -53,7 +53,7 @@ class OurTeam extends React.PureComponent{
       <div class="container">
 
         <ol>
-          <li><a href="index.html">Home</a></li>
+          <li><a href="/">Home</a></li>
           <li>Team</li>
         </ol>
         <h2>Team </h2>

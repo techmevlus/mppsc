@@ -75,7 +75,7 @@ class Timer extends React.Component {
       </div>;
     }
     return (
-      <div style={{fontSize:"25px"}} className="timer">
+      <div style={this.props.style} className="timer">
 
 <AccessTimeIcon ></AccessTimeIcon>
           {(days!==0)?days:""}
