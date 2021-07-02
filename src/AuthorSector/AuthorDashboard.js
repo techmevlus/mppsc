@@ -3,6 +3,7 @@ import { getUser, removeUserSession } from '../Utils/Common.js';
 import { Link } from 'react-router-dom'
 import AuthorExam from './AuthorExam.js';
 import ExamName from '../Common/ExamName.js';
+import S3 from 'react-aws-s3';
 
  
 //  <Link to="/addQuestion"><button className="marTop25 nextBtn  btn-primary">Add Question</button></Link>
@@ -15,7 +16,10 @@ import ExamName from '../Common/ExamName.js';
       selectedExam : "",
       examName     : "",
       examLogo     : null,
-      exams         : []
+      exams        : [],
+      imgSrc       : ""
+      //examLogoName : "",
+      //imageLocation: null
     }
 	 
     this.handleLogout = this.handleLogout.bind(this);
@@ -38,8 +42,13 @@ import ExamName from '../Common/ExamName.js';
   }
 
   //handle input image
-  handleImage = (e) =>{
+  handleImage = async (e) =>{
     let file = e.target.files[0];
+    var imgSrc = URL.createObjectURL(event.target.files[0]);
+    this.setState({
+      imgSrc: imgSrc
+    })
+    
     if(file){
       const reader = new FileReader();
       reader.onload = this._handleReaderLoaded.bind(this);
@@ -54,6 +63,7 @@ import ExamName from '../Common/ExamName.js';
       examLogo: btoa(binaryString)
     })
   }
+
 
   //Create new exam to database
   handleSaveExam = () =>{
@@ -74,6 +84,13 @@ import ExamName from '../Common/ExamName.js';
                 
             },
             body: JSON.stringify(formData)
+        }).then(res=>{
+          console.log(res)
+          if(res.ok==true){
+            alert("Exam Added!")
+          }else{
+            alert("Network Error!")
+          }
         })
   }
 
@@ -93,7 +110,7 @@ componentWillMount = () =>{
 //display exam logo
 displayExamLogo =  (value) =>{
   console.log(value)
-  return <img src={`data:image/png;base64,${value}`} />
+  return <img src={`data:image/png;base64,${value}`} width="100px" height="100px" />
 }
 
 // save exam id to local storage
@@ -101,6 +118,28 @@ savingToLocalStorage(exam_id, exam_name) {
   localStorage.setItem('exam_id', exam_id);
   localStorage.setItem('exam_name', exam_name);
 }
+
+//upload image to aws s3
+/*uploadImage = async () =>{
+  const config = {
+    bucketName: process.env.REACT_APP_BUCKET_NAME,
+    //dirName: process.env.REACT_APP_DIR_NAME, // optional
+    region: process.env.REACT_APP_REGION,
+    accessKeyId: process.env.REACT_APP_ACCESS_ID,
+    secretAccessKey: process.env.REACT_APP_ACCESS_KEY
+  };
+
+  const ReactS3Client = new S3(config);
+  var today = new Date();
+  await ReactS3Client.uploadFile(this.state.examLogo, this.state.examLogoName+today.getTime()).then( data =>{
+    console.log(data);
+    if(data.status === "204"){
+      this.setState({
+        imageLocation: data.location
+      })
+    }
+  })
+}*/
 
 render () {
   console.log(this.state)
@@ -138,10 +177,11 @@ render () {
               <label>
                 <input type="file" name="examLogo" accept="image/png" onChange={this.handleImage}/>
               </label>
+              <img src={this.state.imgSrc} /><br/>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" onClick={this.handleSaveExam}>Save Exam</button>
+              <button type="button" class="btn btn-primary" onClick={this.handleSaveExam} data-bs-dismiss="modal">Save Exam</button>
             </div>
           </div>
         </div>

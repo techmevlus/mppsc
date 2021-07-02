@@ -308,12 +308,14 @@ router.route('/createNewExam')
 
 		var exam 	    	  = new Exam();
  		exam.exam_name 		  = req.body.examName;
-		exam.logo       = req.body.examLogo;
+		exam.logo       	  = req.body.examLogo;
 
 		exam.save(function(err) {
-	 		if (err)
-	 			res.send(err);
-			console.log("Exam Created Successfully")
+	 		if(err){
+				res.send(err);
+			}else{
+				res.json();
+			}
  		});
 
 });

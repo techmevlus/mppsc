@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var examCollectionSchema = mongoose.Schema(
 	{
 	    exam_name:  	String,
-	    logo     :  	Buffer,
+	    logo     :  	String,
 	    test	 : 	    [{
             
             noq          : Number,
