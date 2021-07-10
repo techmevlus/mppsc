@@ -37,6 +37,12 @@ class ExamName extends React.PureComponent {
         localStorage.setItem('_id', value);
     }
 
+    //display exam logo
+displayExamLogo =  (value) =>{
+    console.log(value)
+    return <img src={`data:image/png;base64,${value}`} width="65px" height="65px" alt=""/>
+  }
+
     
     render() {
         if (this.state.exams === "" || this.state.exams === undefined || this.state.exams === null) {
@@ -59,7 +65,7 @@ class ExamName extends React.PureComponent {
                <Link to="/testDetails" key={index} onClick={() => this.savingToLocalStorage(item._id)}>
                         <Paper style={{width:"150px",height:"150px", alignItems:"bottom" , justify:"center" }}>
                         <div  class="icon-box" style={{ align:"centre",textAlign: "center", paddingTop:"20px"}} key={index}>
-                        <img src="assets/img/sbilogo.jpg"  width="65px" height="65px"  alt="..."></img>
+                        {this.displayExamLogo(item.logo)}
                         <br></br>
                         <div style={{marginTop:"10px"}}> 
                         {item.exam_name}
