@@ -1,6 +1,6 @@
 import React from 'react';
 import Timer from '../QuizComponents/Timer';
-import { Fab, Modal } from '@material-ui/core';
+import { Fab } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { ToggleOff } from '@material-ui/icons';
 import { Redirect } from 'react-router-dom';
@@ -35,7 +35,7 @@ class Test extends React.PureComponent {
             markAttempted: 0,
             attempted: 0,
 
-            redirect : null
+            isFullScreen: 0
         }
         this.loadTestFromServer = this.loadTestFromServer.bind(this);
         this.componentRefresh = this.componentRefresh.bind(this);
@@ -125,7 +125,6 @@ class Test extends React.PureComponent {
 
     // after render this function is called automatically. 
     async componentDidMount() {
-        await this.checkTestInitiation();
         this.testTimerId = setInterval(this.removeTimeTaken, 1000);
         //this will be always ready for page refresh event.
         window.addEventListener('beforeunload', this.componentRefresh);
@@ -476,7 +475,7 @@ class Test extends React.PureComponent {
         let arr = [];
         for (let i = 0; i < this.state.testData.length; i++) {
             arr.push(
-                <div id={"explain"+i}>
+                <div id={"explain" + i}>
                     <h5>Q.{i + 1} {this.state.testData[i].question}</h5>
                     <h6>1. {this.state.testData[i].options1}</h6>
                     <h6>2. {this.state.testData[i].options2}</h6>
@@ -484,9 +483,9 @@ class Test extends React.PureComponent {
                     <h6>4. {this.state.testData[i].options4}</h6>
                     {this.selectedAndCorrect(i)}<br />
                 </div>
-            ); 
+            );
         }
-        return arr; 
+        return arr;
     }
 
     //check and return result data to analysis function
@@ -506,10 +505,14 @@ class Test extends React.PureComponent {
             <span style={{ fontWeight: "bold" }}>Explaination : {this.state.testData[e].explain}</span>
         </div>
     }
- 
+
     //starting fullScreen
-    async onFullScreen() {
-        localStorage.setItem('isTestInitiated', "1");
+    onFullScreen = () =>{
+
+        this.setState({
+            isFullScreen: 1
+        })
+
         var elem = document.getElementById("test_main");
         if (elem.requestFullscreen) {
             elem.requestFullscreen();
@@ -518,45 +521,20 @@ class Test extends React.PureComponent {
         } else if (elem.msRequestFullscreen) { /* IE11 */
             elem.msRequestFullscreen();
         }
-        $('#staticBackdrop').modal('hide');
-        document.getElementById("test_main").style.display = "block";
     }
     //closing fullscreen
-    offFullScreen() {
-        localStorage.setItem('isTestExited', "1");
+    offFullScreen = () =>{
+
+        this.setState({
+            isFullScreen: 0
+        })
+
         if (document.exitFullscreen) {
             document.exitFullscreen();
         } else if (document.webkitExitFullscreen) { /* Safari */
             document.webkitExitFullscreen();
         } else if (document.msExitFullscreen) { /* IE11 */
             document.msExitFullscreen();
-        }
-        $('#staticBackdrop').modal('hide');
-        document.getElementById("test_main").style.display = "none";
-        document.getElementById("thankYou").style.display = "block";
-        window.location.reload(false); 
-    }
-
-    //check if test is already initiated
-    checkTestInitiation() {
-        var ea = localStorage.getItem('isTestInitiated');
-        if (ea == "0") {
-            //show modal
-            $('#staticBackdrop').modal('show');
-            document.getElementById("test_main").style.display = "none";
-            document.getElementById("thankYou").style.display = "none";
-        } else {
-            //don't show modal
-            var eb = localStorage.getItem('isTestExited');
-            if (eb == "0") {
-                $('#staticBackdrop').modal('hide');
-                document.getElementById("test_main").style.display = "block";
-                document.getElementById("thankYou").style.display = "none";
-            } else {
-                $('#staticBackdrop').modal('hide');
-                document.getElementById("test_main").style.display = "none";
-                document.getElementById("thankYou").style.display = "block";
-            }
         }
     }
 
@@ -566,17 +544,7 @@ class Test extends React.PureComponent {
         document.getElementById("showAnalysisButton").style.display = "none";
     }
 
-    //send back to test names page
-    backTestName = () =>{
-        this.setState({
-            redirect: "/testDetails"
-        })
-    }
-
     render() {
-        if (this.state.redirect) {
-            return <Redirect to={this.state.redirect} />
-          }
         if (this.state.data === "" || this.state.data === undefined || this.state.data === null) {
             console.log("test data is empty");
         } else {
@@ -587,106 +555,48 @@ class Test extends React.PureComponent {
         this.dashboardData();
 
 
-        return <div style={{ padding: "10px", border: "2px", borderColor: "black" }}>
+        return <div style={{ border: "2px", borderColor: "black" }}>
 
             {/* <div id="timer" style={{display:"block"}}><Timer startDate={startDate} /></div> */}
 
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-fullscreen">
-                    <div class="modal-content">
-                        <div style={{ backgroundColor: "green", color: 'white' }} class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Exam Instructions</h5>
-                            <p>Guest</p>
-                        </div>
-                        <div class="modal-body">
-                            <span>
+            <div id="test_main" style={{ display: "block", backgroundColor: "white", display: "flex", displayDirection: "column" }}>
 
-
-                          
-<table class="table ">
-  <thead>
-  <tr>
-      <th scope="col">Sl. No.</th>
-      <th scope="col">Name </th>
-      <th scope="col">Question</th>
-      <th scope="col">Duration</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>{this.state.test_id}</td>
-    </tr>
-   
-  
-  </tbody>
-</table>
-    
-
-                                1. SUBJECT NAME and SUBJECT NUMBER <br></br>
-
-                                2. Assessment Task X – Take Home Examination <br></br>
-
-                                3. Insert Session and year e.g. Autumn 2020 <br></br>
-
-                                Instructions <br></br>
-
-                                This examination is made available online at TIME on DATE.  <br></br>
-
-                                Your completed answer file is due at TIME on DATE and must be submitted online via the xx link Assignments folder on Blackboard/Canvas.  <br></br>
-
-                                There are X questions. Your answer to each question attempted should commence on a new page and be appropriately numbered.  <br></br>
-
-                                The examination is worth X% of the marks available in this subject. The contribution each question makes to the total examination mark is indicated in marks or as a percentage.  <br></br>
-
-                                This examination is an open book examination. <br></br>
-
-                                This examination is expected to take approximately 2 hours [3 if an exception] of working time. You are advised to allocate your time accordingly. Your answer file may be submitted at any time before the due time. Please allow time to complete the submission process. <br></br>
-
-                                Please submit your file in PDF/Word etc format unless directed otherwise. Please name your file as follows:  <br></br>
-
-                                EXAM_subject number_student number   e.g. EXAM_54000_12345678 <br></br>
-
-                                Word Limit <br></br>
-
-                                There is a word limit for each question. Footnotes/references are not included in the word count. The most important thing is to answer the question in a succinct manner. This means that your answer can consist of a word count less than the imposed word limit. A ten percent (10%) leeway on word counts is permitted. <br></br>
-
-                                Footnotes/references must be used for citation purposes only and not for the development of your arguments. A bibliography is not required for this assessment task.  <br></br>
-
-                                Important Notice – Exam Conditions and Academic Integrity <br></br>
-
-                                In attempting this examination and submitting an answer file, candidates are undertaking that the work they submit is a result of their own unaided efforts and that they have not discussed the questions or possible answers with other persons during the examination period. Candidates who are found to have participated in any form of cooperation or collusion or any activity which could amount to academic misconduct in the answering of this examination will have their marks withdrawn and disciplinary action will be initiated on a complaint from the Examiner.  <br></br>
-                            </span>
-                        </div>
-                        <div class="modal-footer">
-
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onClick={this.backTestName}>   Cancel   </button>
-                            <button type="button" class="btn btn-success" onClick={this.onFullScreen}>   I am Ready   </button>
-                        </div>
-                    </div>
+                <div id="testIncomplete" style={{
+                     display: "block",
+                     position: "absolute",
+                     right:"0",
+                     left:"0"
+                }}>
+                    <div style={{
+                    position: "absolute",
+                    right:"0",
+                    left:"0",
+                    height: "50px",
+                    backgroundColor: "purple",
+                    fontSize: "25px",
+                    color: "white"
+                    }}>
+                    <div style={{float: "left", marginTop: "3px", paddingLeft: "10px"}}>Test Name</div>
+                    <div style={{float: "right", marginTop: "3px", paddingRight: "10px"}}>User Name</div>
                 </div>
-            </div>
 
 
-
-
-            <div id="test_main" style={{ display: "none", backgroundColor: "white" }}>
-
-             
-
-                <div id="testIncomplete" style={{ display: "block" }}>
                     <div style={{ width: "68%", margin: "35px" }}>
-                        <div  style={{borderRadius: "15px", padding: "35px" }}>
-                            <h3> { this.state.currentQuestion +1} / {this.state.testData.length}</h3>
-                            <br></br>
+                        <div style={{ borderRadius: "15px", padding: "35px" }}>
+                            <div style={{
+                                position: "relative",
+                                right: "0",
+                                left: "0",
+                                width: "10000px",
+                                backgroundColor: "yellow"
+                            }}><h3> {this.state.currentQuestion + 1} / {this.state.testData.length}</h3></div>
+    
                             <div id="question" style={{ display: "block" }}><h3>Q.{this.state.currentQuestion + 1} {this.state.testData[this.state.currentQuestion].question}</h3></div>
-                            
+
 
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="1" value="1" onClick={() => this.selectRadio("1")} />
-                                <label >   &nbsp;&nbsp; (A)  { this.state.testData[this.state.currentQuestion].options1} </label>
+                                <label >   &nbsp;&nbsp; (A)  {this.state.testData[this.state.currentQuestion].options1} </label>
                             </div>
                             <div style={{ fontSize: "20px" }}>
                                 <input class="form-check-input" type="radio" name="option" id="2" value="2" onClick={() => this.selectRadio("2")} />
@@ -705,73 +615,24 @@ class Test extends React.PureComponent {
 
                         </div>
                         <div style={{ marginTop: "150px", textAlign: "left" }} class="d-grid gap-2  d-md-block  ">
-                            
+
                             {
-                                (this.state.currentQuestion !== 0)?  <button  style={{ marginRight: "10px" }} type="button" class="btn btn-outline-dark" onClick={() => this.previewsButton()}> Previews Question</button>:""
+                                (this.state.currentQuestion !== 0) ? <button style={{ marginRight: "10px" }} type="button" class="btn btn-outline-dark" onClick={() => this.previewsButton()}> Previews Question</button> : ""
 
                             }
                             {
-                                (this.state.currentQuestion + 1 !== this.state.testData.length)?  <button  style={{ marginRight: "10px" }}  type="button" class="btn btn-outline-dark" onClick={() => this.nextButton()}>Next Question</button>:""
+                                (this.state.currentQuestion + 1 !== this.state.testData.length) ? <button style={{ marginRight: "10px" }} type="button" class="btn btn-outline-dark" onClick={() => this.nextButton()}>Next Question</button> : ""
 
                             }
                             <button style={{ marginRight: "10px" }} type="button" class="btn btn-outline-danger" onClick={() => this.clearButton()}>Clear Response</button>
                             <button style={{ marginRight: "10px" }} type="button" className={this.checkMarkButtonColor() ? "btn btn-outline-warning" : "btn btn-outline-primary"} onClick={() => this.reviewButton()}>Mark Review</button>
-                            { /* <button  style={{marginRight:"5px"}} type="button" class="btn btn-outline-success" onClick={() => this.submitButton()}>Submit Test</button> */}
 
-                            {/* Button trigger modal */}
-                            <button style={{ marginRight: "10px" }} onClick={this.submitButton} type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitButtonModal">
-                            Submit Test
+                            <button style={{ marginRight: "10px" }} onClick={this.submitButton} type="button" class="btn btn-primary">
+                                Submit Test
                             </button>
 
-                            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">DASHBOARD</button>
-
-
-                            {/* Modal */}
-                            <div class="modal fade" id="submitButtonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Do you want end this test?</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                <table style={{ border: "1px solid black" }}>
-                                                <tr style={{ border: "1px solid black" }}>
-                                                    <td style={{ border: "1px solid black" }}>Not Visited</td>
-                                                    <td style={{ border: "1px solid black" }}>{this.state.notVisited}</td>
-                                                </tr>
-                                                <tr style={{ border: "1px solid black" }}>
-                                                    <td style={{ border: "1px solid black" }}>Not Attempted</td>
-                                                    <td style={{ border: "1px solid black" }}>{this.state.notAttempted}</td>
-                                                </tr>
-                                                <tr style={{ border: "1px solid black" }}>
-                                                    <td style={{ border: "1px solid black" }}>Marked Review &amp; Not Attempted</td>
-                                                    <td style={{ border: "1px solid black" }}>{this.state.markNotAttempted}</td>
-                                                </tr>
-                                                <tr style={{ border: "1px solid black" }}>
-                                                    <td style={{ border: "1px solid black" }}>Marked Review &amp; Attempted</td>
-                                                    <td style={{ border: "1px solid black" }}>{this.state.markAttempted}</td>
-                                                </tr>
-                                                <tr style={{ border: "1px solid black" }}>
-                                                    <td style={{ border: "1px solid black" }}>Attempted</td>
-                                                    <td style={{ border: "1px solid black" }}>{this.state.attempted}</td>
-                                                </tr>
-                                            </table>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" onClick={this.submitButton} data-dismis="modal">Submit</button>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-
-
-
-
-
+                            <button style={{ marginRight: "10px" }} class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">DASHBOARD</button>
+                            {this.state.isFullScreen ? <button class="btn btn-primary" type="button" onClick={this.offFullScreen}>Fullscreen Off</button> : <button class="btn btn-primary" type="button" onClick={this.onFullScreen}>Fullscreen On</button>}
                         </div>
 
 
@@ -784,19 +645,19 @@ class Test extends React.PureComponent {
 
                 <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
                     <div class="offcanvas-header">
-                    <div style={{ padding: "20px" }} class="row">
-    <div class="col-4" id="timer" style={{ display: "block" }}><Timer startDate={new Date().getTime() + (this.state.timeof_test * 1000)} /></div>
-    <div class="col-8 d-flex flex-row-reverse">  <span id="testHeading">Test ID <br></br>{this.state.test_id}</span></div>
-    <hr></hr>
+                        <div style={{ padding: "20px" }} class="row">
+                            <div class="col-4" id="timer" style={{ display: "block" }}><Timer startDate={new Date().getTime() + (this.state.timeof_test * 1000)} /></div>
+                            <div class="col-8 d-flex flex-row-reverse">  <span id="testHeading">Test ID <br></br>{this.state.test_id}</span></div>
+                            <hr></hr>
 
-</div>
+                        </div>
 
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
 
 
-                    <h6 style={{}} class="offcanvas-footer" id="offcanvasScrollingLabel">
+                        <h6 style={{}} class="offcanvas-footer" id="offcanvasScrollingLabel">
                             <span className="badge rounded-pill bg-secondary">{this.state.notVisited}</span>&nbsp;<span style={{ color: "silver" }}>Not Visited : Silver</span><br />
                             <span className="badge rounded-pill bg-danger">{this.state.notAttempted}</span>&nbsp;<span style={{ color: "red" }}>Not Attempted : Red</span><br />
                             <span className="badge rounded-pill bg-primary">{this.state.markNotAttempted}</span>&nbsp;<span style={{ color: "blue" }}>Marked Review &amp; Not Attempted : Blue</span><br />
@@ -806,7 +667,7 @@ class Test extends React.PureComponent {
                         <hr></hr>
                         <br></br>
                         <div>
-                        
+
 
 
 
@@ -858,13 +719,12 @@ class Test extends React.PureComponent {
                     </table>
                     <hr />
                     <button type="button" class="btn btn-success" id="showAnalysisButton" onClick={this.showAnalysis}>Show Analysis</button>&nbsp;
-                    <button type="button" class="btn btn-success" onClick={this.offFullScreen}>Exit Test</button>
+                    {this.state.isFullScreen ? <button type="button" class="btn btn-success" onClick={this.offFullScreen}>Off Fullscreen</button> : ""}
                     <div id="showAnalysis" style={{ display: "none" }}>{this.resultExplaination()}</div>
                 </div>
             </div>
-            <div id="thankYou" style={{ display: "none" }}><h1>Thank You ...</h1></div>
         </div>
-    } 
+    }
 }
 
 export default Test;
