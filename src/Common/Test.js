@@ -180,7 +180,7 @@ class Test extends React.PureComponent {
     }
 
     //Clear button function
-    clearButton() {
+    clearButton = () =>{
 
         //to clear radio button
         var ele = document.getElementsByName("option");
@@ -216,7 +216,7 @@ class Test extends React.PureComponent {
     }
 
     //next question button
-    async nextButton() {
+    nextButton = async () =>{
         var a = this.state.currentQuestion + 1;
         await this.setState({
             currentQuestion: a
@@ -245,7 +245,7 @@ class Test extends React.PureComponent {
     }
 
     //previews question button
-    async previewsButton() {
+    previewsButton = async () =>{
         var a = this.state.currentQuestion - 1;
         await this.setState({
             currentQuestion: a
@@ -513,7 +513,7 @@ class Test extends React.PureComponent {
             isFullScreen: 1
         })
 
-        var elem = document.getElementById("test_main");
+        var elem = document.getElementById("test-main");
         if (elem.requestFullscreen) {
             elem.requestFullscreen();
         } else if (elem.webkitRequestFullscreen) { /* Safari */
@@ -555,9 +555,98 @@ class Test extends React.PureComponent {
         this.dashboardData();
 
 
-        return <div style={{ border: "2px", borderColor: "black" }}>
+        return <div className="test-container" id="test-main">
+            <div className="test-header">
+                <div className="test-header-item1">
+                    <span>Test ID: {this.state.test_id} </span>
+                </div>
+                <div className="test-header-item2">
+                    {this.state.isFullScreen ? <button className="btn test-button" type="button" onClick={this.offFullScreen}>Fullscreen Off</button> : <button class="btn test-button" type="button" onClick={this.onFullScreen}>Fullscreen On</button>}
+                </div>
+                <div className="test-header-item3">
+                    Guest User
+                </div>
+            </div>
+            <div className="test-name">
+                <span>Test Name: {this.state.test_id} </span>
+            </div>
+            <div className="test-content">
+                <div className="test-content-item1">
+                    <span>Question No. {this.state.currentQuestion + 1} / {this.state.testData.length}</span>
+                </div>
+                <div className="test-content-item2">
+                    <span>Negative Marking: </span><span style={{color:"red"}}>{this.state.data.negt_mark}</span>
+                </div>
+            </div>
+            <div className="test-data">
+                <div className="test-data-item1">
+                    <span> {this.state.testData[this.state.currentQuestion].question}</span>
+                </div>
+                <div className="test-data-item2">
+                    <input class="form-check-input" type="radio" name="option" id="1" value="1" onClick={() => this.selectRadio("1")} />
+                    <label >   &nbsp;&nbsp; (A)  {this.state.testData[this.state.currentQuestion].options1} </label>
+                </div>
+                <div className="test-data-item3">
+                    <input class="form-check-input" type="radio" name="option" id="2" value="2" onClick={() => this.selectRadio("2")} />
+                    <label> &nbsp;&nbsp; (B)  {this.state.testData[this.state.currentQuestion].options2} </label>
+                </div>
+                <div className="test-data-item4">
+                    <input class="form-check-input" type="radio" name="option" id="3" value="3" onClick={() => this.selectRadio("3")} />
+                    <label> &nbsp;&nbsp; (C)  {this.state.testData[this.state.currentQuestion].options3} </label>
+                </div>
+                <div className="test-data-item5">
+                    <input class="form-check-input" type="radio" name="option" id="4" value="4" onClick={() => this.selectRadio("4")} />
+                    <label> &nbsp;&nbsp; (E)  {this.state.testData[this.state.currentQuestion].options4} </label>
+                </div>
+            </div>
+            <div className="test-dashboard">
+                <div className="test-dashboard-item1">
+                    Time Left
+                </div>
+                <div className="test-dashboard-item2">
+                    <Timer startDate={new Date().getTime() + (this.state.timeof_test * 1000)} />
+                </div>
+                <div className="test-dashboard-item3">
+                    Color Guide
+                </div>
+                <div className="test-dashboard-item4">
+                    <span className="badge rounded-pill bg-secondary">{this.state.notVisited}</span>&nbsp;<span style={{ color: "silver" }}>Not Visited : Silver</span><br />
+                    <span className="badge rounded-pill bg-danger">{this.state.notAttempted}</span>&nbsp;<span style={{ color: "red" }}>Not Attempted : Red</span><br />
+                    <span className="badge rounded-pill bg-primary">{this.state.markNotAttempted}</span>&nbsp;<span style={{ color: "blue" }}>Marked Review &amp; Not Attempted : Blue</span><br />
+                    <span className="badge rounded-pill bg-warning">{this.state.markAttempted}</span>&nbsp;<span style={{ color: "orange" }}>Marked Review &amp; Attempted : Orange</span><br />
+                    <span className="badge rounded-pill bg-success">{this.state.attempted}</span>&nbsp;<span style={{ color: "green" }}>Attempted : Green</span>
+                </div>
+                <div className="test-dashboard-item5">
+                    {this.state.questionPanel.map((e, index) => (
+                        <span>
+                            <Fab key={index} onClick={() => this.panelClick(e.questionNum)} style={{ backgroundColor: e.questionColor, margin: "5px", color: "white" }} aria-label={e.questionNum}>
+                                {e.questionNum}
+                            </Fab>
 
-            {/* <div id="timer" style={{display:"block"}}><Timer startDate={startDate} /></div> */}
+                        </span>
+                    ))}
+                </div>
+            </div>
+            <div className="test-footer">
+                <div className="test-footer-item1">
+                    <button className="btn test-button" type="button" onClick={this.reviewButton}>Mark &amp; Review</button>
+                </div>
+                <div className="test-footer-item2">
+                    <button className="btn test-button" type="button" onClick={this.clearButton}>Clear</button>
+                </div>
+                <div className="test-footer-item3">
+                    <button className="btn test-button" type="button" onClick={this.previewsButton}>Previews</button>
+                </div>
+                <div className="test-footer-item4">
+                    <button className="btn test-button" type="button" onClick={this.nextButton}>Next</button>
+                </div>
+                <div className="test-footer-item5">
+                    <button className="btn" type="button" onClick={this.submitButton}>Submit</button>
+                </div>
+            </div>
+        </div>
+        
+        /*<div style={{ border: "2px", borderColor: "black" }}>
 
             <div id="test_main" style={{ display: "block", backgroundColor: "white", display: "flex", displayDirection: "column" }}>
 
@@ -581,16 +670,19 @@ class Test extends React.PureComponent {
                 </div>
 
 
-                    <div style={{ width: "68%", margin: "35px" }}>
-                        <div style={{ borderRadius: "15px", padding: "35px" }}>
+                    <div style={{ width: "68%", margin: "10px" }}>
+                        <div style={{ borderRadius: "15px", padding: "40px", backgroundColor: "orange" }}>
                             <div style={{
-                                position: "relative",
+                                position: "absolute",
                                 right: "0",
                                 left: "0",
-                                width: "10000px",
                                 backgroundColor: "yellow"
-                            }}><h3> {this.state.currentQuestion + 1} / {this.state.testData.length}</h3></div>
-    
+                            }}>
+                                <div style={{float: "left", marginLeft: "10px"}}>Question: {this.state.currentQuestion + 1} / {this.state.testData.length}</div>
+                                <div class="col-4" id="timer" style={{ display: "block", float: "right", marginRight: "10px" }}><Timer startDate={new Date().getTime() + (this.state.timeof_test * 1000)} /></div>
+                            </div>
+                            <br/>
+                            <br/>
                             <div id="question" style={{ display: "block" }}><h3>Q.{this.state.currentQuestion + 1} {this.state.testData[this.state.currentQuestion].question}</h3></div>
 
 
@@ -632,7 +724,7 @@ class Test extends React.PureComponent {
                             </button>
 
                             <button style={{ marginRight: "10px" }} class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">DASHBOARD</button>
-                            {this.state.isFullScreen ? <button class="btn btn-primary" type="button" onClick={this.offFullScreen}>Fullscreen Off</button> : <button class="btn btn-primary" type="button" onClick={this.onFullScreen}>Fullscreen On</button>}
+                            {this.state.isFullScreen ? <button style={{ marginRight: "10px" }} class="btn btn-primary" type="button" onClick={this.offFullScreen}>Fullscreen Off</button> : <button style={{ marginRight: "10px" }} class="btn btn-primary" type="button" onClick={this.onFullScreen}>Fullscreen On</button>}
                         </div>
 
 
@@ -723,7 +815,7 @@ class Test extends React.PureComponent {
                     <div id="showAnalysis" style={{ display: "none" }}>{this.resultExplaination()}</div>
                 </div>
             </div>
-        </div>
+        </div>*/
     }
 }
 
