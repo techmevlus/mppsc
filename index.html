@@ -1,243 +1,87 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
 <!doctype html>
 <html lang="en">
   <head>
-
-
-    <title>Mevlus.com</title>
-
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" >
-    
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-  <!-- BOT Production/Live //-->
-  <script>var chatbot_id=7933;!function(){var t,e,a=document,s="smatbot-chatbot";a.getElementById(s)||(t=a.createElement("script"),t.id=s,t.type="text/javascript",t.src="https://smatbot.s3.amazonaws.com/files/smatbot_plugin.js.gz",e=a.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e))}();</script><script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/1.5.1/fingerprint2.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!--<script type="application/html" crossorigin="anonymous" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/KChIQO91665523732785.js" onload="onScriptLoad();"> </script> -->
-    <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-  
-    <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
-
-
-        <!-- Vendor CSS Files -->
-        <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-        <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-        <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-        <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-        <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-      
-        <!-- Template Main CSS File -->
-        <link href="assets/css/style.css" rel="stylesheet">
-
-
-<!-- PAYTM LIBRARY-->
-<script type="application/javascript" crossorigin="anonymous" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/KChIQO91665523732785.js" onload="onScriptLoad();"></script>
-<script>
-    function onScriptLoad(){
-        var config = {
-         "root": "",
-         "flow": "DEFAULT",
-         "data": {
-          "orderId": "" /* update order id */,
-          "token": "" /* update token value */,
-          "tokenType": "TXN_TOKEN",
-          "amount": "" /* update amount */
-         },
-         "handler": {
-            "notifyMerchant": function(eventName,data){
-              console.log("notifyMerchant handler function called");
-              console.log("eventName => ",eventName);
-              console.log("data => ",data);
-            } 
-          }
-        };
-
-        if(window.Paytm && window.Paytm.CheckoutJS){
-            window.Paytm.CheckoutJS.onLoad(function excecuteAfterCompleteLoad() {
-                // initialze configuration using init method 
-                window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
-                   // after successfully update configuration invoke checkoutjs
-                   window.Paytm.CheckoutJS.invoke();
-                }).catch(function onError(error){
-                    console.log("error => ",error);
-                });
-            });
-        } 
-    }
-</script>
-<script type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/emailjs-com@2.3.2/dist/email.min.js"></script>
-<script type="text/javascript">
-  (function(){ console.log("EMAILJS")
-      // Obtain your user ID at the dashboard https://dashboard.emailjs.com/integration
-      emailjs.init("user_rvls0jee6rwlaavAdsFjL"); 
-  })();
-</script>
-
-
-   
-  
-    <!-- =======================================================
-    * Template Name: Eterna - v4.1.0
-    * Template URL: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
-
-
-    <style type="text/css">
-      .mainPayment {
-        margin-left:30px;
-        font-family:Verdana, Geneva, sans-serif, serif;
-      }
-      .textPayment {
-        float:left;
-        width:180px;
-      }
-      .dvPayment {
-        margin-bottom:5px;
-      }
-    </style>
-
-
-
+    <title>Hello, world!</title>
   </head>
   <body>
-   
-
-
-<!-- ======= Top Bar ======= -->
-<section id="topbar" class="d-flex align-items-center">
-  <div class="container d-flex justify-content-center justify-content-md-between">
-    <div class="contact-info d-flex align-items-center">
-      <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">suport@mevlus.com</a></i>
-      <i class="bi bi-phone d-flex align-items-center ms-4"><span>+91 9755-088077</span></i>
-    </div>
-    <div class="social-links d-none d-md-flex align-items-center">
-      <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-      <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-      <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-      <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+    <h1>Hello, world!</h1>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">Full Silider Bs.4.1.1 by Luckmoshy</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home
+                <span class="sr-only">(current)</span>
+              </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul>
     </div>
   </div>
-</section>
-
-  <!-- ======= Header ======= -->
-  <header id="header" class="d-flex align-items-center">
-    <div class="container d-flex justify-content-between align-items-center">
-
-      <div class="logo">
-        <h1><a href="/">MEVLUS</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-      </div>
-
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="active" href="/">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="services.html">Video Lectures</a></li>
-          <li><a href="portfolio.html">Mock Test</a></li>
-          <li><a href="team.html">Team</a></li>
-          <li><a href="pricing.html">Pricing</a></li>
-          <li><a href="blog.html">Articles</a></li>
-          <li class="dropdown"><a href="#"><span>Downloads</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="#">IIT</a></li>
-              <li class="dropdown"><a href="#"><span>NCERT</span> <i class="bi bi-chevron-right"></i></a>
-                <ul>
-                  <li><a href="https://ibb.co/Jksp9LW" download >8</a></li>
-                  <li><a href="#">9</a></li>
-                  <li><a href="#">10</a></li>
-                  <li><a href="#">11</a></li>
-                  <li><a href="#">12</a></li>
-                </ul>
-              </li>
-              <li><a href="#">SSC</a></li>
-              <li><a href="#">UPSC</a></li>
-              <li><a href="#">MPPSC</a></li>
-            </ul>
-          </li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-    </div>
-  </header><!-- End Header -->
+</nav>
 
 
 
-
-
-    <div id="root">
-
-
-    </div>
- 
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class=" bi-arrow-up-circle-fill"></i></a>
-
-    
-
- <!--   <div id="footer" class="footer container" > 
-     
-    </div>-->
-  <script src="_assets/thirdparty/jquery.js"></script>
-  <script src="_assets/thirdparty/dist/js/bootstrap.js"></script> 
-
-
-    
-    
-    
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="assets/vendor/purecounter/purecounter.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-
-    
-    
-    <!--   
+<div class="container">
+    <div class="row">
+         <div class="col-md-8">
+        <blockquote class="blockquote text-center mb-0">
+          <svg class="lnr text-muted quote-icon pull-left">
+            <use xlink:href="#lnr-heart">                                       
+          </use></svg>
+          <p class="mb-0">Keep in touch with me for more Theme  right here!</p>
+          <footer class="blockquote-footer">Luckmoshy Designing
+            <cite title="Source Title">Webublog @</cite>
+          </footer>
+        </blockquote>
+        </div>
+        <div class="col-md-4">
+        <a class="flot-right btn btn-white border-0 rounded shadow post-pager-link p-0 next ml-4" href="">
+               <span class="d-flex h-100">
+              <span class="p-3 d-flex flex-column justify-content-center w-100">
+            <div class="indicator mb-1 text-uppercase text-muted">webublog<i class="fa fa-bars ml-2"></i></div>
+                 <p class="f-13">See next awesome themes</p>
+                     </span>
+               <span class="bg-primary p-2 d-flex align-items-center text-white">
+               <i class="fa fa-arrow-circle-right"></i>
+          </span>
+         </span>
+</a></div>
+        </div>
         
-    <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+      </div>
+<!-- /.container -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="_assets/thirdparty/jquery.js"></script>
-    <script src="_assets/thirdparty/dist/js/bootstrap.js"></script>
-    <link href="assets/css/style.css" rel="stylesheet">
-
-    -->
-   
-
-
-
-
- <!-- Vendor JS Files -->
-<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="assets/vendor/php-email-form/validate.js"></script>
-<script src="assets/vendor/purecounter/purecounter.js"></script>
-<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-<script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-
-<!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+      <script src="https://cdn.linearicons.com/free/1.0.0/svgembedder.min.js"></script>
 
   </body>
 </html>
