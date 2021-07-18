@@ -3,7 +3,7 @@ import { getUser, removeUserSession } from '../Utils/Common.js';
 import { Link } from 'react-router-dom'
 import AuthorExam from './AuthorExam.js';
 import ExamName from '../Common/ExamName.js';
-import S3 from 'react-aws-s3';
+//import S3 from 'react-aws-s3';
 
  
 //  <Link to="/addQuestion"><button className="marTop25 nextBtn  btn-primary">Add Question</button></Link>
