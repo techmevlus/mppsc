@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "Satyam Mishra",
   "private": true,
-  "homepage": "https://techmevlus.com",
+  "homepage": "https://mevlus.com",
   "proxy": "http://localhost:3001/",
   "dependencies": {
     "@material-ui/core": "^4.11.4",
