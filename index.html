@@ -36,61 +36,6 @@
         <link href="assets/css/style.css" rel="stylesheet">
 
 
-<!-- PAYTM LIBRARY-->
-<script type="application/javascript" crossorigin="anonymous" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/KChIQO91665523732785.js" onload="onScriptLoad();"></script>
-<script>
-    function onScriptLoad(){
-        var config = {
-         "root": "",
-         "flow": "DEFAULT",
-         "data": {
-          "orderId": "" /* update order id */,
-          "token": "" /* update token value */,
-          "tokenType": "TXN_TOKEN",
-          "amount": "" /* update amount */
-         },
-         "handler": {
-            "notifyMerchant": function(eventName,data){
-              console.log("notifyMerchant handler function called");
-              console.log("eventName => ",eventName);
-              console.log("data => ",data);
-            } 
-          }
-        };
-
-        if(window.Paytm && window.Paytm.CheckoutJS){
-            window.Paytm.CheckoutJS.onLoad(function excecuteAfterCompleteLoad() {
-                // initialze configuration using init method 
-                window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
-                   // after successfully update configuration invoke checkoutjs
-                   window.Paytm.CheckoutJS.invoke();
-                }).catch(function onError(error){
-                    console.log("error => ",error);
-                });
-            });
-        } 
-    }
-</script>
-<script type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/emailjs-com@2.3.2/dist/email.min.js"></script>
-<script type="text/javascript">
-  (function(){ console.log("EMAILJS")
-      // Obtain your user ID at the dashboard https://dashboard.emailjs.com/integration
-      emailjs.init("user_rvls0jee6rwlaavAdsFjL"); 
-  })();
-</script>
-
-
-   
-  
-    <!-- =======================================================
-    * Template Name: Eterna - v4.1.0
-    * Template URL: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
-
-
     <style type="text/css">
       .mainPayment {
         margin-left:30px;
