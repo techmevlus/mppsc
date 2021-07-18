@@ -1,4 +1,4 @@
-# React-Express-MongoDB based Javascript Quiz
+# MPPSC
 
 This gist contains the code to create a simple "javascript quiz" with react & ES6. In this version, you can see following features in this app-
 
