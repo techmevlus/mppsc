@@ -11,7 +11,6 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
   <!-- BOT Production/Live //-->
-  <script>var chatbot_id=7933;!function(){var t,e,a=document,s="smatbot-chatbot";a.getElementById(s)||(t=a.createElement("script"),t.id=s,t.type="text/javascript",t.src="https://smatbot.s3.amazonaws.com/files/smatbot_plugin.js.gz",e=a.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e))}();</script><script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/1.5.1/fingerprint2.min.js"></script>
 
   <!--<script type="application/html" crossorigin="anonymous" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/KChIQO91665523732785.js" onload="onScriptLoad();"> </script> -->
     <!-- Favicons -->
@@ -37,40 +36,7 @@
 
 
 <!-- PAYTM LIBRARY-->
-<script type="application/javascript" crossorigin="anonymous" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/KChIQO91665523732785.js" onload="onScriptLoad();"></script>
-<script>
-    function onScriptLoad(){
-        var config = {
-         "root": "",
-         "flow": "DEFAULT",
-         "data": {
-          "orderId": "" /* update order id */,
-          "token": "" /* update token value */,
-          "tokenType": "TXN_TOKEN",
-          "amount": "" /* update amount */
-         },
-         "handler": {
-            "notifyMerchant": function(eventName,data){
-              console.log("notifyMerchant handler function called");
-              console.log("eventName => ",eventName);
-              console.log("data => ",data);
-            } 
-          }
-        };
 
-        if(window.Paytm && window.Paytm.CheckoutJS){
-            window.Paytm.CheckoutJS.onLoad(function excecuteAfterCompleteLoad() {
-                // initialze configuration using init method 
-                window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
-                   // after successfully update configuration invoke checkoutjs
-                   window.Paytm.CheckoutJS.invoke();
-                }).catch(function onError(error){
-                    console.log("error => ",error);
-                });
-            });
-        } 
-    }
-</script>
 <script type="text/javascript"
     src="https://cdn.jsdelivr.net/npm/emailjs-com@2.3.2/dist/email.min.js"></script>
 <script type="text/javascript">
@@ -142,10 +108,13 @@
         <ul>
           <li><a class="active" href="/">Home</a></li>
           <li><a href="about.html">About</a></li>
-          <li><a href="services.html">Video Lectures</a></li>
+
+        <!--  <li><a href="pricing.html">Pricing</a></li> 
+        
+                  <li><a href="services.html">Video Lectures</a></li>
           <li><a href="portfolio.html">Mock Test</a></li>
           <li><a href="team.html">Team</a></li>
-          <li><a href="pricing.html">Pricing</a></li>
+        
           <li><a href="blog.html">Articles</a></li>
           <li class="dropdown"><a href="#"><span>Downloads</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
@@ -164,6 +133,9 @@
               <li><a href="#">MPPSC</a></li>
             </ul>
           </li>
+-->
+
+
           <li><a href="contact.html">Contact</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
