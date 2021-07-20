@@ -80,6 +80,36 @@
           background: #125688;
           color: white;
         }
+
+        blink {
+          -webkit-animation: 2s linear infinite condemned_blink_effect; /* for Safari 4.0 - 8.0 */
+          animation: 2s linear infinite condemned_blink_effect;
+        }
+
+        /* for Safari 4.0 - 8.0 */
+        @-webkit-keyframes condemned_blink_effect {
+          0% {
+            visibility: hidden;
+          }
+          50% {
+            visibility: hidden;
+          }
+          100% {
+            visibility: visible;
+          }
+        }
+
+        @keyframes condemned_blink_effect {
+          0% {
+            visibility: hidden;
+          }
+          50% {
+            visibility: hidden;
+          }
+          100% {
+            visibility: visible;
+          }
+        }
     </style>
     <title>MPPSC 2020 ANSWER KEY</title>
     <link rel="icon" href="M_logo.ico" type="image/ico" sizes="16x16">
@@ -157,7 +187,8 @@
            
       
             <!-- Description -->
-            <p class="mb-4"><b>ANSWER KEY FOR PAPER 2 (EVENING)</b></p>
+            <p class="mb-4" style="color: red;"><b>ANSWER KEY FOR PAPER 2 (EVENING)</b></p>
+            <b style="color: red; font-size: large;"><blink>will be updated soon</blink></b>
       
             <!-- Section: Live preview -->
             <section class="mx-2 pb-3">
